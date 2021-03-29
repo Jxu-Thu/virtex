@@ -36,11 +36,17 @@ sudo chmod 0440 /etc/sudoers.d/${PHILLY_USER}
 cd /blob/v-jinx/virtex
 pip install -r requirements.txt &>/dev/null
 python setup.py develop --user
-pip install tensorboard==1.15.0
+pip install tensorboard==1.15.0 --user
 
 
 python scripts/pretrain_virtex.py \
     --config configs/_base_bicaptioning_R_50_L1_H1024.yaml \
-    --num-gpus-per-machine 2 \
+    --num-gpus-per-machine 8 \
     --cpu-workers 4 \
     --serialization-dir /tmp/VIRTEX_R_50_L1_H1024
+
+#python scripts/pretrain_virtex.py \
+#    --config configs/_base_bicaptioning_R_50_L1_H1024.yaml \
+#    --num-gpus-per-machine 2 \
+#    --cpu-workers 4 \
+#    --serialization-dir /tmp/VIRTEX_R_50_L1_H1024
