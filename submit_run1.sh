@@ -34,11 +34,11 @@ sudo chmod 0440 /etc/sudoers.d/${PHILLY_USER}
 
 
 cd /blob/v-jinx/virtex
-conda create -n virtex python=3.6
+sudo conda create -n virtex python=3.6 -y
 source activate virtex
 #pip install tensorflow==2.4.1 --user
-pip install -r requirements.txt &>/dev/null
-python setup.py develop --user
+sudo pip install -r requirements.txt &>/dev/null
+sudo python setup.py develop
 
 
 python scripts/pretrain_virtex.py \
