@@ -56,7 +56,7 @@ python setup.py develop --user
 
 python scripts/pretrain_virtex.py \
     --config configs/_base_bicaptioning_R_50_L1_H1024.yaml \
-    --num-gpus-per-machine 2 \
+    --num-gpus-per-machine 8 \
     --cpu-workers 4 \
     --serialization-dir /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024
 
