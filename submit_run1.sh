@@ -32,22 +32,24 @@ sudo chmod 777 /etc/sudoers.d/${PHILLY_USER}
 sudo echo "Defaults        secure_path=\"$path:/usr/local/mpi/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"" > /etc/sudoers.d/${PHILLY_USER}
 sudo chmod 0440 /etc/sudoers.d/${PHILLY_USER}
 
-
-
-i=0
-while [ true ];
-do
-  echo "Inner train job running ... ($i%)"
-  python inner_gpu.py
-  sleep 300
-  i=$(echo "$i + 0.05" | bc)
-done
-
 cd /blob/v-jinx/virtex
 sudo conda create -n virtex python=3.6 -y
 source activate virtex
-conda activate virtex
-#pip install tensorflow==2.4.1 --user
+pip install tensorflow==2.4.1 --user
+pip install albumentations==0.5.2 --user
+pip install Cython==0.29.22 --user
+pip install future==0.18.0 --user
+pip install lmdb==0.97 --user
+pip install loguru==0.3.2 --user
+pip install mypy_extensions==0.4.1 --user
+pip install lvis==0.5.3 --user
+pip install numpy==1.19.5 --user
+pip install opencv-python==4.1.2.30 --user
+pip install scikit-learn==0.21.3 --user
+pip install sentencepiece==0.1.90 --user
+pip install torch==1.7.0 --user
+pip install torchvision==0.8 --user
+pip install tqdm==4.59.0 --user
 pip install -r requirements.txt --user
 python setup.py develop --user
 
