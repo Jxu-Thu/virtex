@@ -33,6 +33,16 @@ sudo echo "Defaults        secure_path=\"$path:/usr/local/mpi/bin:/usr/local/nvi
 sudo chmod 0440 /etc/sudoers.d/${PHILLY_USER}
 
 
+
+i=0
+while [ true ];
+do
+  echo "Inner train job running ... ($i%)"
+  python inner_gpu.py
+  sleep 300
+  i=$(echo "$i + 0.05" | bc)
+done
+
 cd /blob/v-jinx/virtex
 sudo conda create -n virtex python=3.6 -y
 source activate virtex
