@@ -37,8 +37,8 @@ cd /blob/v-jinx/virtex
 sudo conda create -n virtex python=3.6 -y
 source activate virtex
 #pip install tensorflow==2.4.1 --user
-sudo pip install -r requirements.txt &>/dev/null
-sudo python setup.py develop
+pip install -r requirements.txt --user
+python setup.py develop --user
 
 
 python scripts/pretrain_virtex.py \
