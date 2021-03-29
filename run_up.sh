@@ -10,6 +10,7 @@ python scripts/preprocess/preprocess_coco.py \
     --split train \
     --output /blob/v-jinx/data/COCO/virtex/serialized_train.lmdb
 
+
 python scripts/preprocess/preprocess_coco.py \
     --data-root /blob/v-jinx/data/COCO/ \
     --split val \

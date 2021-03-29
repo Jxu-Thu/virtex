@@ -27,7 +27,7 @@ class MaskedLmDataset(Dataset):
         use_single_caption: bool = False,
         percentage: float = 100.0,
     ):
-        lmdb_path = os.path.join(data_root, f"serialized_{split}.lmdb")
+        lmdb_path = os.path.join(data_root, 'virtex', f"serialized_{split}.lmdb")
         self.reader = LmdbReader(lmdb_path, percentage=percentage)
 
         self.image_transform = image_transform

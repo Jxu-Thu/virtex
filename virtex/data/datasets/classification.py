@@ -49,7 +49,7 @@ class TokenClassificationDataset(Dataset):
         image_transform: Callable = T.DEFAULT_IMAGE_TRANSFORM,
         max_caption_length: int = 30,
     ):
-        lmdb_path = os.path.join(data_root, f"serialized_{split}.lmdb")
+        lmdb_path = os.path.join(data_root, 'virtex', f"serialized_{split}.lmdb")
         self.reader = LmdbReader(lmdb_path)
 
         self.image_transform = image_transform
