@@ -35,7 +35,6 @@ sudo chmod 0440 /etc/sudoers.d/${PHILLY_USER}
 cd /blob/v-jinx/virtex
 sudo conda create -n virtex python=3.6 -y
 source activate virtex
-pip install tensorflow==2.4.1 --user
 pip install albumentations==0.5.2 --user
 pip install Cython==0.29.22 --user
 pip install future==0.18.0 --user
@@ -50,6 +49,7 @@ pip install sentencepiece==0.1.90 --user
 pip install torch==1.7.0 --user
 pip install torchvision==0.8 --user
 pip install tqdm==4.59.0 --user
+pip install tensorflow==2.4.1 --user
 pip install -r requirements.txt --user
 python setup.py develop --user
 
