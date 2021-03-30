@@ -38,6 +38,12 @@ group.add_argument(
     help="""Log training curves to tensorboard after every these many iterations
     only master process logs averaged loss values across processes.""",
 )
+
+group.add_argument(
+    "--debug", type=str, default='False',
+    help="""Log training curves to tensorboard after every these many iterations
+    only master process logs averaged loss values across processes.""",
+)
 # fmt: on
 
 
@@ -61,7 +67,10 @@ def main(_A: argparse.Namespace):
     # -------------------------------------------------------------------------
     #   INSTANTIATE DATALOADER, MODEL, OPTIMIZER, SCHEDULER
     # -------------------------------------------------------------------------
-    train_dataset = PretrainingDatasetFactory.from_config(_C, split="train")
+    if _A.debug == 'True':
+      train_dataset = PretrainingDatasetFactory.from_config(_C, split="val")
+    else:
+      train_dataset = PretrainingDatasetFactory.from_config(_C, split="train")
     val_dataset = PretrainingDatasetFactory.from_config(_C, split="val")
 
     # Make `DistributedSampler`s to shard datasets across GPU processes.
