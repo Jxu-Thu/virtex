@@ -42,7 +42,9 @@ group.add_argument(
 
 
 def main(_A: argparse.Namespace):
-
+    
+    import pdb
+    pdb.set_trace()
     if _A.num_gpus_per_machine == 0:
         # Set device as CPU if num_gpus_per_machine = 0.
         device: Any = torch.device("cpu")
