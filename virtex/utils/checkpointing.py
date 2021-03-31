@@ -60,6 +60,7 @@ class CheckpointManager(object):
 
         # Shallow copy, keeps references to tensors as original objects.
         self.checkpointables = copy.copy(checkpointables)
+        # dict_keys(['model', 'optimizer', 'scheduler', 'scaler'])
 
         # Initialize members to hold state dict of best checkpoint and its
         # performance.

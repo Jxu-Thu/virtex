@@ -201,6 +201,8 @@ def main(_A: argparse.Namespace):
         # ---------------------------------------------------------------------
         #   VALIDATION
         # ---------------------------------------------------------------------
+        import pdb
+        pdb.set_trace()
         if iteration % _A.checkpoint_every == 0:
             if dist.is_master_process():
                 checkpoint_manager.step(iteration)

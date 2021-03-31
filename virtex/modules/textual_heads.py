@@ -276,6 +276,8 @@ class TransformerTextualHead(TextualHead):
         caption_mask = caption_lengths.unsqueeze(1) < ones.cumsum(dim=1)
 
         # shape: (batch_size, max_caption_length, textual_feature_size)
+        import pdb
+        pdb.set_trace()
         caption_embeddings = self.embedding(caption_tokens)
 
         if self.mask_future_positions:
