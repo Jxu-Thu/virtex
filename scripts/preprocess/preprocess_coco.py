@@ -51,8 +51,6 @@ if __name__ == "__main__":
 
     _A = parser.parse_args()
     os.makedirs(os.path.dirname(_A.output), exist_ok=True)
-    import pdb
-    pdb.set_trace()
     dloader = DataLoader(
         SimpleCocoCaptionsReader(_A.data_root, _A.split),
         batch_size=_A.batch_size,
