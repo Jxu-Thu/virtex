@@ -1,9 +1,9 @@
-CUDA_VISIBLE_DEVICES=0 python scripts/pretrain_virtex.py \
-    --config configs/_base_bicaptioning_R_50_L1_H1024.yaml \
-    --num-gpus-per-machine 1 \
-    --debug True \
-    --cpu-workers 1 \
-    --serialization-dir /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024_debug
+#CUDA_VISIBLE_DEVICES=0 python scripts/pretrain_virtex.py \
+#    --config configs/_base_bicaptioning_R_50_L1_H1024.yaml \
+#    --num-gpus-per-machine 1 \
+#    --debug True \
+#    --cpu-workers 1 \
+#    --serialization-dir /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024_debug
 
 
 #python scripts/preprocess/build_vocabulary.py \
@@ -11,3 +11,9 @@ CUDA_VISIBLE_DEVICES=0 python scripts/pretrain_virtex.py \
 #    --vocab-size 10000 \
 #    --output-prefix /blob/v-jinx/data/COCO/virtex/vocab/coco_10k_debug \
 #    --do-lower-case
+
+
+python scripts/preprocess/preprocess_coco.py \
+    --data-root /blob/v-jinx/data/COCO/ \
+    --split val \
+    --output /blob/v-jinx/data/COCO/virtex/serialized_val.lmdb.debug

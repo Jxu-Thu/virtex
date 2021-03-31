@@ -37,7 +37,9 @@ class SimpleCocoCaptionsReader(Dataset):
         Which split (from COCO 2017 version) to read. One of ``{"train", "val"}``.
     """
     def __init__(self, root: str = "datasets/coco", split: str = "train"):
-
+        
+        import pdb
+        pdb.set_trace()
         image_dir = os.path.join(root, f"{split}2017")
 
         # Make a tuple of image id and its filename, get image_id from its
