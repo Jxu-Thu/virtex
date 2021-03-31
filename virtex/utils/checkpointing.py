@@ -39,14 +39,14 @@ class CheckpointManager(object):
 
     Examples
     --------
-    >>> model = torch.nn.Linear(10, 2)
-    >>> optimizer = torch.optim.Adam(model.parameters())
-    >>> ckpt_manager = CheckpointManager("/tmp", model=model, optimizer=optimizer)
-    >>> num_epochs = 20
-    >>> for epoch in range(num_epochs):
-    ...     train(model)
-    ...     val_loss = validate(model)
-    ...     ckpt_manager.step(- val_loss, epoch)
+    # >>> model = torch.nn.Linear(10, 2)
+    # >>> optimizer = torch.optim.Adam(model.parameters())
+    # >>> ckpt_manager = CheckpointManager("/tmp", model=model, optimizer=optimizer)
+    # >>> num_epochs = 20
+    # >>> for epoch in range(num_epochs):
+    # ...     train(model)
+    # ...     val_loss = validate(model)
+    # ...     ckpt_manager.step(- val_loss, epoch)
     """
 
     def __init__(
