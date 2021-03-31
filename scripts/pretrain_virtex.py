@@ -64,8 +64,6 @@ def main(_A: argparse.Namespace):
     # -------------------------------------------------------------------------
     #   INSTANTIATE DATALOADER, MODEL, OPTIMIZER, SCHEDULER
     # -------------------------------------------------------------------------
-    import pdb
-    pdb.set_trace()
     if _A.debug == 'True':
       train_dataset = PretrainingDatasetFactory.from_config(_C, split="val")
     else:
