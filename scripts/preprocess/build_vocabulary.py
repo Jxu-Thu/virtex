@@ -66,6 +66,8 @@ def _read_captions(annotations_path: str) -> List[str]:
 if __name__ == "__main__":
     _A = parser.parse_args()
     captions: List[str] = _read_captions(_A.captions)
+    import pdb
+    pdb.set_trace()
 
     # Lower case the captions and remove accents according to arguments.
     for i, caption in enumerate(captions):
