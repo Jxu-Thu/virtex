@@ -5,13 +5,13 @@ visual backbone can be created as:
 
     .. code-block:: python
 
-        >>> # Explicitly by name, args and kwargs:
-        >>> backbone = VisualBackboneFactory.create(
-        ...     "torchvision::resnet50", pretrained=False
-        ... )
-        >>> # Directly from a config object:
-        >>> _C = Config(override_list=["MODEL.VISUAL.NAME", "torchvision::resnet50"])
-        >>> backbone = VisualBackboneFactory.from_config(_C)
+        # >>> # Explicitly by name, args and kwargs:
+        # >>> backbone = VisualBackboneFactory.create(
+        # ...     "torchvision::resnet50", pretrained=False
+        # ... )
+        # >>> # Directly from a config object:
+        # >>> _C = Config(override_list=["MODEL.VISUAL.NAME", "torchvision::resnet50"])
+        # >>> backbone = VisualBackboneFactory.from_config(_C)
 
 Creating directly from :class:`~virtex.config.Config` is fast and simple, and
 ensures minimal changes throughout the codebase upon any change in the call
