@@ -117,7 +117,9 @@ class CaptioningModel(nn.Module):
         # shape: (batch_size, channels, height, width)
         visual_features = self.visual(batch["image"])
         batch_size = visual_features.size(0)
-
+        
+        import pdb
+        pdb.set_trace()
         if "caption_tokens" in batch:
             caption_tokens = batch["caption_tokens"]
             caption_lengths = batch["caption_lengths"]
