@@ -104,8 +104,6 @@ def main(_A: argparse.Namespace):
     )
 
     model = PretrainingModelFactory.from_config(_C).to(device)
-    import pdb
-    pdb.set_trace()
     optimizer = OptimizerFactory.from_config(_C, model.named_parameters())
     scheduler = LRSchedulerFactory.from_config(_C, optimizer)
 
