@@ -1,23 +1,3 @@
-r"""
-This module is a collection of *factories* for creating objects of datasets,
-models, optimizers and other useful components. For example, a ResNet-50
-visual backbone can be created as:
-
-    .. code-block:: python
-
-        # >>> # Explicitly by name, args and kwargs:
-        # >>> backbone = VisualBackboneFactory.create(
-        # ...     "torchvision::resnet50", pretrained=False
-        # ... )
-        # >>> # Directly from a config object:
-        # >>> _C = Config(override_list=["MODEL.VISUAL.NAME", "torchvision::resnet50"])
-        # >>> backbone = VisualBackboneFactory.from_config(_C)
-
-Creating directly from :class:`~virtex.config.Config` is fast and simple, and
-ensures minimal changes throughout the codebase upon any change in the call
-signature of underlying class; or config hierarchy. Refer description of
-specific factories for more details.
-"""
 from functools import partial
 import re
 from typing import Any, Callable, Dict, Iterable, List
