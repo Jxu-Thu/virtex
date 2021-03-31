@@ -210,6 +210,8 @@ class PretrainingDatasetFactory(Factory):
         kwargs["image_transform"] = alb.Compose(image_transform_list)
 
         # Add dataset specific kwargs.
+        import pdb
+        pdb.set_trace()
         if _C.MODEL.NAME != "multilabel_classification":
             tokenizer = TokenizerFactory.from_config(_C)
             kwargs.update(
