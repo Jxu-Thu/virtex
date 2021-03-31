@@ -159,8 +159,11 @@ def main(_A: argparse.Namespace):
         timer.tic()
         optimizer.zero_grad()
         batch = next(train_dataloader_iter)
+        # dict_keys(['image_id', 'image', 'caption_tokens', 'noitpac_tokens', 'caption_lengths'])
 
         with amp.autocast(enabled=_C.AMP):
+            import pdb
+            pdb.set_trace()
             output_dict = model(batch)
             loss = output_dict["loss"]
 
