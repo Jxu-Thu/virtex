@@ -51,7 +51,8 @@ class SimpleCocoCaptionsReader(Dataset):
             open(os.path.join(root, "annotations", f"captions_{split}2017.json"))
         )
         self._id_to_captions: Dict[ImageID, Captions] = defaultdict(list)
-
+        import pdb
+        pdb.set_trace()
         for ann in _captions["annotations"]:
             self._id_to_captions[ann["image_id"]].append(ann["caption"])
 
