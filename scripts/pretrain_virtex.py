@@ -10,6 +10,8 @@ from torch.utils.data import DataLoader, DistributedSampler
 from torch.utils.tensorboard import SummaryWriter
 
 # fmt: off
+import pdb
+pdb.set_trace()
 from virtex.config import Config
 from virtex.factories import (
     PretrainingDatasetFactory, PretrainingModelFactory, OptimizerFactory,
