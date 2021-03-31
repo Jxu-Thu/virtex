@@ -87,12 +87,12 @@ class CaptioningDataset(Dataset):
         # Pass in caption to image_transform due to paired horizontal flip.
         # Caption won't be tokenized/processed here.
         image_caption = self.image_transform(image=image, caption=caption)
-        import pdb
-        pdb.set_trace()
+        print('caption', image_caption["caption"])
         image, caption = image_caption["image"], image_caption["caption"]
         image = np.transpose(image, (2, 0, 1))
 
         caption_tokens = self.caption_transform(caption=caption)["caption"]
+        print('caption_tokens', caption_tokens)
         return {
             "image_id": torch.tensor(image_id, dtype=torch.long),
             "image": torch.tensor(image, dtype=torch.float),
