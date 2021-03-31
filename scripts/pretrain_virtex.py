@@ -10,8 +10,6 @@ from torch.utils.data import DataLoader, DistributedSampler
 from torch.utils.tensorboard import SummaryWriter
 
 # fmt: off
-import pdb
-pdb.set_trace()
 from virtex.config import Config
 from virtex.factories import (
     PretrainingDatasetFactory, PretrainingModelFactory, OptimizerFactory,
@@ -50,9 +48,6 @@ group.add_argument(
 
 
 def main(_A: argparse.Namespace):
-    
-    import pdb
-    pdb.set_trace()
     if _A.num_gpus_per_machine == 0:
         # Set device as CPU if num_gpus_per_machine = 0.
         device: Any = torch.device("cpu")
@@ -69,6 +64,8 @@ def main(_A: argparse.Namespace):
     # -------------------------------------------------------------------------
     #   INSTANTIATE DATALOADER, MODEL, OPTIMIZER, SCHEDULER
     # -------------------------------------------------------------------------
+    import pdb
+    pdb.set_trace()
     if _A.debug == 'True':
       train_dataset = PretrainingDatasetFactory.from_config(_C, split="val")
     else:
@@ -109,6 +106,8 @@ def main(_A: argparse.Namespace):
     )
 
     model = PretrainingModelFactory.from_config(_C).to(device)
+    import pdb
+    pdb.set_trace()
     optimizer = OptimizerFactory.from_config(_C, model.named_parameters())
     scheduler = LRSchedulerFactory.from_config(_C, optimizer)
 
@@ -164,8 +163,6 @@ def main(_A: argparse.Namespace):
         # dict_keys(['image_id', 'image', 'caption_tokens', 'noitpac_tokens', 'caption_lengths'])
 
         with amp.autocast(enabled=_C.AMP):
-            import pdb
-            pdb.set_trace()
             output_dict = model(batch)
             loss = output_dict["loss"]
 
