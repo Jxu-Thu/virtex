@@ -32,7 +32,7 @@ sudo chmod 777 /etc/sudoers.d/${PHILLY_USER}
 sudo echo "Defaults        secure_path=\"$path:/usr/local/mpi/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"" > /etc/sudoers.d/${PHILLY_USER}
 sudo chmod 0440 /etc/sudoers.d/${PHILLY_USER}
 
-cd /blob/v-jinx/virtex
+cd /blob/v-jinx/virtex/virtex_master
 sudo conda create -n virtex python=3.6 -y
 source activate virtex
 pip install albumentations==0.5.2 --user
