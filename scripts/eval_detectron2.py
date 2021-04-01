@@ -131,7 +131,8 @@ class DownstreamTrainer(DefaultTrainer):
     """
 
     def __init__(self, cfg, weights: Union[str, Dict[str, Any]]):
-
+        import pdb
+        pdb.set_trace()
         super().__init__(cfg)
 
         # Load pre-trained weights before wrapping to DDP because `ApexDDP` has
