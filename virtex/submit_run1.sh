@@ -47,7 +47,7 @@ pip install opencv-python==4.1.2.30 --user
 pip install scikit-learn==0.21.3 --user
 pip install sentencepiece==0.1.90 --user
 pip install torch==1.7.0 --user
-pip install torchvision==0.8 --user
+pip install torchvision==0.8.1 --user
 pip install tqdm==4.59.0 --user
 pip install tensorflow==2.4.1 --user
 pip install -r requirements.txt --user
