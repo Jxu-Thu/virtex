@@ -56,7 +56,9 @@ def main(_A: argparse.Namespace):
 
     if _A.data_root is None:
         _A.data_root = os.path.join(_C.DATA.ROOT, "val2017")
-
+    
+    import pdb
+    pdb.set_trace()
     val_dataloader = DataLoader(
         ImageDirectoryDataset(_A.data_root),
         batch_size=_C.OPTIM.BATCH_SIZE,
