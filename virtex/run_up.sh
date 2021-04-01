@@ -15,3 +15,8 @@ python scripts/preprocess/preprocess_coco.py \
     --data-root /blob/v-jinx/data/COCO/ \
     --split val \
     --output /blob/v-jinx/data/COCO/virtex/serialized_val.lmdb
+
+
+
+# follow https://blog.csdn.net/kdongyi/article/details/107002068
+# Download Jave Pacakge for captioning tasks
