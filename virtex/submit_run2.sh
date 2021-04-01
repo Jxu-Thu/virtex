@@ -32,7 +32,7 @@ sudo chmod 777 /etc/sudoers.d/${PHILLY_USER}
 sudo echo "Defaults        secure_path=\"$path:/usr/local/mpi/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"" > /etc/sudoers.d/${PHILLY_USER}
 sudo chmod 0440 /etc/sudoers.d/${PHILLY_USER}
 
-cd /blob/v-jinx/virtex/virtex_master
+cd /blob/v-jinx/virtex/virtex
 sudo conda create -n virtex python=3.6 -y
 source activate virtex
 pip install albumentations==0.5.2 --user
@@ -55,10 +55,10 @@ python setup.py develop --user
 
 
 python scripts/pretrain_virtex.py \
-    --config configs/_base_bicaptioning_R_50_L1_H1024.yaml \
+    --config configs/width_ablations/bicaptioning_R_50_L1_H2048.yaml \
     --num-gpus-per-machine 8 \
     --cpu-workers 4 \
-    --serialization-dir /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024
+    --serialization-dir /blob/v-jinx/checkpoint_virtex/bicaptioning_R_50_L1_H2048
 
 #python scripts/pretrain_virtex.py \
 #    --config configs/_base_bicaptioning_R_50_L1_H1024.yaml \
