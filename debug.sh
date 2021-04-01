@@ -7,19 +7,19 @@
 
 
 #python scripts/preprocess/build_vocabulary.py \
-#    --captions /blob/v-jinx/data/COCO/annotations/captions_train2017.json \
+#    --captions /blob/v-jinx/data/coco/annotations/captions_train2017.json \
 #    --vocab-size 10000 \
-#    --output-prefix /blob/v-jinx/data/COCO/virtex/vocab/coco_10k_debug \
+#    --output-prefix /blob/v-jinx/data/coco/virtex/vocab/coco_10k_debug \
 #    --do-lower-case
 
 
 #python scripts/preprocess/preprocess_coco.py \
-#    --data-root /blob/v-jinx/data/COCO/ \
+#    --data-root /blob/v-jinx/data/coco/ \
 #    --split val \
-#    --output /blob/v-jinx/data/COCO/virtex/serialized_val.lmdb.debug
+#    --output /blob/v-jinx/data/coco/virtex/serialized_val.lmdb.debug
 
 
-export DETECTRON2_DATASETS=/blob/v-jinx/data/
+export DETECTRON2_DATASETS=/blob/v-jinx/data
 CUDA_VISIBLE_DEVICES=0 python scripts/eval_detectron2.py \
     --config /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024/pretrain_config.yaml \
     --d2-config configs/detectron2/coco_segm_default_init_2x.yaml \

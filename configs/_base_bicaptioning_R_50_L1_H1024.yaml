@@ -8,8 +8,8 @@ CUDNN_BENCHMARK: True
 CUDNN_DETERMINISTIC: False
 
 DATA:
-  ROOT: "/blob/v-jinx/data/COCO"
-  TOKENIZER_MODEL: "/blob/v-jinx/data/COCO/virtex/vocab/coco_10k.model"
+  ROOT: "/blob/v-jinx/data/coco"
+  TOKENIZER_MODEL: "/blob/v-jinx/data/coco/virtex/vocab/coco_10k.model"
   VOCAB_SIZE: 10000
   UNK_INDEX: 0
   SOS_INDEX: 1
