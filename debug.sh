@@ -19,6 +19,7 @@
 #    --output /blob/v-jinx/data/COCO/virtex/serialized_val.lmdb.debug
 
 
+export DETECTRON2_DATASETS=/blob/v-jinx/data/
 CUDA_VISIBLE_DEVICES=0 python scripts/eval_detectron2.py \
     --config /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024/pretrain_config.yaml \
     --d2-config configs/detectron2/coco_segm_default_init_2x.yaml \
