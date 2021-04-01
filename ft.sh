@@ -6,5 +6,5 @@ python scripts/eval_detectron2.py \
     --weight-init virtex \
     --num-gpus-per-machine 8 \
     --cpu-workers 2 \
-    --serialization-dir /tmp/bicaptioning_R_50_L1_H2048/coco_segm_500000 \
+    --serialization-dir /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024/coco_segm_500000 \
     --checkpoint-every 5000
