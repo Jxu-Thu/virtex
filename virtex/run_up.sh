@@ -22,4 +22,4 @@ python scripts/preprocess/preprocess_coco.py \
 # Download Jave Pacakge for captioning tasks
 
 # aria2c -c https://nlp.stanford.edu/software/stanford-corenlp-3.7.0.zip
-# export CLASSPATH=/path/to/stanford-corenlp-full-2016-10-31/stanford-corenlp-3.7.0.jar
+# unzip stanford-corenlp-3.7.0.zip

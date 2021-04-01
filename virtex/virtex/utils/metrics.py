@@ -159,8 +159,6 @@ def tokenize(image_id_to_captions: Dict[int, List[str]]) -> Dict[int, List[str]]
     tmp_file.write(sentences.encode())
     tmp_file.close()
     
-    import pdb
-    pdb.set_trace()
     # fmt: off
     # Tokenize sentences. We use the JAR file for tokenization.
     command = [
