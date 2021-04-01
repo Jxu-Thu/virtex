@@ -142,13 +142,13 @@ def tokenize(image_id_to_captions: Dict[int, List[str]]) -> Dict[int, List[str]]
     the presence of Stanford CoreNLP JAR file in directory of this module.
     """
     # Path to the Stanford CoreNLP JAR file.
-    # CORENLP_JAR = (
-    #     "assets/stanford-corenlp-full-2014-08-27/stanford-corenlp-3.4.1.jar"
-    # )
-
     CORENLP_JAR = (
-      "/blob/v-jinx/stanford-corenlp-4.2.0/stanford-corenlp-4.2.0.jar"
+        "assets/stanford-corenlp-full-2014-08-27/stanford-corenlp-3.4.1.jar"
     )
+
+    # CORENLP_JAR = (
+    #   "/blob/v-jinx/stanford-corenlp-4.2.0/stanford-corenlp-4.2.0.jar"
+    # )
 
     # Prepare data for Tokenizer: write captions to a text file, one per line.
     image_ids = [k for k, v in image_id_to_captions.items() for _ in range(len(v))]

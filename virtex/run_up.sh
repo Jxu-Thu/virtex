@@ -17,9 +17,14 @@ python scripts/preprocess/preprocess_coco.py \
     --output /blob/v-jinx/data/COCO/virtex/serialized_val.lmdb
 
 
+
 # for caption generation
 # follow https://blog.csdn.net/kdongyi/article/details/107002068
 # Download Jave Pacakge for captioning tasks
 
+
+cd utils/assets
+bash download_spice.sh
+#
 # aria2c -c https://nlp.stanford.edu/software/stanford-corenlp-3.7.0.zip
 # unzip stanford-corenlp-3.7.0.zip
