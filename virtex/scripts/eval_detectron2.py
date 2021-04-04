@@ -187,6 +187,8 @@ def main(_A: argparse.Namespace):
 
     # Create a config object (this will be immutable) and perform common setup
     # such as logging and setting up serialization directory.
+    import pdb
+    pdb.set_trace()
     if _A.weight_init == "imagenet":
         _A.config_override.extend(["MODEL.VISUAL.PRETRAINED", True])
     _C = Config(_A.config, _A.config_override)
