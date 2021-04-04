@@ -25,3 +25,10 @@ docker run --gpus '"'device=$CUDA_VISIBLE_DEVICES'"' --ipc=host --rm -it \
     --mount src=$IMG_DIR,dst=/img,type=bind,readonly \
     -e NVIDIA_VISIBLE_DEVICES=$CUDA_VISIBLE_DEVICES \
     -w /src chenrocks/uniter
+
+# ---------------- #
+bash scripts/download_nlvr2.sh /data/xujin/checkpoint_uniter
+
+source launch_container.sh /blob/v-jinx/checkpoint_uniter/txt_db /blob/v-jinx/checkpoint_uniter/img_db \
+    /blob/v-jinx/checkpoint_uniter/finetune /blob/v-jinx/checkpoint_uniter/pretrained
+
