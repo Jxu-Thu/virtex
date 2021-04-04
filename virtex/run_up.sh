@@ -25,6 +25,7 @@ python scripts/preprocess/preprocess_coco.py \
 
 cd utils/assets
 bash download_spice.sh
+unzip stanford-corenlp-full-2014-08-27.zip
 #
 # aria2c -c https://nlp.stanford.edu/software/stanford-corenlp-3.7.0.zip
 # unzip stanford-corenlp-3.7.0.zip

@@ -31,10 +31,23 @@
 #    --checkpoint-every 5000
 
 
-
-CUDA_VISIBLE_DEVICES=0  python scripts/eval_captioning.py \
+export DETECTRON2_DATASETS=/blob/v-jinx/data
+CUDA_VISIBLE_DEVICES=0 python scripts/eval_detectron2.py \
     --config /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024/pretrain_config.yaml \
-    --checkpoint-path  /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024/checkpoint_500000.pth \
-    --calc-metrics \
+    --d2-config configs/detectron2/coco_segm_default_init_2x.yaml \
+    --resume \
+    --checkpoint-path /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024/coco_segm_500000/model_0179999.pth \
+    --eval-only \
+    --weight-init virtex \
     --num-gpus-per-machine 1 \
-    --cpu-workers 4
+    --cpu-workers 2 \
+    --serialization-dir /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024/coco_segm_500000 \
+    --checkpoint-every 5000
+
+
+#CUDA_VISIBLE_DEVICES=0  python scripts/eval_captioning.py \
+#    --config /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024/pretrain_config.yaml \
+#    --checkpoint-path  /blob/v-jinx/checkpoint_virtex/VIRTEX_R_50_L1_H1024/checkpoint_500000.pth \
+#    --calc-metrics \
+#    --num-gpus-per-machine 1 \
+#    --cpu-workers 4
