@@ -269,9 +269,9 @@ def main(opts):
     # quick hack for amp delay_unscale bug
     optimizer.zero_grad()
     optimizer.step()
-    import pdb
-    pdb.set_trace()
     for step, (name, batch) in enumerate(meta_loader):
+        import pdb
+        pdb.set_trace()
         # forward pass
         n_examples[name] += batch['input_ids'].size(0)
         n_in_units[name] += (batch['attn_masks'] == 1).sum().item()
