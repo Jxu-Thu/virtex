@@ -399,7 +399,8 @@ if __name__ == "__main__":
     parser.add_argument('--config', help='JSON config files')
 
     args = parse_with_config(parser)
-
+    import pdb
+    pdb.set_trace()
     if exists(args.output_dir) and os.listdir(args.output_dir):
         raise ValueError("Output directory ({}) already exists and is not "
                          "empty.".format(args.output_dir))
