@@ -215,12 +215,15 @@ def main(opts):
                              accum_steps=opts.gradient_accumulation_steps,
                              distributed=n_gpu > 1)
     meta_loader = PrefetchLoader(meta_loader)
-
+    
+    import pdb
+    pdb.set_trace()
     # Prepare model
     if opts.checkpoint:
         checkpoint = torch.load(opts.checkpoint)
     else:
         checkpoint = {}
+    
     model = UniterForPretraining.from_pretrained(
         opts.model_config, checkpoint,
         img_dim=IMG_DIM, img_label_dim=IMG_LABEL_DIM)
@@ -266,6 +269,8 @@ def main(opts):
     # quick hack for amp delay_unscale bug
     optimizer.zero_grad()
     optimizer.step()
+    import pdb
+    pdb.set_trace()
     for step, (name, batch) in enumerate(meta_loader):
         # forward pass
         n_examples[name] += batch['input_ids'].size(0)
