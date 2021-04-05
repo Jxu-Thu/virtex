@@ -179,8 +179,6 @@ def main(opts):
                 "16-bits training: {}".format(
                     device, n_gpu, hvd.rank(), opts.fp16))
     
-    import pdb
-    pdb.set_trace()
     if opts.gradient_accumulation_steps < 1:
         raise ValueError("Invalid gradient_accumulation_steps parameter: {}, "
                          "should be >= 1".format(
@@ -216,8 +214,6 @@ def main(opts):
                              distributed=n_gpu > 1)
     meta_loader = PrefetchLoader(meta_loader)
     
-    import pdb
-    pdb.set_trace()
     # Prepare model
     if opts.checkpoint:
         checkpoint = torch.load(opts.checkpoint)
@@ -270,8 +266,6 @@ def main(opts):
     optimizer.zero_grad()
     optimizer.step()
     for step, (name, batch) in enumerate(meta_loader):
-        import pdb
-        pdb.set_trace()
         # forward pass
         n_examples[name] += batch['input_ids'].size(0)
         n_in_units[name] += (batch['attn_masks'] == 1).sum().item()
