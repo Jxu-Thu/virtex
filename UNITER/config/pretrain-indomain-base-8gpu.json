@@ -1,7 +1,7 @@
 {
     "output_dir": "/blob/v-jinx/checkpoint_uniter/pre_train/pretrain/indomain",
     "model_config": "/blob/v-jinx/virtex/UNITER/config/uniter-base.json",
-    "checkpoint": "/blob/v-jinx/checkpoint_uniter/pre_train/pretrained/uniter-base-init.pt",
+    "checkpoint": "/blob/v-jinx/checkpoint_uniter/pre_train_dataset/pretrained/uniter-base-init.pt",
     "mrm_prob": 0.15,
     "itm_neg_prob": 0.5,
     "itm_ot_lambda": 0.1,
