@@ -29,7 +29,7 @@ from data import (TokenBucketSampler, TokenBucketSamplerForItm,
                   mlm_collate, mrfr_collate, mrc_collate,
                   ItmDataset, itm_collate, itm_ot_collate)
 
-from model.pretrain import UniterForPretraining
+from model.pretrain_debug import UniterForPretraining
 from optim import get_lr_sched
 from optim.misc import build_optimizer
 

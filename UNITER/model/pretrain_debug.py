@@ -63,6 +63,8 @@ class UniterForPretraining(UniterPreTrainedModel):
         self.apply(self.init_weights)
 
     def forward(self, batch, task, compute_loss=True):
+        import pdb
+        pdb.set_trace()
         batch = defaultdict(lambda: None, batch)
         input_ids = batch['input_ids']
         position_ids = batch['position_ids']
