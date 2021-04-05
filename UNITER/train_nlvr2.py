@@ -37,6 +37,10 @@ from utils.save import ModelSaver, save_training_meta
 from utils.misc import NoOp, parse_with_config, set_dropout, set_random_seed
 from utils.const import IMG_DIM, BUCKET_SIZE
 
+import shutil
+
+
+
 
 def create_dataloader(img_path, txt_path, batch_size, is_train,
                       dset_cls, collate_fn, opts):
@@ -394,14 +398,18 @@ if __name__ == "__main__":
                         help="number of data workers")
     parser.add_argument('--pin_mem', action='store_true',
                         help="pin memory")
+    parser.add_argument('--debug', action='store_true',
+                        help="pin memory")
 
     # can use config files
     parser.add_argument('--config', help='JSON config files')
 
     args = parse_with_config(parser)
-    import pdb
-    pdb.set_trace()
+
     if exists(args.output_dir) and os.listdir(args.output_dir):
+      if args.debug:
+        shutil.rmtree(args.output_dir)
+      else:
         raise ValueError("Output directory ({}) already exists and is not "
                          "empty.".format(args.output_dir))
 
