@@ -40,6 +40,9 @@ from utils.save import ModelSaver, save_training_meta
 from utils.misc import NoOp, parse_with_config, set_dropout, set_random_seed
 from utils.const import IMG_DIM, IMG_LABEL_DIM, BUCKET_SIZE
 
+import shutil
+
+
 
 def build_dataloader(dataset, collate_fn, is_train, opts):
     if is_train:
@@ -628,10 +631,15 @@ if __name__ == "__main__":
 
     # can use config files
     parser.add_argument('--config', required=True, help='JSON config files')
+    parser.add_argument('--debug', action='store_true',
+                        help="pin memory")
 
     args = parse_with_config(parser)
 
     if exists(args.output_dir) and os.listdir(args.output_dir):
+      if args.debug:
+        shutil.rmtree(args.output_dir)
+      else:
         raise ValueError("Output directory ({}) already exists and is not "
                          "empty.".format(args.output_dir))
 
