@@ -7,6 +7,12 @@ bash scripts/download_nlvr2.sh /blob/v-jinx/checkpoint_uniter/pre_train
 
 bash scripts/download_pretrained.sh /blob/v-jinx/checkpoint_uniter/pre_train
 
+
+# pretrain
+bash scripts/download_indomain.sh /blob/v-jinx/checkpoint_uniter/pre_train_dataset
+
+bash scripts/download_vqa.sh /blob/v-jinx/checkpoint_uniter/pre_train_dataset
+
 #TXT_DB=/blob/v-jinx/checkpoint_uniter/pre_train/txt_db
 #IMG_DIR=/blob/v-jinx/checkpoint_uniter/pre_train/img_db
 #OUTPUT=/blob/v-jinx/checkpoint_uniter/pre_train/finetune
