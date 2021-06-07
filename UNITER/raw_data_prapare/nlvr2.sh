@@ -48,3 +48,27 @@ echo "done"
 # "identifier": "dev-850-0-0", # 唯一标识符 (key)
 # "extra_validations": {"154": "False", "139": "False", "149": "False", "62": "False"}
 # }
+
+
+# image feature extract
+# first follow the https://github.com/lil-lab/nlvr to download the images (fuck) [need crawl images by ourself]
+# switch to another docker chenrocks/butd-caffe:nlvr2
+pip install imagehash --user
+pip install progressbar --user
+
+IMG_DIR=/blob/v-jinx/data/nlvr2/img
+OUT_DIR=/blob/v-jinx/checkpoint_uniter/processed_data/nlvr2
+
+set -e
+
+echo "extracting image features..."
+if [ ! -d $OUT_DIR ]; then
+    mkdir -p $OUT_DIR
+fi
+docker run --gpus all --ipc=host --rm \
+    --mount src=$IMG_DIR,dst=/img,type=bind,readonly \
+    --mount src=$OUT_DIR,dst=/output,type=bind \
+    -w /src chenrocks/butd-caffe:nlvr2 \
+    bash -c "python tools/generate_npz.py --gpu 0"
+
+echo "done"

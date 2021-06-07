@@ -118,8 +118,6 @@ def main(opts):
     else:
         raise ValueError('Found existing DB. Please explicitly remove '
                          'for re-processing')
-    import pdb
-    pdb.set_trace()
     meta = vars(opts)
     meta['tokenizer'] = opts.toker
     toker = BertTokenizer.from_pretrained(
