@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/UNITER" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6 (deit_debug)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.6 (pycharm_usage)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
@@ -15,8 +15,5 @@
         <option value="$MODULE_DIR$/docs/_templates" />
       </list>
     </option>
-  </component>
-  <component name="TestRunnerService">
-    <option name="PROJECT_TEST_RUNNER" value="Unittests" />
   </component>
 </module>
