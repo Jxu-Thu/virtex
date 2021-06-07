@@ -31,7 +31,7 @@ for SPLIT in 'train' 'dev' 'test1'; do
 
     python prepro.py --annotation $ANN_DIR/$SPLIT.json \
                      --missing_imgs $ANN_DIR/missing_nlvr2_imgs.json \
-                     --output $OUT_DIR/nlvr2_${SPLIT}.db --task nlvr2
+                     --output $OUT_DIR/nlvr2_${SPLIT}.db --task nlvr
 done
 
 echo "done"
@@ -45,6 +45,6 @@ echo "done"
 # "right_url": "https://cdn.pixabay.com/photo/2015/09/21/12/57/beer-bottles-949793_960_720.jpg",
 # "synset": "beer bottle",
 # "query": "some beer bottles38",
-# "identifier": "dev-850-0-0",
+# "identifier": "dev-850-0-0", # 唯一标识符 (key)
 # "extra_validations": {"154": "False", "139": "False", "149": "False", "62": "False"}
 # }
