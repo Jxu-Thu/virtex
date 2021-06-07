@@ -5,7 +5,7 @@
     "train_img_dbs": ["/blob/v-jinx/checkpoint_uniter/pre_train_dataset/img_db/coco_train2014/", "/blob/v-jinx/checkpoint_uniter/pre_train_dataset/img_db/coco_val2014", "/blob/v-jinx/checkpoint_uniter/pre_train_dataset/img_db/vg/"],
     "val_txt_db": "/blob/v-jinx/checkpoint_uniter/pre_train_dataset/txt_db/vqa_devval.db",
     "val_img_db": "/blob/v-jinx/checkpoint_uniter/pre_train_dataset/img_db/coco_val2014/",
-    "checkpoint": "/blob/v-jinx/checkpoint_uniter/pre_train/pretrain/indomain_submit/uniter-base.pt",
+    "checkpoint": "/blob/v-jinx/checkpoint_uniter/pre_train/pretrain/indomain_submit/ckpt/model_step_200000.pt",
     "model_config": "/blob/v-jinx/virtex/UNITER/config/uniter-base.json",
     "output_dir": "/blob/v-jinx/checkpoint_uniter/pre_train/pretrain/vqa/default",
     "max_txt_len": 60,
