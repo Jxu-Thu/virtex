@@ -29,9 +29,9 @@ for SPLIT in 'train' 'dev' 'test1'; do
 
     echo "preprocessing ${SPLIT} annotations..."
 
-    python prepro.py --annotation $ANN_DIR/$SPLIT.json \
-                     --missing_imgs $ANN_DIR/missing_nlvr2_imgs.json \
-                     --output $OUT_DIR/nlvr2_${SPLIT}.db --task nlvr2
+#    python prepro.py --annotation $ANN_DIR/$SPLIT.json \
+#                     --missing_imgs $ANN_DIR/missing_nlvr2_imgs.json \
+#                     --output $OUT_DIR/nlvr2_${SPLIT}.db --task nlvr2
 done
 
 echo "done"
