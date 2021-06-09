@@ -71,16 +71,12 @@ class UniterForPretraining(UniterPreTrainedModel):
         attention_mask = batch['attn_masks']
         gather_index = batch['gather_index']
         if task == 'mlm':
-            import pdb
-            pdb.set_trace()
             txt_labels = batch['txt_labels']
             return self.forward_mlm(input_ids, position_ids,
                                     img_feat, img_pos_feat,
                                     attention_mask, gather_index,
                                     txt_labels, compute_loss)
         elif task == 'mrfr':
-            import pdb
-            pdb.set_trace()
             img_mask_tgt = batch['img_mask_tgt']
             img_masks = batch['img_masks']
             mrfr_feat_target = batch['feat_targets']
@@ -90,8 +86,6 @@ class UniterForPretraining(UniterPreTrainedModel):
                                      img_masks, img_mask_tgt,
                                      mrfr_feat_target, compute_loss)
         elif task == 'itm':
-            import pdb
-            pdb.set_trace()
             targets = batch['targets']
             ot_inputs = batch['ot_inputs']
             return self.forward_itm(input_ids, position_ids,
@@ -99,8 +93,6 @@ class UniterForPretraining(UniterPreTrainedModel):
                                     attention_mask, gather_index,
                                     targets, ot_inputs, compute_loss)
         elif task.startswith('mrc'):
-            import pdb
-            pdb.set_trace()
             img_mask_tgt = batch['img_mask_tgt']
             img_masks = batch['img_masks']
             mrc_label_target = batch['label_targets']
@@ -181,6 +173,7 @@ class UniterForPretraining(UniterPreTrainedModel):
             max_l = max(ot_inputs['scatter_max'] + 1, tl+il)
 
             ot_scatter = ot_scatter.unsqueeze(-1).expand_as(sequence_output)
+            # ot_scatter : batch * max_len * hidden_size
             ctx_emb = torch.zeros(b, max_l, self.config.hidden_size,
                                   dtype=sequence_output.dtype,
                                   device=sequence_output.device

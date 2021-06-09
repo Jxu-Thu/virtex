@@ -157,8 +157,6 @@ def main(opts):
     optimizer.step()
     while True:
         for step, batch in enumerate(train_dataloader):
-            import pdb
-            pdb.set_trace()
             targets = batch['targets']
             n_examples += targets.size(0)
 

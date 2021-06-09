@@ -35,6 +35,8 @@ def trace(x):
 @torch.no_grad()
 def ipot(C, x_len, x_pad, y_len, y_pad, joint_pad, beta, iteration, k):
     """ [B, M, N], [B], [B, M], [B], [B, N], [B, M, N]"""
+    # M text_max_len
+    # N image_max_len
     b, m, n = C.size()
     sigma = torch.ones(b, m, dtype=C.dtype, device=C.device
                        ) / x_len.unsqueeze(1)
@@ -69,6 +71,9 @@ def ipot(C, x_len, x_pad, y_len, y_pad, joint_pad, beta, iteration, k):
 def optimal_transport_dist(txt_emb, img_emb, txt_pad, img_pad,
                            beta=0.5, iteration=50, k=1):
     """ [B, M, D], [B, N, D], [B, M], [B, N]"""
+    # M text_len
+    # D 768 hidden dim
+    #
     cost = cost_matrix_cosine(txt_emb, img_emb)
     # mask the padded inputs
     joint_pad = txt_pad.unsqueeze(-1) | img_pad.unsqueeze(-2)

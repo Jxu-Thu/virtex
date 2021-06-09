@@ -203,8 +203,6 @@ def main(opts):
     all_dbs = [db for datasets in [opts.train_datasets, opts.val_datasets]
                for dset in datasets for db in dset['db']]
 
-    import pdb
-    pdb.set_trace()
     tokenizer = json.load(open(f'{all_dbs[0]}/meta.json'))['bert']
     assert all(tokenizer == json.load(open(f'{db}/meta.json'))['bert']
                for db in all_dbs)
