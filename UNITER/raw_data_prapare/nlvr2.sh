@@ -57,8 +57,11 @@ pip install imagehash --user
 pip install progressbar --user
 
 IMG_DIR=/blob/v-jinx/data/nlvr2/img
-OUT_DIR=/blob/v-jinx/checkpoint_uniter/processed_data/nlvr2
+OUT_DIR=/blob/v-jinx/checkpoint_uniter/processed_data/nlvr2/npz
 
+
+# change the /img to /blob/v-jinx/data/nlvr2/img
+# change the /output to /blob/v-jinx/checkpoint_uniter/processed_data/nlvr2/npz
 set -e
 
 echo "extracting image features..."
@@ -72,3 +75,15 @@ docker run --gpus all --ipc=host --rm \
     bash -c "python tools/generate_npz.py --gpu 0"
 
 echo "done"
+
+python tools/generate_npz.py
+
+
+# concert imgdb
+IMG_NPY=/blob/v-jinx/checkpoint_uniter/processed_data/nlvr2/npz/
+OUT_DIR=/blob/v-jinx/checkpoint_uniter/processed_data/nlvr2/imgdb
+
+
+
+python scripts/convert_imgdir.py --img_dir /blob/v-jinx/checkpoint_uniter/processed_data/nlvr2/npz/ --output /blob/v-jinx/checkpoint_uniter/processed_data/nlvr2/imgdb
+
