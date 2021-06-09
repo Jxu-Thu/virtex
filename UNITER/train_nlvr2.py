@@ -73,7 +73,9 @@ def main(opts):
                             opts.gradient_accumulation_steps))
 
     set_random_seed(opts.seed)
-    
+
+    import pdb
+    pdb.set_trace()
     # train_examples = None
     LOGGER.info(f"Loading Train Dataset {opts.train_txt_db}, "
                 f"{opts.train_img_db}")
