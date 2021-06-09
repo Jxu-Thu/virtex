@@ -35,8 +35,6 @@ class Nlvr2PairedDataset(DetectFeatTxtTokDataset):
         [[txt, img1],
          [txt, img2]]
         """
-        import pdb
-        pdb.set_trace()
         example = super().__getitem__(i)
         target = example['target']
         outs = []

@@ -52,7 +52,7 @@ def create_dataloader(img_path, txt_path, batch_size, is_train,
                                  batch_size=batch_size, droplast=is_train)
     # debug
     loader = DataLoader(dset, batch_sampler=sampler,
-                        num_workers=1, pin_memory=opts.pin_mem,
+                        num_workers=opts.n_workers, pin_memory=opts.pin_mem,
                         collate_fn=collate_fn)
     return PrefetchLoader(loader)
 
