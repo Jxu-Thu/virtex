@@ -7,7 +7,7 @@
     "val_img_db": "/blob/v-jinx/checkpoint_uniter/pre_train_dataset/img_db/coco_val2014/",
     "checkpoint": "/blob/v-jinx/checkpoint_uniter/pre_train/pretrain/indomain_submit/ckpt/model_step_200000.pt",
     "model_config": "/blob/v-jinx/virtex/UNITER/config/uniter-base.json",
-    "output_dir": "/blob/v-jinx/checkpoint_uniter/pre_train/pretrain/vqa/train_by_self",
+    "output_dir": "/blob/v-jinx/checkpoint_uniter/pre_train/pretrain/vqa/self_train_submit",
     "max_txt_len": 60,
     "conf_th": 0.2,
     "max_bb": 100,

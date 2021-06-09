@@ -130,6 +130,8 @@ def main(opts):
                                       False, opts)
 
     # Prepare model
+    import pdb
+    pdb.set_trace()
     if opts.checkpoint:
         checkpoint = torch.load(opts.checkpoint)
     else:

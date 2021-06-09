@@ -1,1 +1,1 @@
-python train_vqa.py --config config/train-vqa-base-4gpu-re.json --output_dir /blob/v-jinx/checkpoint_uniter/pre_train/pretrain/vqa/self_train_submit
+python train_vqa.py --config config/train-vqa-base-4gpu-re.json
