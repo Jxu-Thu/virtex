@@ -70,8 +70,6 @@ def dumps_msgpack(dump):
 
 
 def main(opts):
-    import pdb
-    pdb.set_trace()
     if opts.img_dir[-1] == '/':
         opts.img_dir = opts.img_dir[:-1]
     split = basename(opts.img_dir)
