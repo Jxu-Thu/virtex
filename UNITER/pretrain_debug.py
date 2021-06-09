@@ -117,6 +117,9 @@ def build_itm_dataset(txt_db, img_db, is_train, opts):
 
 
 def create_dataloaders(datasets, is_train, opts, all_img_dbs=None):
+    # opts.conf_th ： 0.2
+    # opts.min_bb : 10
+    # opts.num_bb 36
     if all_img_dbs is None:
         all_img_dbs = ImageLmdbGroup(opts.conf_th, opts.max_bb, opts.min_bb,
                                      opts.num_bb, opts.compressed_db)
