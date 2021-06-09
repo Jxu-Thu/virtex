@@ -166,6 +166,8 @@ class UniterForNlvr2PairedAttn(UniterPreTrainedModel):
         attn_masks = batch['attn_masks']
         gather_index = batch['gather_index']
         img_type_ids = batch['img_type_ids']
+        import pdb
+        pdb.set_trace()
         sequence_output = self.uniter(input_ids, position_ids,
                                       img_feat, img_pos_feat,
                                       attn_masks, gather_index,

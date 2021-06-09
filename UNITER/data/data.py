@@ -269,6 +269,8 @@ def pad_tensors(tensors, lens=None, pad=0):
 
 
 def get_gather_index(txt_lens, num_bbs, batch_size, max_len, out_size):
+    # out_size : max_txt_len + max_bb_len
+    # max_len : max_txt_len
     assert len(txt_lens) == len(num_bbs) == batch_size
     gather_index = torch.arange(0, out_size, dtype=torch.long,
                                 ).unsqueeze(0).repeat(batch_size, 1)
