@@ -15,7 +15,7 @@
     "num_bb": 36,
     "train_batch_size": 5120,
     "val_batch_size": 10240,
-    "gradient_accumulation_steps": 2,
+    "gradient_accumulation_steps": 5,
     "learning_rate": 3e-04,
     "lr_mul": 10.0,
     "valid_steps": 500,
