@@ -123,8 +123,8 @@ def df_from_shelve(chunk_size, func, dataset_name):
         df = pd.concat([results[str(k)][1] for k in keylist], sort=True)
     return df
 
-num_processes=1
-images_per_part=1
+num_processes=30
+images_per_part=100
 data_name = "img"
 with open('sbu-captions-all.json', 'r') as f:
     x = json.load(f)
