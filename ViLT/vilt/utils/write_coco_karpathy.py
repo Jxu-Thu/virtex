@@ -61,6 +61,6 @@ def make_arrow(root, dataset_root):
         ) as sink:
             with pa.RecordBatchFileWriter(sink, table.schema) as writer:
                 writer.write_table(table)
-
+# 123287
 if __name__ == '__main__':
     make_arrow('/blob/v-jinx/data/coco', '/blob/v-jinx/data/VilT_dataset')

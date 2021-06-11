@@ -144,6 +144,6 @@ def make_arrow_blob(root, dataset_root):
             del table
             del bs
             gc.collect()
-# 290
+# 2910226
 if __name__ == '__main__':
     make_arrow_blob('/blob/v-jinx/data/cc3m', '/blob/v-jinx/data/VilT_dataset')
