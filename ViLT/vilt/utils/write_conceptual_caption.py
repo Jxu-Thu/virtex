@@ -112,8 +112,6 @@ def make_arrow_blob(root, dataset_root):
         #     iid2captions[iid] = [cap[1]]
 
         # paths = list(glob(f"{root}/images_{split}/*/*")) # /blob/v-jinx/data/cc3m/validation/1962_81346558
-        import pdb
-        pdb.set_trace()
         random.shuffle(paths)
         caption_paths = [path for path in paths if path.split("/")[-1] in iid2captions]
         if len(paths) == len(caption_paths):
@@ -129,9 +127,6 @@ def make_arrow_blob(root, dataset_root):
         for sub in subs:
             sub_paths = caption_paths[sub * 100000 : (sub + 1) * 100000]
             # for debug
-            import pdb
-            pdb.set_trace()
-            bb = path2rest_split(sub_paths[0], iid2captions, file_split)
             bs = [path2rest_split(path, iid2captions, file_split) for path in tqdm(sub_paths)]
             dataframe = pd.DataFrame(
                 bs, columns=["image", "caption", "image_id", "split"],
