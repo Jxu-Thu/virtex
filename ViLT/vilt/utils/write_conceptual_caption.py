@@ -96,6 +96,8 @@ def make_arrow_blob(root, dataset_root):
             tsv_file = f"{root}/training_url_caption.tsv"
             paths = list(glob(f"{root}/training/*"))
         captions = pd.read_csv(tsv_file, sep='\t') # columns = ['img', 'folder', 'type', 'x', 'http_status', 'url', 'caption']
+        # some do not obtain the img
+        captions = captions.dropna(axis=0, subset=['img'])
         import pdb
         pdb.set_trace()
         captions['img_file_name'] = captions['img'].apply(lambda x: x.split('/')[-1])
@@ -146,6 +148,4 @@ def make_arrow_blob(root, dataset_root):
             gc.collect()
 # 290
 if __name__ == '__main__':
-    import pdb
-    pdb.set_trace()
     make_arrow_blob('/blob/v-jinx/data/cc3m', '/blob/v-jinx/data/VilT_dataset')
