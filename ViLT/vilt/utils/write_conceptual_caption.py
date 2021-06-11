@@ -143,7 +143,7 @@ def make_arrow_blob(root, dataset_root):
             del bs
             gc.collect()
 # 290
-if __name__ == 'main':
+if __name__ == '__main__':
     import pdb
     pdb.set_trace()
     make_arrow_blob('/blob/v-jinx/data/cc3m', '/blob/v-jinx/data/VilT_dataset')
