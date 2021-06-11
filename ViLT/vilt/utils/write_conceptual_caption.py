@@ -26,9 +26,8 @@ def path2rest(path, iid2captions):
         split,
     ]
 
-def path2rest_split(path, iid2captions, split):
-    split, _, name = path.split("/")[-3:]
-    split = split.split("_")[-1]
+def path2rest_split(path, iid2captions):
+    split, name = path.split("/")[-2:]
     iid = name
 
     with open(path, "rb") as fp:
@@ -69,6 +68,10 @@ def make_arrow(root, dataset_root):
         subs = list(range(sub_len + 1))
         for sub in subs:
             sub_paths = caption_paths[sub * 100000 : (sub + 1) * 100000]
+            # for debug
+            import pdb
+            pdb.set_trace()
+            bb = path2rest(sub_paths[0], iid2captions)
             bs = [path2rest(path, iid2captions) for path in tqdm(sub_paths)]
             dataframe = pd.DataFrame(
                 bs, columns=["image", "caption", "image_id", "split"],
@@ -112,7 +115,7 @@ def make_arrow_blob(root, dataset_root):
         #     iid = cap[0].split("/")[-1]
         #     iid2captions[iid] = [cap[1]]
 
-        # paths = list(glob(f"{root}/images_{split}/*/*"))
+        # paths = list(glob(f"{root}/images_{split}/*/*")) # /blob/v-jinx/data/cc3m/validation/1962_81346558
         import pdb
         pdb.set_trace()
         random.shuffle(paths)
