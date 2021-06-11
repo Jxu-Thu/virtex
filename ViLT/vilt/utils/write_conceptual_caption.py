@@ -26,8 +26,8 @@ def path2rest(path, iid2captions):
         split,
     ]
 
-def path2rest_split(path, iid2captions):
-    split, name = path.split("/")[-2:]
+def path2rest_split(path, iid2captions, split):
+    name = path.split("/")[-1]
     iid = name
 
     with open(path, "rb") as fp:
@@ -91,9 +91,11 @@ def make_arrow_blob(root, dataset_root):
         if split == 'val':
             tsv_file = f"{root}/validation_url_caption.tsv"
             paths = list(glob(f"{root}/validation/*"))
+            file_split = 'images_val'
         else:
             tsv_file = f"{root}/training_url_caption.tsv"
             paths = list(glob(f"{root}/training/*"))
+            file_split = 'images_train'
         captions = pd.read_csv(tsv_file, sep='\t') # columns = ['img', 'folder', 'type', 'x', 'http_status', 'url', 'caption']
         # some do not obtain the img
         captions = captions.dropna(axis=0, subset=['img'])
@@ -129,8 +131,8 @@ def make_arrow_blob(root, dataset_root):
             # for debug
             import pdb
             pdb.set_trace()
-            bb = path2rest_split(sub_paths[0], iid2captions)
-            bs = [path2rest_split(path, iid2captions) for path in tqdm(sub_paths)]
+            bb = path2rest_split(sub_paths[0], iid2captions, file_split)
+            bs = [path2rest_split(path, iid2captions, file_split) for path in tqdm(sub_paths)]
             dataframe = pd.DataFrame(
                 bs, columns=["image", "caption", "image_id", "split"],
             )
