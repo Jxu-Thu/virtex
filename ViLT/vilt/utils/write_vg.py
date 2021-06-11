@@ -59,7 +59,9 @@ def make_arrow(root, dataset_root):
     print(
         len(paths), len(caption_paths), len(iid2captions),
     )
-
+    import pdb
+    pdb.set_trace()
+    bb = path2rest(caption_paths[0], iid2captions)
     bs = [path2rest(path, iid2captions) for path in tqdm(caption_paths)]
     dataframe = pd.DataFrame(
         bs, columns=["image", "caption", "width", "height", "x", "y", "image_id"],
