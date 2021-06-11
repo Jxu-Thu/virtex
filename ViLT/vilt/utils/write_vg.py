@@ -46,8 +46,8 @@ def make_arrow(root, dataset_root):
         for c in cap:
             iid2captions[c["image_id"]].append(c)
 
-    paths = list(glob(f"{root}/images/VG_100K/*.jpg")) + list(
-        glob(f"{root}/images/VG_100K_2/*.jpg")
+    paths = list(glob(f"{root}/VG_100K/*.jpg")) + list(
+        glob(f"{root}/VG_100K_2/*.jpg")
     )
     random.shuffle(paths)
     caption_paths = [
