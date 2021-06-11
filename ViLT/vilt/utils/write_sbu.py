@@ -66,7 +66,7 @@ def make_arrow(root, dataset_root):
         gc.collect()
 
 def make_arrow_blob(root, dataset_root):
-    with open('sbu-captions-all.json', 'r') as f:
+    with open(f"{root}/sbu-captions-all.json", 'r') as f:
         x = json.load(f)
     df = pd.DataFrame(data=x)
     df.columns = ['url', 'user_ids', 'caption']
