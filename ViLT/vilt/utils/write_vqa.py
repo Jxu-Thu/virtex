@@ -203,3 +203,7 @@ def make_arrow(root, dataset_root):
     with pa.OSFile(f"{dataset_root}/vqav2_rest_val.arrow", "wb") as sink:
         with pa.RecordBatchFileWriter(sink, df2.schema) as writer:
             writer.write_table(df2)
+
+
+if __name__ == '__main__':
+    make_arrow('/blob/v-jinx/data/coco', '/blob/v-jinx/data/VilT_dataset')
