@@ -96,6 +96,8 @@ def make_arrow_blob(root, dataset_root):
             tsv_file = f"{root}/training_url_caption.tsv"
             paths = list(glob(f"{root}/training/*"))
         captions = pd.read_csv(tsv_file, sep='\t') # columns = ['img', 'folder', 'type', 'x', 'http_status', 'url', 'caption']
+        import pdb
+        pdb.set_trace()
         captions['img_file_name'] = captions['img'].apply(lambda x: x.split('/')[-1])
         # with open(f"{root}/{split}_annot.json", "r") as fp:
         #     captions = json.load(fp)
