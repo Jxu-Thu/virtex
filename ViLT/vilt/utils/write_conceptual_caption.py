@@ -68,10 +68,6 @@ def make_arrow(root, dataset_root):
         subs = list(range(sub_len + 1))
         for sub in subs:
             sub_paths = caption_paths[sub * 100000 : (sub + 1) * 100000]
-            # for debug
-            import pdb
-            pdb.set_trace()
-            bb = path2rest(sub_paths[0], iid2captions)
             bs = [path2rest(path, iid2captions) for path in tqdm(sub_paths)]
             dataframe = pd.DataFrame(
                 bs, columns=["image", "caption", "image_id", "split"],
@@ -101,8 +97,6 @@ def make_arrow_blob(root, dataset_root):
         captions = pd.read_csv(tsv_file, sep='\t') # columns = ['img', 'folder', 'type', 'x', 'http_status', 'url', 'caption']
         # some do not obtain the img
         captions = captions.dropna(axis=0, subset=['img'])
-        import pdb
-        pdb.set_trace()
         captions['img_file_name'] = captions['img'].apply(lambda x: x.split('/')[-1])
         # with open(f"{root}/{split}_annot.json", "r") as fp:
         #     captions = json.load(fp)
@@ -132,6 +126,10 @@ def make_arrow_blob(root, dataset_root):
         subs = list(range(sub_len + 1))
         for sub in subs:
             sub_paths = caption_paths[sub * 100000 : (sub + 1) * 100000]
+            # for debug
+            import pdb
+            pdb.set_trace()
+            bb = path2rest(sub_paths[0], iid2captions)
             bs = [path2rest_split(path, iid2captions) for path in tqdm(sub_paths)]
             dataframe = pd.DataFrame(
                 bs, columns=["image", "caption", "image_id", "split"],
