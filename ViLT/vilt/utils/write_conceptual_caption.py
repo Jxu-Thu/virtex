@@ -129,7 +129,7 @@ def make_arrow_blob(root, dataset_root):
             # for debug
             import pdb
             pdb.set_trace()
-            bb = path2rest(sub_paths[0], iid2captions)
+            bb = path2rest_split(sub_paths[0], iid2captions)
             bs = [path2rest_split(path, iid2captions) for path in tqdm(sub_paths)]
             dataframe = pd.DataFrame(
                 bs, columns=["image", "caption", "image_id", "split"],
