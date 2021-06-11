@@ -26,6 +26,22 @@ def path2rest(path, iid2captions):
         split,
     ]
 
+def path2rest_split(path, iid2captions, split='images_train'):
+    name = path.split("/")[-1]
+    iid = name
+
+    with open(path, "rb") as fp:
+        binary = fp.read()
+
+    captions = iid2captions[iid]
+
+    return [
+        binary,
+        captions,
+        iid,
+        split,
+    ]
+
 
 def make_arrow(root, dataset_root):
     with open(f"{root}/annot.json", "r") as fp:
@@ -66,21 +82,26 @@ def make_arrow(root, dataset_root):
         gc.collect()
 
 def make_arrow_blob(root, dataset_root):
-    with open(f"{root}/sbu-captions-all.json", 'r') as f:
-        x = json.load(f)
-    df = pd.DataFrame(data=x)
-    df.columns = ['url', 'user_ids', 'caption']
     import pdb
     pdb.set_trace()
+    captions = pd.read_csv(f'{root}/downloaded_img_report.tsv', sep='\t',
+                     names=['caption', 'img', 'te', 'type', 'x', 'http_status', 'url', 'user_ids'])
     # with open(f"{root}/annot.json", "r") as fp:
     #     captions = json.load(fp)
 
-    iid2captions = dict()
-    for cap in tqdm(captions):
-        iid = cap[0].split("/")[-1]
-        iid2captions[iid] = [cap[1]]
+    captions = captions.dropna(axis=0, subset=['img'])
+    captions['img_file_name'] = captions['img'].apply(lambda x: x.split('/')[-1])
+    # with open(f"{root}/{split}_annot.json", "r") as fp:
+    #     captions = json.load(fp)
 
-    paths = list(glob(f"{root}/images_train/*/*"))
+    iid2captions = captions[['img_file_name', 'caption']].set_index('img_file_name').squeeze().T.to_dict()
+
+    # iid2captions = dict()
+    # for cap in tqdm(captions):
+    #     iid = cap[0].split("/")[-1]
+    #     iid2captions[iid] = [cap[1]]
+
+    paths = list(glob(f"{root}/img/*"))
     random.shuffle(paths)
     caption_paths = [path for path in paths if path.split("/")[-1] in iid2captions]
     if len(paths) == len(caption_paths):
@@ -95,7 +116,10 @@ def make_arrow_blob(root, dataset_root):
     subs = list(range(sub_len + 1))
     for sub in subs:
         sub_paths = caption_paths[sub * 100000 : (sub + 1) * 100000]
-        bs = [path2rest(path, iid2captions) for path in tqdm(sub_paths)]
+        import pdb
+        pdb.set_trace()
+        bb = path2rest_split(sub_paths[0], iid2captions)
+        bs = [path2rest_split(path, iid2captions) for path in tqdm(sub_paths)]
         dataframe = pd.DataFrame(bs, columns=["image", "caption", "image_id", "split"],)
 
         table = pa.Table.from_pandas(dataframe)
