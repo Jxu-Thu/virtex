@@ -70,3 +70,7 @@ def make_arrow(root, dataset_root):
     with pa.OSFile(f"{dataset_root}/vg.arrow", "wb") as sink:
         with pa.RecordBatchFileWriter(sink, table.schema) as writer:
             writer.write_table(table)
+
+
+if __name__ == '__main__':
+    make_arrow('/blob/v-jinx/data/VG', '/blob/v-jinx/data/VilT_dataset')
