@@ -116,9 +116,6 @@ def make_arrow_blob(root, dataset_root):
     subs = list(range(sub_len + 1))
     for sub in subs:
         sub_paths = caption_paths[sub * 100000 : (sub + 1) * 100000]
-        import pdb
-        pdb.set_trace()
-        bb = path2rest_split(sub_paths[0], iid2captions)
         bs = [path2rest_split(path, iid2captions) for path in tqdm(sub_paths)]
         dataframe = pd.DataFrame(bs, columns=["image", "caption", "image_id", "split"],)
 
