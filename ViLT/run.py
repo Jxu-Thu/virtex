@@ -16,7 +16,6 @@ def main(_config):
 
     model = ViLTransformerSS(_config)
     exp_name = f'{_config["exp_name"]}'
-
     os.makedirs(_config["log_dir"], exist_ok=True)
     checkpoint_callback = pl.callbacks.ModelCheckpoint(
         save_top_k=1,
