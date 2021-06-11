@@ -39,6 +39,8 @@ def make_arrow(root, dataset_root):
         captions = json.load(fp)
 
     iid2captions = defaultdict(list)
+    import pdb
+    pdb.set_trace()
     for cap in tqdm(captions):
         cap = cap["regions"]
         for c in cap:
