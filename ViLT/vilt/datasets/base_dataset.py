@@ -156,7 +156,8 @@ class BaseDataset(torch.utils.data.Dataset):
                     ret.update(self.get_false_text(i))
                 result = True
             except Exception as e:
-                print(f"Error while read file idx {index} in {self.names[0]} -> {e}")
+                # debug : not printing anymore
+                # print(f"Error while read file idx {index} in {self.names[0]} -> {e}")
                 index = random.randint(0, len(self.index_mapper) - 1)
         return ret
 
