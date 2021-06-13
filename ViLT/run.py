@@ -42,6 +42,8 @@ def main(_config):
         _config["per_gpu_batchsize"] * num_gpus * _config["num_nodes"]
     )
 
+    print(f'N_GPUS: {num_gpus}, grad_steps: {grad_steps}')
+
     max_steps = _config["max_steps"] if _config["max_steps"] is not None else None
 
     trainer = pl.Trainer(
