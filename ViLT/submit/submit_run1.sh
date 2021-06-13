@@ -34,6 +34,7 @@ sudo chmod 0440 /etc/sudoers.d/${PHILLY_USER}
 
 
 cd /blob/v-jinx/virtex/ViLT
+sudo apt-get install -y git
 sudo pip --no-cache-dir install -r requirements.txt
 sudo pip --no-cache-dir install -e .
 
