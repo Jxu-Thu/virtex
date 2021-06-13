@@ -40,6 +40,8 @@ class BaseDataset(torch.utils.data.Dataset):
         self.data_dir = data_dir
 
         if len(names) != 0:
+            import pdb
+            pdb.set_trace()
             tables = [
                 pa.ipc.RecordBatchFileReader(
                     pa.memory_map(f"{data_dir}/{name}.arrow", "r")
