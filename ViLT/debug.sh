@@ -13,7 +13,7 @@
 #dist_config="-m torch.distributed.launch --nproc_per_node=${N_GPU_PER_WORKER} --nnodes=${N_WORKER} --node_rank=${NODE_RANK} \
 #    --master_addr="${MASTER_ADDR}" --master_port=${MASTER_PORT}"
 
-
+#CUDA_VISIBLE_DEVICES=0
 MASTER_PORT=54321       # Port of master server
 N_GPU_LOCAL=`nvidia-smi --query-gpu=name --format=csv,noheader | wc -l`
 N_GPU_PER_WORKER=${DLTS_NUM_GPU_PER_WORKER:-${N_GPU_LOCAL}}
