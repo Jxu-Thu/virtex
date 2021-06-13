@@ -82,8 +82,6 @@ def make_arrow(root, dataset_root):
         gc.collect()
 
 def make_arrow_blob(root, dataset_root):
-    import pdb
-    pdb.set_trace()
     captions = pd.read_csv(f'{root}/downloaded_img_report.tsv', sep='\t',
                      names=['caption', 'img', 'te', 'type', 'x', 'http_status', 'url', 'user_ids'])
     # with open(f"{root}/annot.json", "r") as fp:
