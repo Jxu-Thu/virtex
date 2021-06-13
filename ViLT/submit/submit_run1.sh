@@ -55,8 +55,8 @@ export NCCL_TREE_THRESHOLD=0
 export NCCL_ALGO=Ring
 export NCCL_DEBUG=INFO
 
-exp_name=pretrain_16GPU
+exp_name=pretrain_24GPU
 data_root=/blob/v-jinx/data/VilT_dataset
 log_dir=/blob/v-jinx/checkpoint_vilt/pre_train
 batch_size=64
-python run.py with data_root=${data_root} log_dir=${log_dir} exp_name=${exp_name} num_gpus=${N_GPU_PER_WORKER} num_nodes=${N_WORKER} task_mlm_itm whole_word_masking=True step200k per_gpu_batchsize=${batch_size}
+python run.py with data_root=${data_root} log_dir=${log_dir} exp_name=${exp_name} num_gpus=${N_GPU_PER_WORKER} num_nodes=${N_WORKER} task_mlm_itm whole_word_masking=True step200k batch_size=4608 per_gpu_batchsize=${batch_size}
