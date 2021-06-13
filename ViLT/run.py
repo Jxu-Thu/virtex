@@ -9,8 +9,6 @@ from vilt.datamodules.multitask_datamodule import MTDataModule
 
 @ex.automain
 def main(_config):
-    import pdb
-    pdb.set_trace()
     _config = copy.deepcopy(_config)
     pl.seed_everything(_config["seed"])
 
