@@ -39,6 +39,7 @@ class BaseDataset(torch.utils.data.Dataset):
         self.image_only = image_only
         self.data_dir = data_dir
 
+        # 就是把所有arror读进来concat
         if len(names) != 0:
             tables = [
                 pa.ipc.RecordBatchFileReader(
@@ -69,6 +70,7 @@ class BaseDataset(torch.utils.data.Dataset):
 
         self.index_mapper = dict()
 
+        # index: img_index, all_texts_index
         if text_column_name != "" and not self.image_only:
             j = 0
             for i, texts in enumerate(self.all_texts):
