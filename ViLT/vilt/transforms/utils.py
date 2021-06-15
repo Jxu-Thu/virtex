@@ -4,8 +4,8 @@ from PIL import Image
 
 class MinMaxResize:
     def __init__(self, shorter=800, longer=1333):
-        self.min = shorter
-        self.max = longer
+        self.min = shorter # 384
+        self.max = longer # 639
 
     def __call__(self, x):
         w, h = x.size
