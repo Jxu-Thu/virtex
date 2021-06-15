@@ -14,6 +14,4 @@ class VisualGenomeCaptionDataset(BaseDataset):
         super().__init__(*args, **kwargs, names=names, text_column_name="caption")
 
     def __getitem__(self, index):
-        import pdb
-        pdb.set_trace()
         return self.get_suite(index)

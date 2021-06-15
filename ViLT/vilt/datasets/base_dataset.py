@@ -164,6 +164,8 @@ class BaseDataset(torch.utils.data.Dataset):
         return ret
 
     def collate(self, batch, mlm_collator):
+        import pdb
+        pdb.set_trace()
         batch_size = len(batch)
         keys = set([key for b in batch for key in b.keys()])
         dict_batch = {k: [dic[k] if k in dic else None for dic in batch] for k in keys}
