@@ -2,7 +2,7 @@ import os
 import copy
 import pytorch_lightning as pl
 
-from vilt.config import ex
+from vilt.config_pdb import ex
 from vilt.modules import ViLTransformerSS
 from vilt.datamodules.multitask_datamodule import MTDataModule
 
