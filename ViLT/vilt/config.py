@@ -77,7 +77,7 @@ def config():
     num_gpus = 1
     num_nodes = 1
     load_path = ""
-    num_workers = 8 #debug 8
+    num_workers = 4 #debug 8
     precision = 16
 
 
@@ -95,6 +95,15 @@ def env_dandelin():
 def task_mlm_itm():
     exp_name = "mlm_itm"
     datasets = ["coco", "vg", "sbu", "gcc"]
+    loss_names = _loss_names({"itm": 1, "mlm": 1})
+    batch_size = 4096
+    max_epoch = 10
+    max_image_len = 200
+
+@ex.named_config
+def task_mlm_itm_indomain():
+    exp_name = "mlm_itm"
+    datasets = ["coco", "vg"]
     loss_names = _loss_names({"itm": 1, "mlm": 1})
     batch_size = 4096
     max_epoch = 10
