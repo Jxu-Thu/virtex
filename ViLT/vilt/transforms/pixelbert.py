@@ -7,6 +7,7 @@ from .randaug import RandAugment
 
 
 def pixelbert_transform(size=800):
+    # 384
     longer = int((1333 / 800) * size)
     return transforms.Compose(
         [

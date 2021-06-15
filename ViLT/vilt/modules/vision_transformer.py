@@ -555,10 +555,14 @@ class VisionTransformer(nn.Module):
         return feats, labels
 
     def visual_embed(self, _x, max_image_len=200, mask_it=False):
+        import pdb
+        pdb.set_trace()
         _, _, ph, pw = self.patch_embed.proj.weight.shape
 
         x = self.patch_embed(_x)
+        # x: 32*768*18*19
         x_mask = (_x.sum(dim=1) != 0).float()[:, None, :, :]
+        # x_mask: 32*1*576*608
         x_mask = F.interpolate(x_mask, size=(x.shape[2], x.shape[3])).long()
         x_h = x_mask[:, 0].sum(dim=1)[:, 0]
         x_w = x_mask[:, 0].sum(dim=2)[:, 0]
