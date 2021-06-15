@@ -147,7 +147,7 @@ class BaseDataset(torch.utils.data.Dataset):
             try:
                 ret = dict()
                 import pdb
-                pdb.set_trace()
+                pdb.set_trace() 
                 ret.update(self.get_image(index))
                 if not self.image_only:
                     txt = self.get_text(index)
