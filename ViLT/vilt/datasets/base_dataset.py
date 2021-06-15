@@ -146,6 +146,8 @@ class BaseDataset(torch.utils.data.Dataset):
         while result is None:
             try:
                 ret = dict()
+                import pdb
+                pdb.set_trace()
                 ret.update(self.get_image(index))
                 if not self.image_only:
                     txt = self.get_text(index)
@@ -168,9 +170,11 @@ class BaseDataset(torch.utils.data.Dataset):
         pdb.set_trace()
         batch_size = len(batch)
         keys = set([key for b in batch for key in b.keys()])
+        # Reshape key: batch * data
         dict_batch = {k: [dic[k] if k in dic else None for dic in batch] for k in keys}
 
         img_keys = [k for k in list(dict_batch.keys()) if "image" in k]
+        # ['image', 'false_image_0']
         img_sizes = list()
 
         for img_key in img_keys:
@@ -188,6 +192,7 @@ class BaseDataset(torch.utils.data.Dataset):
 
         for img_key in img_keys:
             img = dict_batch[img_key]
+            # view_size=1
             view_size = len(img[0])
 
             new_images = [
@@ -211,9 +216,17 @@ class BaseDataset(torch.utils.data.Dataset):
         if len(txt_keys) != 0:
             texts = [[d[0] for d in dict_batch[txt_key]] for txt_key in txt_keys]
             encodings = [[d[1] for d in dict_batch[txt_key]] for txt_key in txt_keys]
+            # encodings[0][0] =
+            # {'input_ids': [101, 1037, 2931, 5093, 2447, 11820, 2014, 14513, 3388, 1998, 2770, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            # 'token_type_ids': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            # 'special_tokens_mask': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            # 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
             draw_text_len = len(encodings)
             flatten_encodings = [e for encoding in encodings for e in encoding]
             flatten_mlms = mlm_collator(flatten_encodings)
+            # ('inputs_id', 'labels)
+            # inputs_id : batch size (32) * 40 tokens
+            # labels : batch size * 40 tokens
 
             for i, txt_key in enumerate(txt_keys):
                 texts, encodings = (
@@ -221,6 +234,7 @@ class BaseDataset(torch.utils.data.Dataset):
                     [d[1] for d in dict_batch[txt_key]],
                 )
 
+                # no thin
                 mlm_ids, mlm_labels = (
                     flatten_mlms["input_ids"][batch_size * (i) : batch_size * (i + 1)],
                     flatten_mlms["labels"][batch_size * (i) : batch_size * (i + 1)],
