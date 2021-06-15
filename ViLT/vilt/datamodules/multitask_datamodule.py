@@ -26,6 +26,8 @@ class MTDataModule(LightningDataModule):
         self.dist = dist
 
     def prepare_data(self):
+        import pdb
+        pdb.set_trace()
         for dm in self.dms:
             dm.prepare_data()
 
