@@ -58,11 +58,16 @@ class BaseDataset(torch.utils.data.Dataset):
             if text_column_name != "":
                 self.text_column_name = text_column_name
                 self.all_texts = self.table[text_column_name].to_pandas().tolist()
+                if not isinstance(self.all_texts[0], list):
+                    self.all_texts = [[texts] for texts in self.all_texts]
+
                 self.all_texts = (
                     [list(set(texts)) for texts in self.all_texts]
                     if remove_duplicate
                     else self.all_texts
                 )
+
+
             else:
                 self.all_texts = list()
         else:

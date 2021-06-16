@@ -15,7 +15,7 @@ class SBUCaptionDataset(BaseDataset):
 
         import pdb
         pdb.set_trace()
-        super().__init__(*args, **kwargs, remove_duplicate=False, names=names, text_column_name="caption")
+        super().__init__(*args, **kwargs,  names=names, text_column_name="caption")
 
     def __getitem__(self, index):
         return self.get_suite(index)
