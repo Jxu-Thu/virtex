@@ -39,6 +39,8 @@ class MTDataModule(LightningDataModule):
         self.test_dataset = ConcatDataset([dm.test_dataset for dm in self.dms])
         self.tokenizer = self.dms[0].tokenizer
 
+        import pdb
+        pdb.set_trace()
         self.collate = functools.partial(
             self.dms[0].train_dataset.collate, mlm_collator=self.dms[0].mlm_collator,
         )
