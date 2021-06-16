@@ -30,4 +30,4 @@ export NCCL_DEBUG=INFO
 exp_name=debug_pretrain
 data_root=/blob/v-jinx/data/VilT_dataset
 log_dir=/blob/v-jinx/checkpoint_vilt/pre_train
-python -m pdb run_pdb.py with data_root=${data_root} log_dir=${log_dir} exp_name=${exp_name} num_gpus=${N_GPU_PER_WORKER} num_nodes=${N_WORKER} task_mlm_itm whole_word_masking=True step100k per_gpu_batchsize=32
+python -m pdb run_pdb.py print_config with data_root=${data_root} log_dir=${log_dir} exp_name=${exp_name} num_gpus=${N_GPU_PER_WORKER} num_nodes=${N_WORKER} task_mlm_itm whole_word_masking=True step100k per_gpu_batchsize=32
