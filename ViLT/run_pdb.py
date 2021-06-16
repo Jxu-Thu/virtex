@@ -32,6 +32,8 @@ def main(_config):
     lr_callback = pl.callbacks.LearningRateMonitor(logging_interval="step")
     callbacks = [checkpoint_callback, lr_callback]
 
+    import pdb
+    pdb.set_trace()
     num_gpus = (
         _config["num_gpus"]
         if isinstance(_config["num_gpus"], int)
