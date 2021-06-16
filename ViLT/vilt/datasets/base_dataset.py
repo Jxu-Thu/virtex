@@ -3,7 +3,7 @@ import torch
 import io
 import pyarrow as pa
 import os
-
+import numpy as np
 from PIL import Image
 from vilt.transforms import keys_to_transforms
 
@@ -60,7 +60,7 @@ class BaseDataset(torch.utils.data.Dataset):
                 self.all_texts = self.table[text_column_name].to_pandas().tolist()
                 import pdb
                 pdb.set_trace()
-                if not isinstance(self.all_texts[0], list):
+                if (not isinstance(self.all_texts[0], list)) and (not isinstance(self.all_texts[0], np.ndarray)):
                     self.all_texts = [[texts] for texts in self.all_texts]
 
                 self.all_texts = (
