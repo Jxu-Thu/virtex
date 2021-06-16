@@ -58,8 +58,6 @@ class BaseDataset(torch.utils.data.Dataset):
             if text_column_name != "":
                 self.text_column_name = text_column_name
                 self.all_texts = self.table[text_column_name].to_pandas().tolist()
-                import pdb
-                pdb.set_trace()
                 if (not isinstance(self.all_texts[0], list)) and (not isinstance(self.all_texts[0], np.ndarray)):
                     self.all_texts = [[texts] for texts in self.all_texts]
 
