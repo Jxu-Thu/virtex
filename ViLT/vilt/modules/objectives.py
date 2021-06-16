@@ -199,15 +199,15 @@ def compute_mpfr(pl_module, batch):
 
 
 def compute_itm_wpa(pl_module, batch):
-    import pdb
-    pdb.set_trace()
     pos_len = len(batch["text"]) // 2
     neg_len = len(batch["text"]) - pos_len
     itm_labels = torch.cat([torch.ones(pos_len), torch.zeros(neg_len)]).to(
         pl_module.device
     )
     itm_labels = itm_labels[torch.randperm(itm_labels.size(0))]
-
+    # bti: 32*3*576*608
+    # bfi: 32*3*576*608
+    # 这个大小是按照最大图像对其过的，所以concat没问题，详见base_dataset.py collect函数的185行
     itm_images = [
         torch.stack(
             [
@@ -217,6 +217,7 @@ def compute_itm_wpa(pl_module, batch):
         )
         for bti, bfi in zip(batch["image"], batch["false_image_0"])
     ]
+    # itm_images: 32*3*576*608
 
     batch = {k: v for k, v in batch.items()}
     batch["image"] = itm_images
@@ -226,8 +227,10 @@ def compute_itm_wpa(pl_module, batch):
     with torch.cuda.amp.autocast(enabled=False):
         txt_emb, img_emb = infer["text_feats"], infer["image_feats"]
         txt_mask, img_mask = infer["text_masks"].bool(), infer["image_masks"].bool()
+        # mask the sep token
         for i, _len in enumerate(txt_mask.sum(dim=1)):
             txt_mask[i, _len - 1] = False
+        # mask the start token
         txt_mask[:, 0] = False
         img_mask[:, 0] = False
         if "deit" in pl_module.hparams.config["vit"]:
@@ -235,6 +238,7 @@ def compute_itm_wpa(pl_module, batch):
         txt_pad, img_pad = ~txt_mask, ~img_mask
 
         cost = cost_matrix_cosine(txt_emb.float(), img_emb.float())
+        # cost: batch:txt_len*img_token_len
         joint_pad = txt_pad.unsqueeze(-1) | img_pad.unsqueeze(-2)
         cost.masked_fill_(joint_pad, 0)
 
