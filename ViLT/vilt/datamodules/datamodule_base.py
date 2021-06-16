@@ -73,8 +73,6 @@ class BaseDataModule(LightningDataModule):
         raise NotImplementedError("return name of dataset")
 
     def set_train_dataset(self):
-        import pdb
-        pdb.set_trace()
         self.train_dataset = self.dataset_cls(
             self.data_dir,
             self.train_transform_keys,
