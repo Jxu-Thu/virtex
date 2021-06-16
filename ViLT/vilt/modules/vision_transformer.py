@@ -555,8 +555,6 @@ class VisionTransformer(nn.Module):
         return feats, labels
 
     def visual_embed(self, _x, max_image_len=200, mask_it=False):
-        import pdb
-        pdb.set_trace()
         _, _, ph, pw = self.patch_embed.proj.weight.shape
 
         x = self.patch_embed(_x)
@@ -564,6 +562,7 @@ class VisionTransformer(nn.Module):
         x_mask = (_x.sum(dim=1) != 0).float()[:, None, :, :]
         # x_mask: 32*1*576*608
         x_mask = F.interpolate(x_mask, size=(x.shape[2], x.shape[3])).long()
+        # 计算mask 32 * 1 * 18*19
         x_h = x_mask[:, 0].sum(dim=1)[:, 0]
         x_w = x_mask[:, 0].sum(dim=2)[:, 0]
 
@@ -588,6 +587,7 @@ class VisionTransformer(nn.Module):
 
         pos_embed = pos_embed.flatten(2).transpose(1, 2)
         x = x.flatten(2).transpose(1, 2)
+        # 32*342*768
         patch_index = (
             torch.stack(
                 torch.meshgrid(
@@ -598,6 +598,7 @@ class VisionTransformer(nn.Module):
             .expand(x_mask.shape[0], x_mask.shape[1], -1, -1, -1)
             .flatten(1, 3)
         )
+        # 32*(18*19)*2 : 代表patch的x,y坐标
         x_mask = x_mask.flatten(1)
 
         if mask_it:
@@ -618,6 +619,7 @@ class VisionTransformer(nn.Module):
             eff = x_h * x_w
             max_image_len = min(eff.max(), max_image_len)
 
+        # x_mask: 32 * 342
         valid_idx = x_mask.nonzero(as_tuple=False)
         non_valid_idx = (1 - x_mask).nonzero(as_tuple=False)
         unique_rows = valid_idx[:, 0].unique()
@@ -625,7 +627,7 @@ class VisionTransformer(nn.Module):
         non_valid_row_idx = [
             non_valid_idx[non_valid_idx[:, 0] == u] for u in unique_rows
         ]
-
+        # 拿到哪个batch. patch 的数据是空
         valid_nums = [v.size(0) for v in valid_row_idx]
         non_valid_nums = [v.size(0) for v in non_valid_row_idx]
         pad_nums = [max_image_len - v for v in valid_nums]
@@ -647,9 +649,13 @@ class VisionTransformer(nn.Module):
 
         select = torch.cat(select, dim=0)
         x = x[select[:, 0], select[:, 1]].view(B, -1, C)
+        # 32*200*768
         x_mask = x_mask[select[:, 0], select[:, 1]].view(B, -1)
+        # 32*200
         patch_index = patch_index[select[:, 0], select[:, 1]].view(B, -1, 2)
+        #32, 200,2
         pos_embed = pos_embed[select[:, 0], select[:, 1]].view(B, -1, C)
+        # 32*200*768
 
         if mask_it:
             label = label[select[:, 0], select[:, 1]].view(B, -1, 3)
