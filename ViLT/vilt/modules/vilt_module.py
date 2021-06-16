@@ -184,6 +184,8 @@ class ViLTransformerSS(pl.LightningModule):
         return ret
 
     def forward(self, batch):
+        import pdb
+        pdb.set_trace()
         ret = dict()
         if len(self.current_tasks) == 0:
             ret.update(self.infer(batch))
