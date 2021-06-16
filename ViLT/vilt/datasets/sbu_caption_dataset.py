@@ -13,6 +13,8 @@ class SBUCaptionDataset(BaseDataset):
         elif split == "val":
             names = []
 
+        import pdb
+        pdb.set_trace()
         super().__init__(*args, **kwargs, remove_duplicate=False, names=names, text_column_name="caption")
 
     def __getitem__(self, index):
