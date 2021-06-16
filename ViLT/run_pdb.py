@@ -68,8 +68,6 @@ def main(_config):
         fast_dev_run=_config["fast_dev_run"],
         val_check_interval=_config["val_check_interval"],
     )
-    import pdb
-    pdb.set_trace()
     if not _config["test_only"]:
         trainer.fit(model, datamodule=dm)
     else:
