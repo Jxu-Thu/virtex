@@ -5,6 +5,7 @@ import pytorch_lightning as pl
 from vilt.config import ex
 from vilt.modules import ViLTransformerSS
 from vilt.datamodules.multitask_datamodule import MTDataModule
+# https://tensorboard.dev/experiment/mNHxDM08R6eHKeU0JHn5vg/#scalars&_smoothingWeight=0.75
 
 
 @ex.automain
