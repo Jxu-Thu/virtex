@@ -27,7 +27,7 @@ def main(_config):
     )
     logger = pl.loggers.TensorBoardLogger(
         _config["log_dir"],
-        name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}',
+        name=exp_name,
     )
 
     lr_callback = pl.callbacks.LearningRateMonitor(logging_interval="step")
