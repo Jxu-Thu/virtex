@@ -63,7 +63,7 @@ def main(_config):
         accumulate_grad_batches=grad_steps,
         log_every_n_steps=10,
         flush_logs_every_n_steps=10,
-        progress_bar_refresh_rate=10,
+        progress_bar_refresh_rate=5,
         resume_from_checkpoint=_config["resume_from"],
         weights_summary="top",
         fast_dev_run=_config["fast_dev_run"],
