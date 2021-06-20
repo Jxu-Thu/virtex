@@ -59,9 +59,9 @@ exp_name=pretrain_indomain24GPU
 data_root=/blob/v-jinx/data/VilT_dataset
 log_dir=/blob/v-jinx/checkpoint_vilt/pre_train
 resume_dir=${log_dir}/${exp_name}/version_0/checkpoints/last.ckpt
-batch_size=64
+batch_size=60
 python run.py with data_root=${data_root} log_dir=${log_dir} \
 exp_name=${exp_name} num_gpus=${N_GPU_PER_WORKER} \
 num_nodes=${N_WORKER} task_mlm_itm_indomain whole_word_masking=True \
 resume_from=$resume_dir \
-step100k batch_size=4608 per_gpu_batchsize=${batch_size}
+step100k batch_size=4320 per_gpu_batchsize=${batch_size}
