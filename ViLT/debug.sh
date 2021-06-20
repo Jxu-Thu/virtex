@@ -33,7 +33,10 @@ data_root=/blob/v-jinx/data/VilT_dataset
 log_dir=/blob/v-jinx/checkpoint_vilt/pre_train
 resume_dir=${log_dir}/${exp_name}/version_0/checkpoints/last.ckpt
 batch_size=32
-python run.py with data_root=${data_root} log_dir=${log_dir} exp_name=${exp_name} num_gpus=1 num_nodes=1 task_mlm_itm_indomain whole_word_masking=True step100k per_gpu_batchsize=${batch_size}
+python run.py with data_root=${data_root} log_dir=${log_dir} exp_name=${exp_name} \
+num_gpus=1 num_nodes=1 task_mlm_itm_indomain whole_word_masking=True \
+resume_from=$resume_dir \
+step100k per_gpu_batchsize=${batch_size}
 
 #exp_name=debug_pretrain
 #data_root=/blob/v-jinx/data/VilT_dataset
