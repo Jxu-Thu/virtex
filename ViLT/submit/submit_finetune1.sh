@@ -61,5 +61,5 @@ RESUME_DIR=${LOG_DIR}/${EXP_NAME}/version_2/checkpoints/last.ckpt
 
 python run.py with data_root=$DATA_ROOT \
 num_gpus=$N_GPU_PER_WORKER num_nodes=${N_WORKER} \
-task_finetune_vqa_trainval_randaug \
+task_finetune_vqa_randaug \
 per_gpu_batchsize=64 load_path=$RESUME_DIR
