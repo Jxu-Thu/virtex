@@ -61,6 +61,7 @@ class ViLTransformerSS(pl.LightningModule):
             ckpt = torch.load(self.hparams.config["load_path"], map_location="cpu")
             state_dict = ckpt["state_dict"]
             self.load_state_dict(state_dict, strict=False)
+            print(f'Loading checkpoint from {self.hparams.config["load_path"]}')
 
         hs = self.hparams.config["hidden_size"]
 
