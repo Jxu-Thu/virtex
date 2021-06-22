@@ -38,6 +38,8 @@ def main(_config):
         else len(_config["num_gpus"])
     )
 
+    import pdb
+    pdb.set_trace()
     grad_steps = _config["batch_size"] // (
         _config["per_gpu_batchsize"] * num_gpus * _config["num_nodes"]
     )
