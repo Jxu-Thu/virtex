@@ -26,7 +26,7 @@ def main(_config):
     )
     logger = pl.loggers.TensorBoardLogger(
         _config["log_dir"],
-        name=f'{exp_name}_seed{_config["seed"]}_from_{_config["load_path"].split("/")[-1][:-5]}',
+        name=f'{exp_name}_debug',
     )
 
     lr_callback = pl.callbacks.LearningRateMonitor(logging_interval="step")
@@ -38,8 +38,6 @@ def main(_config):
         else len(_config["num_gpus"])
     )
 
-    import pdb
-    pdb.set_trace()
     grad_steps = _config["batch_size"] // (
         _config["per_gpu_batchsize"] * num_gpus * _config["num_nodes"]
     )
@@ -64,7 +62,7 @@ def main(_config):
         accumulate_grad_batches=grad_steps,
         log_every_n_steps=10,
         flush_logs_every_n_steps=10,
-        progress_bar_refresh_rate=10,
+        progress_bar_refresh_rate=5,
         resume_from_checkpoint=_config["resume_from"],
         weights_summary="top",
         fast_dev_run=_config["fast_dev_run"],

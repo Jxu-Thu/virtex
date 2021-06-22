@@ -41,7 +41,7 @@ sudo pip --no-cache-dir install -e . &>/dev/null
 
 #sudo pip --no-cache-dir install torch==$version &>/dev/null
 
-# 4卡即可
+# 4卡即可 V100 32GB
 MASTER_PORT=54321       # Port of master server
 N_GPU_LOCAL=`nvidia-smi --query-gpu=name --format=csv,noheader | wc -l`
 N_GPU_PER_WORKER=${DLTS_NUM_GPU_PER_WORKER:-${N_GPU_LOCAL}}
