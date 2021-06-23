@@ -3,7 +3,7 @@ import copy
 import pytorch_lightning as pl
 
 from vilt.config import ex
-from vilt.modules import ViLTransformerSS
+from vilt.modules import ViLTransformerSS, MoveMosCKPT
 from vilt.datamodules.multitask_datamodule import MTDataModule
 
 
@@ -30,7 +30,12 @@ def main(_config):
     )
 
     lr_callback = pl.callbacks.LearningRateMonitor(logging_interval="step")
-    callbacks = [checkpoint_callback, lr_callback]
+
+    if _config['huawei_target_dir'] is not None:
+        moveckpt_callback = MoveMosCKPT(_config["huawei_flag"], _config["huawei_target_dir"])
+        callbacks = [checkpoint_callback, lr_callback, moveckpt_callback]
+    else:
+        callbacks = [checkpoint_callback, lr_callback]
 
     num_gpus = (
         _config["num_gpus"]
