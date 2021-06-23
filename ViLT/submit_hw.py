@@ -16,11 +16,13 @@ args, unparsed = parser.parse_known_args()
 def print_and_excute_cmd(str):
     print(str)
     os.system(str)
-
-print_and_excute_cmd(args)
+    
+root=os.path.abspath('.')
+print(f'root: {root}')
+print_and_excute_cmd('args')
 print_and_excute_cmd('pwd')
 print_and_excute_cmd('ls')
-print_and_excute_cmd('cd virtex-master/ViLT')
+print_and_excute_cmd(f'cd {root}/virtex-master/ViLT')
 print_and_excute_cmd('pwd')
 print_and_excute_cmd('ls')
 
