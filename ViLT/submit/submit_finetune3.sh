@@ -41,7 +41,8 @@ sudo pip --no-cache-dir install -e . &>/dev/null
 
 #sudo pip --no-cache-dir install torch==$version &>/dev/null
 
-# 4卡即可 V100 32GB
+# 4卡即可 V100 32GB Wu2
+# 8ka V100 32GB RR!
 MASTER_PORT=54321       # Port of master server
 N_GPU_LOCAL=`nvidia-smi --query-gpu=name --format=csv,noheader | wc -l`
 N_GPU_PER_WORKER=${DLTS_NUM_GPU_PER_WORKER:-${N_GPU_LOCAL}}
@@ -63,4 +64,4 @@ RESUME_DIR=/blob/v-jinx/checkpoint_vilt/pre_train/pretrain_indomain24GPU/version
 python run.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
 exp_name=$EXP_NAME num_gpus=$N_GPU_PER_WORKER num_nodes=${N_WORKER} \
 task_finetune_vqa_randaug \
-per_gpu_batchsize=64 load_path=$RESUME_DIR
+per_gpu_batchsize=32 load_path=$RESUME_DIR
