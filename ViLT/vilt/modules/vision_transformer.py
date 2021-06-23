@@ -916,7 +916,8 @@ def _create_vision_transformer(variant, pretrained=False, distilled=False, **kwa
         **kwargs,
     )
     model.default_cfg = default_cfg
-
+    import pdb
+    pdb.set_trace()
     if pretrained:
         print('-'*30)
         print('Initialize from the Pre-trained CKPT')

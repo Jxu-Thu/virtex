@@ -81,6 +81,7 @@ def config():
     precision = 16
 
     pretrained_flag=True
+    huawei_flag=False
 
 
 # Named configs for "environment" which define gpus and nodes, and paths
