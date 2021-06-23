@@ -82,6 +82,7 @@ def config():
 
     pretrained_flag=True
     huawei_flag=False
+    huawei_root_path = ""
 
 
 # Named configs for "environment" which define gpus and nodes, and paths

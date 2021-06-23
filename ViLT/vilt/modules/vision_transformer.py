@@ -33,13 +33,14 @@ from functools import partial
 from tqdm import tqdm
 
 from timm.data import IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD
-from timm.models.helpers import load_pretrained
+# from timm.models.helpers import load_pretrained
 from timm.models.layers import StdConv2dSame, DropPath, to_2tuple, trunc_normal_
 from timm.models.resnet import resnet26d, resnet50d
 from timm.models.resnetv2 import ResNetV2
 from timm.models.registry import register_model
 from torchvision import transforms
 
+from vilt.modules.load_pretrained_ckpt import load_pretrained
 _logger = logging.getLogger(__name__)
 
 
@@ -994,6 +995,8 @@ def vit_base_patch32_384(pretrained=False, **kwargs):
     """ ViT-Base model (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
     ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
     """
+    import pdb
+    pdb.set_trace()
     model_kwargs = dict(patch_size=32, embed_dim=768, depth=12, num_heads=12, **kwargs)
     model = _create_vision_transformer(
         "vit_base_patch32_384", pretrained=pretrained, **model_kwargs
