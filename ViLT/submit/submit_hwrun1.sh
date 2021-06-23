@@ -15,6 +15,12 @@ DATA_ROOT=/cache/VilT_dataset
 LOG_DIR=/cache/checkpoint
 mkdir -p LOG_DIR
 
+echo address,$MASTER_ADDR
+echo port,$MASTER_PORT
+echo rank,$NODE_RANK
+echo gpu_per_node,$N_GPU_PER_WORKER
+echo nodes,$N_WORKER
+
 EXP_NAME=pretrain_indomain24GPU_debug
 #RESUME_DIR=${LOG_DIR}/${EXP_NAME}/version_0/checkpoints/last.ckpt
 BATCH_SIZE=64
