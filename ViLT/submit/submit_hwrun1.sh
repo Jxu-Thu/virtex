@@ -15,7 +15,7 @@ DATA_ROOT=/cache/VilT_dataset
 LOG_DIR=/cache/checkpoint
 mkdir -p LOG_DIR
 
-EXP_NAME=pretrain_indomain24GPU
+EXP_NAME=pretrain_indomain24GPU_debug
 #RESUME_DIR=${LOG_DIR}/${EXP_NAME}/version_0/checkpoints/last.ckpt
 BATCH_SIZE=64
 CKPT_DIR=s3://bucket-7001/luoxu/dataset/MMT/vilt_checkpoint/${EXP_NAME}
