@@ -903,8 +903,6 @@ def _create_vision_transformer(variant, pretrained=False, distilled=False, **kwa
     num_classes = kwargs.pop("num_classes", default_num_classes)
     img_size = kwargs.pop("img_size", default_img_size)
     repr_size = kwargs.pop("representation_size", None)
-    import pdb
-    pdb.set_trace()
     huawei_root_path = kwargs['config'].pop("huawei_root_path")
     if repr_size is not None and num_classes != default_num_classes:
         # Remove representation layer if fine-tuning. This may not always be the desired action,
@@ -928,7 +926,7 @@ def _create_vision_transformer(variant, pretrained=False, distilled=False, **kwa
         print('-'*30)
         load_pretrained(
             model,
-            save_ckpt_path=save_ckpt_path,
+            save_ckpt_path=huawei_root_path,
             num_classes=num_classes,
             in_chans=kwargs.get("in_chans", 3),
             filter_fn=partial(checkpoint_filter_fn, model=model),
