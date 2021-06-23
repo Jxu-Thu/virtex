@@ -40,7 +40,7 @@ from timm.models.resnetv2 import ResNetV2
 from timm.models.registry import register_model
 from torchvision import transforms
 
-from vilt.modules.load_pretrained_ckpt import load_pretrained
+from .load_pretrained_ckpt import load_pretrained
 _logger = logging.getLogger(__name__)
 
 

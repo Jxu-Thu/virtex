@@ -33,12 +33,12 @@ os.system('pip install --ignore-installed PyYAML')
 os.system('pip install -r requirements_hw.txt')
 os.system('pip install -e .')
 print('finish pip install')
-print_and_excute_cmd('pip list')
+
 
 
 print(sys.path)
-print('check python path')
-os.system('which python') # /home/work
+print_and_excute_cmd('which python')
+print_and_excute_cmd('which python3')
 
 print('start copy dataset!')
 mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/VilT_dataset')
