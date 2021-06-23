@@ -30,8 +30,7 @@ def main(_config):
     )
 
     lr_callback = pl.callbacks.LearningRateMonitor(logging_interval="step")
-    import pdb
-    pdb.set_trace()
+
     if _config['huawei_target_dir'] is not None:
         moveckpt_callback = MoveMosCKPT(_config["huawei_flag"], _config["huawei_target_dir"])
         callbacks = [checkpoint_callback, lr_callback, moveckpt_callback]
