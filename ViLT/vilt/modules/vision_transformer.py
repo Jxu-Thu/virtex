@@ -895,7 +895,7 @@ def checkpoint_filter_fn(state_dict, model):
     return out_dict
 
 
-def _create_vision_transformer(variant, pretrained=False, distilled=False, **kwargs):
+def _create_vision_transformer(variant, pretrained=False, distilled=False, save_ckpt_path=None,**kwargs):
     default_cfg = default_cfgs[variant]
     default_num_classes = default_cfg["num_classes"]
     default_img_size = default_cfg["input_size"][-1]
@@ -925,6 +925,7 @@ def _create_vision_transformer(variant, pretrained=False, distilled=False, **kwa
         print('-'*30)
         load_pretrained(
             model,
+            save_ckpt_path=save_ckpt_path,
             num_classes=num_classes,
             in_chans=kwargs.get("in_chans", 3),
             filter_fn=partial(checkpoint_filter_fn, model=model),
@@ -995,11 +996,10 @@ def vit_base_patch32_384(pretrained=False, **kwargs):
     """ ViT-Base model (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
     ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
     """
-    import pdb
-    pdb.set_trace()
+
     model_kwargs = dict(patch_size=32, embed_dim=768, depth=12, num_heads=12, **kwargs)
     model = _create_vision_transformer(
-        "vit_base_patch32_384", pretrained=pretrained, **model_kwargs
+        "vit_base_patch32_384", pretrained=pretrained, save_ckpt_path=kwargs['config']['huawei_root_path'], **model_kwargs
     )
     return model
 

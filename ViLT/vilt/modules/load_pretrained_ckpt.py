@@ -1,6 +1,6 @@
 from torch.hub import load_state_dict_from_url
 from timm.models.helpers import adapt_input_conv, _logger
-def load_pretrained(model, default_cfg=None, num_classes=1000, in_chans=3, filter_fn=None, strict=True, progress=False):
+def load_pretrained(model, save_ckpt_path=None, default_cfg=None, num_classes=1000, in_chans=3, filter_fn=None, strict=True, progress=False):
     """ Load pretrained checkpoint
     Args:
         model (nn.Module) : PyTorch model module
@@ -13,7 +13,10 @@ def load_pretrained(model, default_cfg=None, num_classes=1000, in_chans=3, filte
     """
     default_cfg = default_cfg or getattr(model, 'default_cfg', None) or {}
     pretrained_url = default_cfg.get('url', None)
-    state_dict = load_state_dict_from_url(pretrained_url, progress=progress, map_location='cpu')
+    if (save_ckpt_path is not None) and (save_ckpt_path != ''):
+        state_dict = load_state_dict_from_url(pretrained_url, model_dir=save_ckpt_path, progress=progress, map_location='cpu')
+    else:
+        state_dict = load_state_dict_from_url(pretrained_url, progress=progress, map_location='cpu')
     if filter_fn is not None:
         # for backwards compat with filter fn that take one arg, try one first, the two
         try:

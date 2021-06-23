@@ -82,7 +82,7 @@ def config():
 
     pretrained_flag=True
     huawei_flag=False
-    huawei_root_path = ""
+    huawei_root_path = "/cache/vilt_dataset"
 
 
 # Named configs for "environment" which define gpus and nodes, and paths
