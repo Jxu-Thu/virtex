@@ -18,7 +18,8 @@ print(args)
 
 os.system('pwd') # /home/work
 print('start pip install')
-os.chdir('./virtex-master/ViLT')
+os.system('cd /virtex-master/ViLT')
+os.system('pwd') # /home/work
 print('check now path directory')
 os.system('ls')
 os.system('pip install --upgrade pip')
