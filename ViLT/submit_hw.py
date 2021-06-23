@@ -13,15 +13,18 @@ parser.add_argument('--rank', action='store', default=0)
 parser.add_argument('--world_size', action='store', default=1)
 args, unparsed = parser.parse_known_args()
 
-print('Args')
-print(args)
+def print_and_excute_cmd(str):
+    print(str)
+    os.system(str)
 
-os.system('pwd') # /home/work
+print_and_excute_cmd(args)
+print_and_excute_cmd('pwd')
+print_and_excute_cmd('ls')
+print_and_excute_cmd('cd virtex-master/ViLT')
+print_and_excute_cmd('pwd')
+print_and_excute_cmd('ls')
+
 print('start pip install')
-os.system('cd /virtex-master/ViLT')
-os.system('pwd') # /home/work
-print('check now path directory')
-os.system('ls')
 os.system('pip install --upgrade pip')
 os.system('pip install --ignore-installed PyYAML')
 os.system('pip install -r requirements_hw.txt')
