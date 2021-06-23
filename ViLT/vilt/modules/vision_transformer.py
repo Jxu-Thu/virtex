@@ -903,7 +903,7 @@ def _create_vision_transformer(variant, pretrained=False, distilled=False, **kwa
     num_classes = kwargs.pop("num_classes", default_num_classes)
     img_size = kwargs.pop("img_size", default_img_size)
     repr_size = kwargs.pop("representation_size", None)
-    huawei_root_path = kwargs['config'].pop("huawei_root_path")
+    huawei_root_path = kwargs['config'].pop("huawei_root_path", None)
     if repr_size is not None and num_classes != default_num_classes:
         # Remove representation layer if fine-tuning. This may not always be the desired action,
         # but I feel better than doing nothing by default for fine-tuning. Perhaps a better interface?
