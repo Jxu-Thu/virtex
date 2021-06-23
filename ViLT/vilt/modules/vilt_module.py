@@ -31,8 +31,7 @@ class ViLTransformerSS(pl.LightningModule):
 
         if self.hparams.config["load_path"] == "":
             self.transformer = getattr(vit, self.hparams.config["vit"])(
-                pretrained=config["pretrained_flag"], config=self.hparams.config, model_dir=config['huawei_root_path']
-            )
+                pretrained=config["pretrained_flag"], config=self.hparams.config)
         else:
             self.transformer = getattr(vit, self.hparams.config["vit"])(
                 pretrained=False, config=self.hparams.config
