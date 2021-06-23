@@ -14,10 +14,9 @@ class MoveMosCKPT(pl.Callback):
 
 
     def on_epoch_end(self, trainer: pl.Trainer, _):
-        """ Check if we should save a checkpoint after every train batch """
-        import pdb
-        pdb.set_trace()
+        """ Move checkpoint from the docker to huawei cloud """
         source_dir = trainer.logger.log_dir
+        # /blob/v-jinx/checkpoint_vilt/pre_train/pretrain_indomain24GPU_nopretrain_debug_debug/version_2
         strings = time.strftime("%Y,%m,%d,%H")
         t = strings.split(',')
         current_path = '-'.join([str(x) for x in t])
