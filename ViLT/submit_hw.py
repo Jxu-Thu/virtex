@@ -33,6 +33,7 @@ os.system('pip install --ignore-installed PyYAML')
 os.system('pip install -r requirements_hw.txt')
 os.system('pip install -e .')
 print('finish pip install')
+print_and_excute_cmd('pip list')
 
 
 print(sys.path)
@@ -42,10 +43,9 @@ os.system('which python') # /home/work
 print('start copy dataset!')
 mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/VilT_dataset')
 print('end copy dataset!')
-os.system('ls /cache/VilT_dataset') # /home/work
+print_and_excute_cmd('ls /cache/VilT_dataset')
 
-
-os.system('pwd') # /home/work
+print_and_excute_cmd('pwd')
 
 
 Log_dir='/cache/checkpoint'
