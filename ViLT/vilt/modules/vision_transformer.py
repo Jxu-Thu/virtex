@@ -895,7 +895,7 @@ def checkpoint_filter_fn(state_dict, model):
     return out_dict
 
 
-def _create_vision_transformer(variant, pretrained=False, distilled=False, save_ckpt_path=None,**kwargs):
+def _create_vision_transformer(variant, pretrained=False, distilled=False, **kwargs):
     default_cfg = default_cfgs[variant]
     default_num_classes = default_cfg["num_classes"]
     default_img_size = default_cfg["input_size"][-1]
@@ -903,6 +903,9 @@ def _create_vision_transformer(variant, pretrained=False, distilled=False, save_
     num_classes = kwargs.pop("num_classes", default_num_classes)
     img_size = kwargs.pop("img_size", default_img_size)
     repr_size = kwargs.pop("representation_size", None)
+    import pdb
+    pdb.set_trace()
+    huawei_root_path = kwargs['config'].pop("huawei_root_path")
     if repr_size is not None and num_classes != default_num_classes:
         # Remove representation layer if fine-tuning. This may not always be the desired action,
         # but I feel better than doing nothing by default for fine-tuning. Perhaps a better interface?
@@ -996,10 +999,9 @@ def vit_base_patch32_384(pretrained=False, **kwargs):
     """ ViT-Base model (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
     ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
     """
-    huawei_root_path = kwargs['config'].pop("huawei_root_path")
     model_kwargs = dict(patch_size=32, embed_dim=768, depth=12, num_heads=12, **kwargs)
     model = _create_vision_transformer(
-        "vit_base_patch32_384", pretrained=pretrained, save_ckpt_path=huawei_root_path, **model_kwargs
+        "vit_base_patch32_384", pretrained=pretrained,  **model_kwargs
     )
     return model
 
