@@ -72,6 +72,8 @@ def main(_config):
         weights_summary="top",
         fast_dev_run=_config["fast_dev_run"],
         val_check_interval=_config["val_check_interval"],
+        limit_train_batches=1,
+        limit_val_batches=1
     )
     if not _config["test_only"]:
         trainer.fit(model, datamodule=dm)
