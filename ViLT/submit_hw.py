@@ -28,8 +28,7 @@ os.system('pip install -r requirements_hw.txt')
 os.system('pip install -e .')
 print('finish pip install')
 
-this_path = os.getcwd()
-sys.path.append(this_path)
+
 print(sys.path)
 print('check python path')
 os.system('which python') # /home/work
