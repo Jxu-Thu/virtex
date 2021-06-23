@@ -15,4 +15,5 @@ exp_name=$EXP_NAME num_gpus=1 \
 num_nodes=1 task_mlm_itm_indomain whole_word_masking=True \
 resume_from=$RESUME_DIR \
 huawei_root_path=/cache/VilT_dataset \
+huawei_target_dir=/cache/aha \
 step100k batch_size=$TOTAL_BATCH_SIZE per_gpu_batchsize=$BATCH_SIZE
