@@ -1,5 +1,6 @@
 import os
 import moxing as mox
+import sys
 
 
 import argparse
@@ -23,6 +24,10 @@ os.system('pip install --ignore-installed PyYAML')
 os.system('pip --no-cache-dir install -r requirements_hw.txt')
 os.system('pip --no-cache-dir install -e .')
 print('finish pip install')
+
+print(sys.path)
+print('check python path')
+os.system('which python') # /home/work
 
 print('start copy dataset!')
 mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/VilT_dataset')
