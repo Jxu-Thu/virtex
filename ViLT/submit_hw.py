@@ -10,7 +10,6 @@ parser.add_argument('--job_num', action='store')
 parser.add_argument('--init_method', action='store')
 parser.add_argument('--rank', action='store', default=0)
 parser.add_argument('--world_size', action='store', default=1)
-parser.add_argument('--data', action='store', help="The working directory.")
 args, unparsed = parser.parse_known_args()
 
 print('Args')
@@ -19,6 +18,7 @@ print(args)
 os.system('pwd') # /home/work
 print('start pip install')
 os.chdir('virtex-master/ViLT')
+os.system('pip --no-cache-dir install --upgrade pip')
 os.system('pip --no-cache-dir install -r requirements.txt')
 os.system('pip --no-cache-dir install -e .')
 print('finish pip install')
@@ -26,6 +26,7 @@ print('finish pip install')
 print('start copy dataset!')
 mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/VilT_dataset')
 print('end copy dataset!')
+os.system('ls /cache/VilT_dataset') # /home/work
 
 
 os.system('pwd') # /home/work
