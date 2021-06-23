@@ -80,7 +80,10 @@ def config():
     num_workers = 0 #debug 8
     precision = 16
 
-    pretrained_flag=True
+    pretrained_flag = True
+    huawei_flag = False
+    huawei_root_path = None
+    huawei_target_dir = None
 
 
 # Named configs for "environment" which define gpus and nodes, and paths
