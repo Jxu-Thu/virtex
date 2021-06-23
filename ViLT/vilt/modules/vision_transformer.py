@@ -996,10 +996,10 @@ def vit_base_patch32_384(pretrained=False, **kwargs):
     """ ViT-Base model (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
     ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
     """
-
+    huawei_root_path = kwargs['config'].pop("huawei_root_path")
     model_kwargs = dict(patch_size=32, embed_dim=768, depth=12, num_heads=12, **kwargs)
     model = _create_vision_transformer(
-        "vit_base_patch32_384", pretrained=pretrained, save_ckpt_path=kwargs['config']['huawei_root_path'], **model_kwargs
+        "vit_base_patch32_384", pretrained=pretrained, save_ckpt_path=huawei_root_path, **model_kwargs
     )
     return model
 
