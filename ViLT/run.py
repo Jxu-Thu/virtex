@@ -1,7 +1,6 @@
 import os
 import copy
 import sys
-sys.path.append('.')
 import pytorch_lightning as pl
 from vilt.config import ex
 from vilt.modules import ViLTransformerSS, MoveMosCKPT

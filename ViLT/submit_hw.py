@@ -18,13 +18,17 @@ print(args)
 
 os.system('pwd') # /home/work
 print('start pip install')
-os.chdir('virtex-master/ViLT')
+os.chdir('./virtex-master/ViLT')
+print('check now path directory')
+os.system('ls')
 os.system('pip install --upgrade pip')
 os.system('pip install --ignore-installed PyYAML')
 os.system('pip install -r requirements_hw.txt')
 os.system('pip install -e .')
 print('finish pip install')
 
+this_path = os.getcwd()
+sys.path.append(this_path)
 print(sys.path)
 print('check python path')
 os.system('which python') # /home/work
