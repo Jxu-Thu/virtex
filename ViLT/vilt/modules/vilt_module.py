@@ -30,6 +30,8 @@ class ViLTransformerSS(pl.LightningModule):
         self.token_type_embeddings.apply(objectives.init_weights)
 
         if self.hparams.config["load_path"] == "":
+            import pdb
+            pdb.set_trace()
             self.transformer = getattr(vit, self.hparams.config["vit"])(
                 pretrained=config["pretrained_flag"], config=self.hparams.config
             )
