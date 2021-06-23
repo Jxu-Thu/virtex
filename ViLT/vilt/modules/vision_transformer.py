@@ -918,6 +918,9 @@ def _create_vision_transformer(variant, pretrained=False, distilled=False, **kwa
     model.default_cfg = default_cfg
 
     if pretrained:
+        print('-'*30)
+        print('Initialize from the Pre-trained CKPT')
+        print('-'*30)
         load_pretrained(
             model,
             num_classes=num_classes,
