@@ -15,6 +15,7 @@ args, unparsed = parser.parse_known_args()
 
 os.system('pwd') # /home/work
 print('start pip install')
+os.chdir('virtex-master/ViLT')
 os.system('pip --no-cache-dir install -r requirements.txt')
 os.system('pip --no-cache-dir install -e .')
 print('finish pip install')
@@ -24,7 +25,6 @@ mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/Vil
 print('end copy dataset!')
 
 
-os.chdir('virtex-master/ViLT')
 os.system('pwd') # /home/work
 
 
