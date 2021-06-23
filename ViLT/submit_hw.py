@@ -19,10 +19,10 @@ print(args)
 os.system('pwd') # /home/work
 print('start pip install')
 os.chdir('virtex-master/ViLT')
-os.system('pip --no-cache-dir install --upgrade pip')
+os.system('pip install --upgrade pip')
 os.system('pip install --ignore-installed PyYAML')
-os.system('pip --no-cache-dir install -r requirements_hw.txt')
-os.system('pip --no-cache-dir install -e .')
+os.system('pip install -r requirements_hw.txt')
+os.system('pip install -e .')
 print('finish pip install')
 
 print(sys.path)
