@@ -12,7 +12,7 @@ TOTAL_BATCH_SIZE=64
 
 python run_pdb.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
 exp_name=$EXP_NAME num_gpus=1 \
-num_nodes=1 task_mlm_itm_indomain whole_word_masking=True \
+num_nodes=1 task_mlm_itm whole_word_masking=True \
 resume_from=$RESUME_DIR \
 huawei_root_path=/cache/VilT_dataset \
 huawei_target_dir=/cache/aha \
