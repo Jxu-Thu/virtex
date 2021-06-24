@@ -22,10 +22,15 @@ print(f'root: {root}')
 print(f'args: {args}')
 
 
+print('start copy dataset!')
+mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/VilT_dataset')
+print('end copy dataset!')
+print_and_excute_cmd('ls /cache/VilT_dataset')
+
+print_and_excute_cmd('pwd')
+
 print('start pip install')
 os.system('pip install --upgrade pip')
-os.system('pip install --ignore-installed PyYAML')
-os.system('pip install -r requirements_hw.txt')
 print('change dir to /cache/VilT_dataset/pytorch-image-models')
 os.chdir('/cache/VilT_dataset/pytorch-image-models')
 print_and_excute_cmd('pwd')
@@ -36,6 +41,8 @@ print(f'os.chdir {root}/virtex-master/ViLT')
 os.chdir(f'{root}/virtex-master/ViLT')
 print_and_excute_cmd('pwd')
 print_and_excute_cmd('ls')
+os.system('pip install --ignore-installed PyYAML')
+os.system('pip install -r requirements_hw.txt')
 os.system('python setup.py install')
 print('finish pip install')
 
@@ -43,13 +50,6 @@ print('finish pip install')
 # print(sys.path)
 # print_and_excute_cmd('which python')
 # print_and_excute_cmd('which python3')
-
-print('start copy dataset!')
-mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/VilT_dataset')
-print('end copy dataset!')
-print_and_excute_cmd('ls /cache/VilT_dataset')
-
-print_and_excute_cmd('pwd')
 
 
 Log_dir='/cache/checkpoint'
