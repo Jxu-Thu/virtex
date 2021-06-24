@@ -85,6 +85,9 @@ def config():
     huawei_root_path = None
     huawei_target_dir = None
 
+    # debug
+    proxy_dataset_debug = False
+
 
 # Named configs for "environment" which define gpus and nodes, and paths
 @ex.named_config
