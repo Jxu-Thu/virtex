@@ -127,6 +127,17 @@ def task_mlm_itm_indomain_nopretrain():
     max_image_len = 200
     pretrained_flag = False
 
+@ex.named_config
+def task_mlm_itm_indomain_nopretrain_middle():
+    exp_name = "mlm_itm"
+    datasets = ["coco", "vg"]
+    loss_names = _loss_names({"itm": 1, "mlm": 1})
+    batch_size = 4096
+    max_epoch = 10
+    max_image_len = 200
+    pretrained_flag = False
+    vit = 'vit_middle_patch32_384'
+    hidden_size = 512
 
 @ex.named_config
 def task_mlm_itm_randaug():

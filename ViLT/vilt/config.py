@@ -140,7 +140,6 @@ def task_mlm_itm_indomain_nopretrain_middle():
     vit = 'vit_middle_patch32_384'
     hidden_size = 512
 
-
 @ex.named_config
 def task_mlm_itm_randaug():
     exp_name = "mlm_itm_randaug"
