@@ -1,2 +1,0 @@
-python inf_vqa.py --txt_db /blob/v-jinx/checkpoint_uniter/pre_train_dataset/txt_db/vqa_test.db --img_db /blob/v-jinx/checkpoint_uniter/pre_train_dataset/img_db/coco_test2015 \
-    --output_dir /blob/v-jinx/checkpoint_uniter/pre_train/pretrain/vqa/self_train_submit --checkpoint 6000 --pin_mem --fp16
