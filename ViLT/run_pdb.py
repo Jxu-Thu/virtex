@@ -15,8 +15,6 @@ def main(_config):
     dm = MTDataModule(_config, dist=True)
 
     model = ViLTransformerSS(_config)
-    import pdb
-    pdb.set_trace()
     print(model)
     exp_name = f'{_config["exp_name"]}'
     os.makedirs(_config["log_dir"], exist_ok=True)
