@@ -138,6 +138,7 @@ def task_mlm_itm_indomain_nopretrain_middle():
     pretrained_flag = False
     vit = 'vit_middle_patch32_384'
     hidden_size = 512
+    num_heads = 8
 
 @ex.named_config
 def task_mlm_itm_randaug():
