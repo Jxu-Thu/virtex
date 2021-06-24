@@ -1,4 +1,4 @@
-                                                                                                                                                                                                                                  N_GPU_PER_WORKER=$1
+N_GPU_PER_WORKER=$1
 N_WORKER=$2
 NODE_RANK=$3
 MASTER_ADDR=$4
