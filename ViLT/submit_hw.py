@@ -20,25 +20,29 @@ def print_and_excute_cmd(str):
 root=os.path.abspath('.')
 print(f'root: {root}')
 print(f'args: {args}')
-print_and_excute_cmd('pwd')
-print_and_excute_cmd('ls')
-print(f'os.chdir {root}/virtex-master/ViLT')
-os.chdir(f'{root}/virtex-master/ViLT')
-print_and_excute_cmd('pwd')
-print_and_excute_cmd('ls')
+
 
 print('start pip install')
 os.system('pip install --upgrade pip')
 os.system('pip install --ignore-installed PyYAML')
 os.system('pip install -r requirements_hw.txt')
-os.system('pip install -e .')
+print('change dir to /cache/VilT_dataset/pytorch-image-models')
+os.chdir('/cache/VilT_dataset/pytorch-image-models')
+print_and_excute_cmd('pwd')
+print_and_excute_cmd('ls')
+print_and_excute_cmd('python setup.py install')
+
+print(f'os.chdir {root}/virtex-master/ViLT')
+os.chdir(f'{root}/virtex-master/ViLT')
+print_and_excute_cmd('pwd')
+print_and_excute_cmd('ls')
+os.system('python setup.py install')
 print('finish pip install')
 
 
-
-print(sys.path)
-print_and_excute_cmd('which python')
-print_and_excute_cmd('which python3')
+# print(sys.path)
+# print_and_excute_cmd('which python')
+# print_and_excute_cmd('which python3')
 
 print('start copy dataset!')
 mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/VilT_dataset')
