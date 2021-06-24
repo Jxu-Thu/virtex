@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import pytorch_lightning as pl
-import vilt.modules.vision_transformer as vit
+# import vilt.modules.vision_transformer as vit
 
 from transformers.models.bert.modeling_bert import BertConfig, BertEmbeddings
 from vilt.modules import heads, objectives, vilt_utils
@@ -28,6 +28,8 @@ class ViLTransformerSS(pl.LightningModule):
 
         self.token_type_embeddings = nn.Embedding(2, config["hidden_size"])
         self.token_type_embeddings.apply(objectives.init_weights)
+
+        import vilt.modules.vision_transformer as vit
 
         if self.hparams.config["load_path"] == "":
             self.transformer = getattr(vit, self.hparams.config["vit"])(
