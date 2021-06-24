@@ -16,4 +16,5 @@ num_nodes=1 task_mlm_itm_indomain whole_word_masking=True \
 resume_from=$RESUME_DIR \
 huawei_root_path=/cache/VilT_dataset \
 huawei_target_dir=/cache/aha \
+proxy_dataset_debug=True \
 step100k batch_size=$TOTAL_BATCH_SIZE per_gpu_batchsize=$BATCH_SIZE
