@@ -9,18 +9,29 @@ from transformers import (
 )
 
 
-def get_pretrained_tokenizer(from_pretrained):
-    import pdb
-    pdb.set_trace()
-    if torch.distributed.is_initialized():
-        if torch.distributed.get_rank() == 0:
-            BertTokenizer.from_pretrained(
-                from_pretrained, do_lower_case="uncased" in from_pretrained
-            )
-        torch.distributed.barrier()
-    return BertTokenizer.from_pretrained(
-        from_pretrained, do_lower_case="uncased" in from_pretrained
-    )
+def get_pretrained_tokenizer(from_pretrained, huawei_flag=False):
+    if not huawei_flag:
+        if torch.distributed.is_initialized():
+            if torch.distributed.get_rank() == 0:
+                BertTokenizer.from_pretrained(
+                    from_pretrained, do_lower_case="uncased" in from_pretrained
+                )
+            torch.distributed.barrier()
+        return BertTokenizer.from_pretrained(
+            from_pretrained, do_lower_case="uncased" in from_pretrained
+        )
+    else:
+        from_pretrained = '/cache/VilT_dataset/bert-base-uncased'
+        if torch.distributed.is_initialized():
+            if torch.distributed.get_rank() == 0:
+                BertTokenizer.from_pretrained(
+                    from_pretrained, do_lower_case=True, local_files_only=True
+                )
+            torch.distributed.barrier()
+        return BertTokenizer.from_pretrained(
+            from_pretrained, do_lower_case=True, local_files_only=True
+        )
+
 
 
 class BaseDataModule(LightningDataModule):
@@ -52,7 +63,7 @@ class BaseDataModule(LightningDataModule):
         )
 
         tokenizer = _config["tokenizer"]
-        self.tokenizer = get_pretrained_tokenizer(tokenizer)
+        self.tokenizer = get_pretrained_tokenizer(tokenizer, _config["huawei_flag"])
         self.vocab_size = self.tokenizer.vocab_size
 
         collator = (
