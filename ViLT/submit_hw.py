@@ -35,14 +35,14 @@ print('change dir to /cache/VilT_dataset/pytorch-image-models')
 os.chdir('/cache/VilT_dataset/pytorch-image-models')
 print_and_excute_cmd('pwd')
 print_and_excute_cmd('ls')
-print_and_excute_cmd('python setup.py install')
+print_and_excute_cmd('python setup.py install &>/dev/null')
 
 print(f'os.chdir {root}/virtex-master/ViLT')
 os.chdir(f'{root}/virtex-master/ViLT')
 print_and_excute_cmd('pwd')
 print_and_excute_cmd('ls')
 os.system('pip install --ignore-installed PyYAML')
-os.system('pip install -r requirements_hw.txt')
+os.system('pip install -r requirements_hw.txt &>/dev/null')
 # os.system('pip install pytorch_lightning==1.1.4')
 # os.system('pip install torch==1.7.1')
 # os.system('pip install torch==1.7.1')
@@ -53,10 +53,7 @@ os.system('pip install -r requirements_hw.txt')
 # os.system('pip install pyarrow==2.0.0')
 # os.system('pip install sacred==0.8.2')
 # os.system('pip install pandas==1.1.5')
-
-
-
-os.system('python setup.py install')
+os.system('python setup.py install &>/dev/null')
 print('finish pip install')
 
 
