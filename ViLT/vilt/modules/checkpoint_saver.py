@@ -25,5 +25,5 @@ class MoveMosCKPT(pl.Callback):
             if self.huawei_flag:
                 import moxing as mox
                 mox.file.copy_parallel(source_dir, target_dir)
-            else:
-                shutil.copytree(source_dir, target_dir)
+            # else:
+            #     shutil.copytree(source_dir, target_dir)
