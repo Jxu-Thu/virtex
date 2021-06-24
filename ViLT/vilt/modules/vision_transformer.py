@@ -151,6 +151,13 @@ default_cfgs = {
         std=(0.5, 0.5, 0.5),
         crop_pct=1.0,
     ),
+   "vit_middle_patch32_384": _cfg(
+        url='None',
+        input_size=(3, 384, 384),
+        mean=(0.5, 0.5, 0.5),
+        std=(0.5, 0.5, 0.5),
+        crop_pct=1.0,
+    ),
     "vit_large_patch16_224": _cfg(
         url="https://github.com/rwightman/pytorch-image-models/releases/download/v0.1-vitjx/jx_vit_large_p16_224-4ee7a4dc.pth",
         mean=(0.5, 0.5, 0.5),
@@ -1001,6 +1008,16 @@ def vit_base_patch32_384(pretrained=False, **kwargs):
     )
     return model
 
+@register_model
+def vit_middle_patch32_384(pretrained=False, **kwargs):
+    """ ViT-Base model (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
+    ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
+    """
+    model_kwargs = dict(patch_size=32, embed_dim=512, depth=12, num_heads=12, **kwargs)
+    model = _create_vision_transformer(
+        "vit_middle_patch32_384", pretrained=False,  **model_kwargs
+    )
+    return model
 
 @register_model
 def vit_large_patch16_224(pretrained=False, **kwargs):
