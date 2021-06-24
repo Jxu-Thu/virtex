@@ -5,7 +5,7 @@ LOG_DIR=/blob/v-jinx/checkpoint_vilt/pre_train
 
 EXP_NAME=pretrain_indomain24GPU_nopretrain_debug
 RESUME_DIR=${LOG_DIR}/${EXP_NAME}/version_0/checkpoints/last.ckpt
-BATCH_SIZE=32
+BATCH_SIZE=${BATCH_SIZE:-"32"}
 TOTAL_BATCH_SIZE=64
 
 
