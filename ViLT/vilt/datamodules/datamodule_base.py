@@ -21,7 +21,6 @@ def get_pretrained_tokenizer(from_pretrained, huawei_flag=False):
             from_pretrained, cache_dir='/blob/v-jinx/bert-base-uncased', do_lower_case="uncased" in from_pretrained
         )
     else:
-        print('comming here')
         if torch.distributed.is_initialized():
             if torch.distributed.get_rank() == 0:
                 BertTokenizer.from_pretrained(
