@@ -10,6 +10,8 @@ from transformers import (
 
 
 def get_pretrained_tokenizer(from_pretrained, huawei_flag=False):
+    import pdb
+    pdb.set_trace()
     if not huawei_flag:
         if torch.distributed.is_initialized():
             if torch.distributed.get_rank() == 0:
