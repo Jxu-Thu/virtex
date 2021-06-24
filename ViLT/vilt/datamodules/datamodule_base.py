@@ -16,22 +16,21 @@ def get_pretrained_tokenizer(from_pretrained, huawei_flag=False):
         if torch.distributed.is_initialized():
             if torch.distributed.get_rank() == 0:
                 BertTokenizer.from_pretrained(
-                    from_pretrained, cache_dir='/cache/VilT_dataset/bert-base-uncased', do_lower_case="uncased" in from_pretrained
+                    from_pretrained, cache_dir='/blob/v-jinx/bert-base-uncased', do_lower_case="uncased" in from_pretrained
                 )
             torch.distributed.barrier()
         return BertTokenizer.from_pretrained(
-            from_pretrained, cache_dir='/cache/VilT_dataset/bert-base-uncased', do_lower_case="uncased" in from_pretrained
+            from_pretrained, cache_dir='/blob/v-jinx/bert-base-uncased', do_lower_case="uncased" in from_pretrained
         )
     else:
-        from_pretrained = '/cache/VilT_dataset/bert-base-uncased'
         if torch.distributed.is_initialized():
             if torch.distributed.get_rank() == 0:
                 BertTokenizer.from_pretrained(
-                    from_pretrained, do_lower_case=True, local_files_only=True
+                    from_pretrained, cache_dir='/cache/VilT_dataset/bert-base-uncased', do_lower_case=True
                 )
             torch.distributed.barrier()
         return BertTokenizer.from_pretrained(
-            from_pretrained, do_lower_case=True, local_files_only=True
+            from_pretrained, cache_dir='/cache/VilT_dataset/bert-base-uncased', do_lower_case=True
         )
 
 
