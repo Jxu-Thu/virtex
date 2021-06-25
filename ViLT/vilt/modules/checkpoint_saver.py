@@ -15,7 +15,7 @@ class MoveMosCKPT(pl.Callback):
 
     def on_epoch_end(self, trainer: pl.Trainer, _):
         """ Move checkpoint from the docker to huawei cloud """
-        print(f'this device {trainer.global_rank}')
+        print(f'----- this device {trainer.global_rank} ------------')
         if trainer.is_global_zero:
             source_dir = trainer.logger.log_dir
             # /blob/v-jinx/checkpoint_vilt/pre_train/pretrain_indomain24GPU_nopretrain_debug_debug/version_2
