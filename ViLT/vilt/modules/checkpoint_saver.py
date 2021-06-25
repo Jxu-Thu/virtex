@@ -26,6 +26,9 @@ class MoveMosCKPT(pl.Callback):
             target_dir = os.path.join(self.target_dir, current_path)
             if self.huawei_flag:
                 import moxing as mox
-                mox.file.copy_parallel(source_dir, target_dir)
+                try:
+                    mox.file.copy_parallel(source_dir, target_dir)
+                except:
+                    print('I do know what fucking reason leads to that this process is corrupted.')
             # else:
             #     shutil.copytree(source_dir, target_dir)
