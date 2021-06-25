@@ -17,6 +17,7 @@ class MoveMosCKPT(pl.Callback):
         """ Move checkpoint from the docker to huawei cloud """
         print(f'----- this device {trainer.global_rank} ------------')
         if trainer.is_global_zero:
+            print('---------- Transfer CKPT back ------------')
             source_dir = trainer.logger.log_dir
             # /blob/v-jinx/checkpoint_vilt/pre_train/pretrain_indomain24GPU_nopretrain_debug_debug/version_2
             strings = time.strftime("%Y,%m,%d,%H")
