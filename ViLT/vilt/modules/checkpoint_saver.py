@@ -30,6 +30,6 @@ class MoveMosCKPT(pl.Callback):
                     mox.file.copy_parallel(source_dir, target_dir)
                 except:
                     print('I do know what fucking reason leads to that this process is corrupted.')
-            print('---------- Mos works. So fucking lucky! ------------')
+            print('---------- Mox works. So fucking lucky! ------------')
             # else:
             #     shutil.copytree(source_dir, target_dir)
