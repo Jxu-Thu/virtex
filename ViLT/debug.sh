@@ -17,3 +17,5 @@ resume_from=$RESUME_DIR \
 huawei_root_path=/cache/VilT_dataset \
 huawei_target_dir=/cache/aha \
 step100k batch_size=$TOTAL_BATCH_SIZE per_gpu_batchsize=$BATCH_SIZE
+
+
