@@ -143,6 +143,20 @@ def task_mlm_itm_indomain_nopretrain_middle():
     num_workers = 8
 
 @ex.named_config
+def task_mlm_itm_indomain_nopretrain_middle_no_itm():
+    exp_name = "mlm"
+    datasets = ["coco", "vg"]
+    loss_names = _loss_names({"mlm": 1})
+    batch_size = 4096
+    max_epoch = 10
+    max_image_len = 200
+    pretrained_flag = False
+    vit = 'vit_middle_patch32_384'
+    hidden_size = 512
+    num_heads = 8
+    num_workers = 8
+
+@ex.named_config
 def task_mlm_itm_randaug():
     exp_name = "mlm_itm_randaug"
     datasets = ["coco", "vg", "sbu", "gcc"]
