@@ -218,8 +218,6 @@ class ViLTransformerSS(pl.LightningModule):
         return ret
 
     def training_step(self, batch, batch_idx):
-        import pdb
-        pdb.set_trace()
         vilt_utils.set_task(self)
         output = self(batch)
         total_loss = sum([v for k, v in output.items() if "loss" in k])
