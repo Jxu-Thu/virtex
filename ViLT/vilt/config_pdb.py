@@ -153,7 +153,7 @@ def task_mlm_itm_indomain_nopretrain_middle_no_itm():
     hidden_size = 512
     num_heads = 8
     num_workers = 8
-    
+
 @ex.named_config
 def task_mlm_itm_randaug():
     exp_name = "mlm_itm_randaug"
