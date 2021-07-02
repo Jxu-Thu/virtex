@@ -24,7 +24,6 @@ echo nodes,$N_WORKER
 
 EXP_NAME=pretrain_indomain24GPU_h512_without_pretrain_ft
 #RESUME_DIR=${LOG_DIR}/${EXP_NAME}/version_0/checkpoints/last.ckpt
-BATCH_SIZE=96
 CKPT_DIR=s3://bucket-7001/luoxu/dataset/MMT/vilt_checkpoint/${EXP_NAME}
 
 python run.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
