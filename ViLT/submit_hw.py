@@ -33,7 +33,7 @@ print_and_excute_cmd('pwd')
 
 if args.resume_ckpt is not None:
     print('start copy ckpt!')
-    mox.file.copy_parallel(args.resume_ckpt, '/cache/checkpoint/resume_dir/last.ckpt')
+    mox.file.copy_parallel(f"s3://{args.resume_ckpt}", '/cache/checkpoint/resume_dir/last.ckpt')
     print('end copy dataset!')
     print_and_excute_cmd('ls /cache/checkpoint/resume_dir')
 
