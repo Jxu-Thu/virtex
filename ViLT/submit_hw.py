@@ -25,7 +25,10 @@ print(f'args: {args}')
 
 
 print('start copy dataset!')
-mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/VilT_dataset')
+if args.job_type == 0:
+    mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/alldata', '/cache/VilT_dataset')
+else:
+    mox.file.copy_parallel('s3://bucket-7001/luoxu/dataset/MMT/all_downstream', '/cache/VilT_dataset')
 print('end copy dataset!')
 print_and_excute_cmd('ls /cache/VilT_dataset')
 
