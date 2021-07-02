@@ -27,6 +27,10 @@ BATCH_SIZE=96
 TOTAL_BATCH_SIZE=3072
 CKPT_DIR=s3://bucket-7001/luoxu/dataset/MMT/vilt_checkpoint/${EXP_NAME}
 
+echo 'config'
+echo $EXP_NAME
+echo task_mlm_itm_indomain_nopretrain_middle_no_itm
+
 python run.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
 exp_name=$EXP_NAME num_gpus=$N_GPU_PER_WORKER \
 num_nodes=${N_WORKER} task_mlm_itm_indomain_nopretrain_middle_no_itm whole_word_masking=True \
