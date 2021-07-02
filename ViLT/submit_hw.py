@@ -7,6 +7,8 @@ import argparse
 parser = argparse.ArgumentParser(description="HW RUN JOB")
 parser.add_argument('--gpus_per_node', action='store', help="gpu number per node")
 parser.add_argument('--job_num', action='store')
+parser.add_argument('--resume_ckpt', action='store', default=None)
+parser.add_argument('--job_type', action='store', default=0) # 0 pretrain 1 finetune
 # auto arg
 parser.add_argument('--init_method', action='store')
 parser.add_argument('--rank', action='store', default=0)
@@ -28,6 +30,12 @@ print('end copy dataset!')
 print_and_excute_cmd('ls /cache/VilT_dataset')
 
 print_and_excute_cmd('pwd')
+
+if args.resume_ckpt is not None:
+    print('start copy ckpt!')
+    mox.file.copy_parallel(args.resume_ckpt, '/cache/checkpoint/resume_dir/last.ckpt')
+    print('end copy dataset!')
+    print_and_excute_cmd('ls /cache/checkpoint/resume_dir')
 
 print('start pip install')
 os.system('pip install --upgrade pip')
@@ -64,7 +72,10 @@ print('finish pip install')
 
 Log_dir='/cache/checkpoint'
 print('Run scripts!')
-run_file=f'submit_hwrun{args.job_num}.sh'
+if args.job_type == 0:
+    run_file=f'submit_hwrun{args.job_num}.sh'
+else:
+    run_file = f'submit_hwfinetune{args.job_num}.sh'
 strs = (f'bash submit/{run_file} {args.gpus_per_node} {args.world_size} {args.rank} {args.init_method[6:-5]} {args.init_method[-4:]}')
 print(strs)
 os.system(strs)
