@@ -29,7 +29,7 @@ CKPT_DIR=s3://bucket-7001/luoxu/dataset/MMT/vilt_checkpoint/${EXP_NAME}
 python run.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
 exp_name=$EXP_NAME num_gpus=$N_GPU_PER_WORKER \
 num_nodes=${N_WORKER} \
-task_finetune_vqa_randaug \
+task_finetune_middle_vqa_randaug \
 huawei_target_dir=$CKPT_DIR \
 huawei_flag=True \
 huawei_root_path=/cache/VilT_dataset \

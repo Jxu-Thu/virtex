@@ -220,6 +220,24 @@ def task_finetune_vqa():
 
 
 @ex.named_config
+def task_finetune_middle_vqa_randaug():
+    exp_name = "finetune_vqa_randaug"
+    datasets = ["vqa"]
+    train_transform_keys = ["pixelbert_randaug"]
+    loss_names = _loss_names({"vqa": 1})
+    batch_size = 256
+    max_epoch = 10
+    max_steps = None
+    warmup_steps = 0.1
+    draw_false_image = 0
+    learning_rate = 1e-4
+    val_check_interval = 0.1
+    vit = 'vit_middle_patch32_384'
+    hidden_size = 512
+    num_heads = 8
+    lr_mult = 10
+
+@ex.named_config
 def task_finetune_vqa_randaug():
     exp_name = "finetune_vqa_randaug"
     datasets = ["vqa"]
