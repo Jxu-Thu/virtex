@@ -146,8 +146,6 @@ class BaseDataset(torch.utils.data.Dataset):
         return {f"false_text_{rep}": (text, encoding)}
 
     def get_suite(self, index):
-        import pdb
-        pdb.set_trace()
         result = None
         while result is None:
             try:
@@ -225,6 +223,8 @@ class BaseDataset(torch.utils.data.Dataset):
             # 'attention_mask': [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
             draw_text_len = len(encodings)
             flatten_encodings = [e for encoding in encodings for e in encoding]
+            import pdb
+            pdb.set_trace()
             flatten_mlms = mlm_collator(flatten_encodings)
             # ('inputs_id', 'labels)
             # inputs_id : batch size (32) * 40 tokens
