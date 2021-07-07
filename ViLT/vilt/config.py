@@ -89,6 +89,9 @@ def config():
     # debug
     proxy_dataset_debug=False
 
+    # OT
+    tempeture_max_OT=False
+
 
 # Named configs for "environment" which define gpus and nodes, and paths
 @ex.named_config

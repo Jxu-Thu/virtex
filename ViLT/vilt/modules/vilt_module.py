@@ -22,7 +22,7 @@ class ViLTransformerSS(pl.LightningModule):
             hidden_dropout_prob=config["drop_rate"],
             attention_probs_dropout_prob=config["drop_rate"],
         )
-
+        self.tempeture_max_OT = config['tempeture_max_OT']
         self.text_embeddings = BertEmbeddings(bert_config)
         self.text_embeddings.apply(objectives.init_weights)
 
@@ -201,7 +201,14 @@ class ViLTransformerSS(pl.LightningModule):
 
         # Image Text Matching
         if "itm" in self.current_tasks:
-            ret.update(objectives.compute_itm_wpa(self, batch))
+            if self.tempeture_max_OT:
+                if self.trainer:
+                    temp = self.trainer.global_step / self.trainer.max_steps
+                else:
+                    temp = 0 # for
+                ret.update(objectives.compute_itm_wpa_tmp_max_ot(self, batch, temp))
+            else:
+                ret.update(objectives.compute_itm_wpa(self, batch))
 
         # Visual Question Answering
         if "vqa" in self.current_tasks:
