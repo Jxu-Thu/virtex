@@ -728,8 +728,15 @@ class VisionTransformer(nn.Module):
         return x
 
 
-class VisionCStemTransformer(VisionTransformer):
-    def __init__(self,
+class VisionCStemTransformer(nn.Module):
+    """ Vision Transformer
+
+    A PyTorch impl of : `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale`  -
+        https://arxiv.org/abs/2010.11929
+    """
+
+    def __init__(
+        self,
         img_size=224,
         patch_size=16,
         in_chans=3,
@@ -747,25 +754,36 @@ class VisionCStemTransformer(VisionTransformer):
         norm_layer=None,
         add_norm_before_transformer=False,
         no_patch_embed_bias=False,
-        config=None):
-        super().__init__(img_size=img_size,
-        patch_size=patch_size,
-        in_chans=in_chans,
-        num_classes=num_classes,
-        embed_dim=embed_dim,
-        depth=depth,
-        num_heads=num_heads,
-        mlp_ratio=mlp_ratio,
-        qkv_bias=qkv_bias,
-        qk_scale=qk_scale,
-        representation_size=representation_size,
-        drop_rate=drop_rate,
-        attn_drop_rate=attn_drop_rate,
-        drop_path_rate=drop_path_rate,
-        norm_layer=norm_layer,
-        add_norm_before_transformer=add_norm_before_transformer,
-        no_patch_embed_bias=no_patch_embed_bias,
-        config=config)
+        config=None,
+    ):
+        """
+        Args:
+            img_size (int, tuple): input image size
+            patch_size (int, tuple): patch size
+            in_chans (int): number of input channels
+            num_classes (int): number of classes for classification head
+            embed_dim (int): embedding dimension
+            depth (int): depth of transformer
+            num_heads (int): number of attention heads
+            mlp_ratio (int): ratio of mlp hidden dim to embedding dim
+            qkv_bias (bool): enable bias for qkv if True
+            qk_scale (float): override default qk scale of head_dim ** -0.5 if set
+            representation_size (Optional[int]): enable and set representation layer (pre-logits) to this value if set
+            drop_rate (float): dropout rate
+            attn_drop_rate (float): attention dropout rate
+            drop_path_rate (float): stochastic depth rate
+            hybrid_backbone (nn.Module): CNN backbone to use in-place of PatchEmbed module
+            norm_layer: (nn.Module): normalization layer
+        """
+        super().__init__()
+        drop_rate = drop_rate if config is None else config["drop_rate"]
+
+        self.num_classes = num_classes
+        self.num_features = (
+            self.embed_dim
+        ) = embed_dim  # num_features for consistency with other models
+        norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
+        self.add_norm_before_transformer = add_norm_before_transformer
 
         import pdb
         pdb.set_trace()
@@ -777,11 +795,14 @@ class VisionCStemTransformer(VisionTransformer):
         )
         num_patches = self.patch_embed.num_patches
 
-
         self.patch_size = patch_size
         self.patch_dim = img_size // patch_size
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
         self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, embed_dim))
+        self.pos_drop = nn.Dropout(p=drop_rate)
+
+        if add_norm_before_transformer:
+            self.pre_norm = norm_layer(embed_dim)
 
         dpr = [
             x.item() for x in torch.linspace(0, drop_path_rate, depth)
@@ -808,10 +829,55 @@ class VisionCStemTransformer(VisionTransformer):
         trunc_normal_(self.cls_token, std=0.02)
         self.apply(self._init_weights)
 
+    def _init_weights(self, m):
+        if isinstance(m, nn.Linear):
+            trunc_normal_(m.weight, std=0.02)
+            if isinstance(m, nn.Linear) and m.bias is not None:
+                nn.init.constant_(m.bias, 0)
+        elif isinstance(m, nn.LayerNorm):
+            nn.init.constant_(m.bias, 0)
+            nn.init.constant_(m.weight, 1.0)
+
+    @torch.jit.ignore
+    def no_weight_decay(self):
+        return {"pos_embed", "cls_token"}
+
+    def mask_tokens(self, orig_image, feats):
+        """
+        Prepare masked tokens inputs/labels for masked patch prediction: 80% MASK, 10% random, 10% original.
+        """
+        img_unnorm = orig_image * 0.5 + 0.5
+        _, _, ph, pw = self.patch_embed.proj.weight.shape
+        with torch.no_grad():
+            img_unnorm_patch = F.conv2d(
+                img_unnorm,
+                weight=torch.ones(3, 1, ph, pw).to(img_unnorm) / (ph * pw),
+                bias=None,
+                stride=(ph, pw),
+                padding=0,
+                groups=3,
+            )
+        labels = (
+            ((img_unnorm_patch * 255).long().flatten(start_dim=2, end_dim=3))
+            .permute(0, 2, 1)
+            .contiguous()
+        )
+
+        # We sample a few tokens in each sequence for MLM training (with probability `self.mlm_probability`)
+        probability_matrix = torch.full(labels.shape[:-1], 0.15)
+        masked_indices = torch.bernoulli(probability_matrix).bool()
+        labels[~masked_indices] = -100  # We only compute loss on masked tokens
+
+        # 80% of the time, we replace masked input tokens with tokenizer.mask_token ([MASK])
+        indices_replaced = (
+            torch.bernoulli(torch.full(labels.shape[:-1], 0.8)).bool() & masked_indices
+        )
+        feats[indices_replaced] = self.mask_token.to(feats)
+
+        return feats, labels
+
     def visual_embed(self, _x, max_image_len=200, mask_it=False):
         _, _, ph, pw = self.patch_embed.proj.weight.shape
-        import pdb
-        pdb.set_trace()
 
         x = self.patch_embed(_x)
         # x: 32*768*18*19
@@ -940,8 +1006,6 @@ class VisionCStemTransformer(VisionTransformer):
             return x, x_mask, (patch_index, (H, W)), None
 
     def forward_features(self, _x, max_image_len=144, mask_it=False):
-        import pdb
-        pdb.set_trace()
         x, x_mask, patch_index, label = self.visual_embed(
             _x, max_image_len=max_image_len, mask_it=mask_it
         )
