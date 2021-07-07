@@ -580,7 +580,7 @@ class VisionTransformer(nn.Module):
         return feats, labels
 
     def visual_embed(self, _x, max_image_len=200, mask_it=False):
-        _, _, ph, pw = self.patch_embed.proj.weight.shape
+        ph = pw = self.patch_size
 
         x = self.patch_embed(_x)
         # x: 32*768*18*19
@@ -783,8 +783,6 @@ class VisionCStemTransformer(nn.Module):
         norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
         self.add_norm_before_transformer = add_norm_before_transformer
 
-        import pdb
-        pdb.set_trace()
         self.patch_embed = ConvPatchEmbed(
             img_size=img_size,
             patch_size=patch_size,
@@ -845,7 +843,7 @@ class VisionCStemTransformer(nn.Module):
         Prepare masked tokens inputs/labels for masked patch prediction: 80% MASK, 10% random, 10% original.
         """
         img_unnorm = orig_image * 0.5 + 0.5
-        _, _, ph, pw = self.patch_embed.proj.weight.shape
+        ph, pw = self.patch_size, self.patch_size
         with torch.no_grad():
             img_unnorm_patch = F.conv2d(
                 img_unnorm,
