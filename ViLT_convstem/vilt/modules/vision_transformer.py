@@ -378,10 +378,11 @@ class ConvLayer(nn.Module):
             out_chans,
             kernel_size=3,
             strides=2,
+            padding=1,
             act=nn.ReLU
     ):
         super().__init__()
-        self.conv = nn.Conv2d(in_chans, out_chans, kernel_size=kernel_size, stride=strides)
+        self.conv = nn.Conv2d(in_chans, out_chans, kernel_size=kernel_size, stride=strides, padding=padding)
         self.norm = nn.BatchNorm2d(out_chans)
         self.act = nn.ReLU()
         # else:
@@ -408,11 +409,11 @@ class ConvPatchEmbed(nn.Module):
         self.patch_size = patch_size
         self.num_patches = num_patches
 
-        self.proj = nn.Sequential(ConvLayer(in_chans, 24, 3, 2),
-                                  ConvLayer(24, 48, 3, 2),
-                                  ConvLayer(48, 96, 3, 2),
-                                  ConvLayer(96, 192, 3, 2),
-                                  ConvLayer(192, 384, 3, 2),
+        self.proj = nn.Sequential(ConvLayer(in_chans, 24, 3, 2, 1),
+                                  ConvLayer(24, 48, 3, 2, 1),
+                                  ConvLayer(48, 96, 3, 2, 1),
+                                  ConvLayer(96, 192, 3, 2, 1),
+                                  ConvLayer(192, 384, 3, 2, 1),
                                   nn.Conv2d(384, embed_dim, kernel_size=1, stride=1)
                                    )
         # self.proj = nn.Conv2d(
