@@ -1002,8 +1002,6 @@ class VisionCStemTransformer(nn.Module):
             return x, x_mask, (patch_index, (H, W)), None
 
     def forward_features(self, _x, max_image_len=144, mask_it=False):
-        import pdb
-        pdb.set_trace()
         x, x_mask, patch_index, label = self.visual_embed(
             _x, max_image_len=max_image_len, mask_it=mask_it
         )
