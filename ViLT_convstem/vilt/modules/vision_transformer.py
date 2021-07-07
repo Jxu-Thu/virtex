@@ -409,12 +409,12 @@ class ConvPatchEmbed(nn.Module):
         self.patch_size = patch_size
         self.num_patches = num_patches
 
-        self.proj = nn.Sequential(ConvLayer(in_chans, 24, 3, 2, 1),
-                                  ConvLayer(24, 48, 3, 2, 1),
+        self.proj = nn.Sequential(ConvLayer(in_chans, 48, 3, 2, 1),
                                   ConvLayer(48, 96, 3, 2, 1),
                                   ConvLayer(96, 192, 3, 2, 1),
                                   ConvLayer(192, 384, 3, 2, 1),
-                                  nn.Conv2d(384, embed_dim, kernel_size=1, stride=1)
+                                  ConvLayer(384, 768, 3, 2, 1),
+                                  nn.Conv2d(768, embed_dim, kernel_size=1, stride=1)
                                    )
         # self.proj = nn.Conv2d(
         #     in_chans,
@@ -1217,7 +1217,7 @@ def vit_middle_conv_patch32_384(pretrained=False, **kwargs):
     """ ViT-Base model (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
     ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
     """
-    model_kwargs = dict(patch_size=32, embed_dim=512, depth=12, num_heads=8, **kwargs)
+    model_kwargs = dict(patch_size=32, embed_dim=512, depth=11, num_heads=8, **kwargs)
     model = _create_vision_conv_stem_transformer(
         "vit_middle_patch32_384", pretrained=False,  **model_kwargs
     )
