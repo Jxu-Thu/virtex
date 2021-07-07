@@ -201,8 +201,6 @@ class ViLTransformerSS(pl.LightningModule):
 
         # Image Text Matching
         if "itm" in self.current_tasks:
-            import pdb
-            pdb.set_trace()
             if self.tempeture_max_OT:
                 if self.trainer:
                     temp = self.trainer.global_step / self.trainer.max_steps

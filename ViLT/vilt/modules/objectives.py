@@ -70,8 +70,6 @@ def ipot(C, x_len, x_pad, y_len, y_pad, joint_pad, beta, iteration, k):
 @torch.no_grad()
 def weighted_ipot(C, txt_w, img_w, x_len, x_pad, y_len, y_pad, joint_pad, beta, iteration, k):
     """ [B, M, N], [B], [B, M], [B], [B, N], [B, M, N]"""
-    import pdb
-    pdb.set_trace()
     b, m, n = C.size()
     sigma = torch.ones(b, m, dtype=C.dtype, device=C.device) / x_len.unsqueeze(1)
     T = torch.ones(b, n, m, dtype=C.dtype, device=C.device)
@@ -358,8 +356,6 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
         cost = cost_matrix_cosine(txt_emb.float(), img_emb.float())
         cosine_sim = 1 - cost
 
-        import pdb
-        pdb.set_trace()
         # cost: batch:txt_len*img_token_len
         joint_pad = txt_pad.unsqueeze(-1) | img_pad.unsqueeze(-2)
         # B * M (txt_len) * N (img_len)
@@ -373,11 +369,11 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
         )
 
         txt_weight_soft = cosine_sim.max(dim=2)[0].masked_fill(txt_pad, 0)
-        txt_weight_soft = (F.relu(txt_weight_soft) + 1e-3)
+        txt_weight_soft = F.relu(txt_weight_soft) + 1e-3
         txt_weight_soft = txt_weight_soft/txt_weight_soft.sum(dim=1).unsqueeze(1)
 
         img_weight_soft = cosine_sim.max(dim=1)[0].masked_fill(img_pad, 0)
-        img_weight_soft = (F.relu(img_weight_soft) + 1e-3)
+        img_weight_soft = F.relu(img_weight_soft) + 1e-3
         img_weight_soft = img_weight_soft / img_weight_soft.sum(dim=1).unsqueeze(1)
 
 
