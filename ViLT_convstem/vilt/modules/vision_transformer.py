@@ -311,8 +311,6 @@ class Block(nn.Module):
         norm_layer=nn.LayerNorm,
     ):
         super().__init__()
-        import pdb
-        pdb.set_trace()
         self.norm1 = norm_layer(dim)
         self.attn = Attention(
             dim,
