@@ -182,6 +182,8 @@ def set_schedule(pl_module):
         "norm2.bias",
         "norm2.weight",
     ]
+    import pdb
+    pdb.set_trace()
     head_names = ["vqa_classifier", "nlvr2_classifier"]
     lr_mult = pl_module.hparams.config["lr_mult"]
     end_lr = pl_module.hparams.config["end_lr"]
