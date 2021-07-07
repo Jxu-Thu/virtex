@@ -356,6 +356,7 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
         txt_pad, img_pad = ~txt_mask, ~img_mask
 
         cost = cost_matrix_cosine(txt_emb.float(), img_emb.float())
+        cosine_sim = 1 - cost
 
         import pdb
         pdb.set_trace()
@@ -372,7 +373,7 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
             dtype=cost.dtype
         )
 
-
+        cosine_sim.max(dim=2)
         txt_weight_soft = F.softmax(cost.sum(dim=2).masked_fill(txt_pad, float("-inf")), dim=1)
         img_weight_soft = F.softmax(cost.sum(dim=1).masked_fill(img_pad, float("-inf")), dim=1)  # barch * N
 
@@ -383,7 +384,8 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
         img_weight_soft = temp * img_weight_soft + (1 - temp) * img_weight_even
 
         T = weighted_ipot(
-            cost.detach(), txt_weight_soft, img_weight_soft, txt_len, txt_pad, img_len, img_pad, joint_pad, 0.5, 50, 1
+            cost.detach(), txt_weight_soft.detach(), img_weight_soft.detach(),
+            txt_len, txt_pad, img_len, img_pad, joint_pad, 0.5, 50, 1
         )
         distance = trace(cost.matmul(T.detach()))
 
