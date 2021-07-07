@@ -248,13 +248,16 @@ class BaseDataset(torch.utils.data.Dataset):
             flatten_encodings = [e for encoding in encodings for e in encoding]
             import pdb
             pdb.set_trace()
-            word_boundary_index, ref_texts = self.get_word_boundary(flatten_encodings, self.max_text_len)
             flatten_mlms = mlm_collator(flatten_encodings)
             # ('inputs_id', 'labels)
             # inputs_id : batch size (32) * 40 tokens
             # labels : batch size * 40 tokens
 
             for i, txt_key in enumerate(txt_keys):
+                import pdb
+                pdb.set_trace()
+                word_boundary_index, ref_texts = self.get_word_boundary(encodings[i], self.max_text_len)
+                word_boundary_index = torch.tensor(word_boundary_index)
                 texts, encodings = (
                     [d[0] for d in dict_batch[txt_key]],
                     [d[1] for d in dict_batch[txt_key]],
@@ -282,5 +285,6 @@ class BaseDataset(torch.utils.data.Dataset):
                 dict_batch[f"{txt_key}_ids_mlm"] = mlm_ids
                 dict_batch[f"{txt_key}_labels_mlm"] = mlm_labels
                 dict_batch[f"{txt_key}_masks"] = attention_mask
+                dict_batch[f"{txt_key}_word_boundary"] = word_boundary_index
 
         return dict_batch
