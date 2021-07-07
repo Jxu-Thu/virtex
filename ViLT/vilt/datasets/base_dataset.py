@@ -146,6 +146,8 @@ class BaseDataset(torch.utils.data.Dataset):
         return {f"false_text_{rep}": (text, encoding)}
 
     def get_suite(self, index):
+        import pdb
+        pdb.set_trace()
         result = None
         while result is None:
             try:
