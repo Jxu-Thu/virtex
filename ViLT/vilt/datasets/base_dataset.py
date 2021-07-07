@@ -248,7 +248,7 @@ class BaseDataset(torch.utils.data.Dataset):
             flatten_encodings = [e for encoding in encodings for e in encoding]
             import pdb
             pdb.set_trace()
-            word_boundary_index = self.get_word_boundary(flatten_encodings, self.max_text_len)
+            word_boundary_index, ref_texts = self.get_word_boundary(flatten_encodings, self.max_text_len)
             flatten_mlms = mlm_collator(flatten_encodings)
             # ('inputs_id', 'labels)
             # inputs_id : batch size (32) * 40 tokens
