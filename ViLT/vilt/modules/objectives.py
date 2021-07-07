@@ -362,7 +362,6 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
         pdb.set_trace()
         # cost: batch:txt_len*img_token_len
         joint_pad = txt_pad.unsqueeze(-1) | img_pad.unsqueeze(-2)
-        cost.masked_fill_(joint_pad, 0)
         # B * M (txt_len) * N (img_len)
 
 
@@ -373,9 +372,14 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
             dtype=cost.dtype
         )
 
-        cosine_sim.max(dim=2)
-        txt_weight_soft = F.softmax(cost.sum(dim=2).masked_fill(txt_pad, float("-inf")), dim=1)
-        img_weight_soft = F.softmax(cost.sum(dim=1).masked_fill(img_pad, float("-inf")), dim=1)  # barch * N
+        txt_weight_soft = cosine_sim.max(dim=2)[0]
+        txt_weight_soft = (F.relu(txt_weight_soft) + 1e-3).masked_fill(txt_pad, 0)
+        txt_weight_soft = txt_weight_soft/txt_weight_soft.sum(dim=1).unsqueeze(1)
+
+        img_weight_soft = cosine_sim.max(dim=1)[0]
+        img_weight_soft = (F.relu(img_weight_soft) + 1e-3).masked_fill(img_pad, 0)
+        img_weight_soft = img_weight_soft / img_weight_soft.sum(dim=1).unsqueeze(1)
+
 
         txt_weight_even = (1 / txt_len.unsqueeze(1)).masked_fill(txt_pad, 0)
         img_weight_even = (1 / img_len.unsqueeze(1)).masked_fill(img_pad, 0)
