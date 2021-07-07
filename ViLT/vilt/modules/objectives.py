@@ -372,12 +372,12 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
             dtype=cost.dtype
         )
 
-        txt_weight_soft = cosine_sim.max(dim=2)[0]
-        txt_weight_soft = (F.relu(txt_weight_soft) + 1e-3).masked_fill(txt_pad, 0)
+        txt_weight_soft = cosine_sim.max(dim=2)[0].masked_fill(txt_pad, 0)
+        txt_weight_soft = (F.relu(txt_weight_soft) + 1e-3)
         txt_weight_soft = txt_weight_soft/txt_weight_soft.sum(dim=1).unsqueeze(1)
 
-        img_weight_soft = cosine_sim.max(dim=1)[0]
-        img_weight_soft = (F.relu(img_weight_soft) + 1e-3).masked_fill(img_pad, 0)
+        img_weight_soft = cosine_sim.max(dim=1)[0].masked_fill(img_pad, 0)
+        img_weight_soft = (F.relu(img_weight_soft) + 1e-3)
         img_weight_soft = img_weight_soft / img_weight_soft.sum(dim=1).unsqueeze(1)
 
 
