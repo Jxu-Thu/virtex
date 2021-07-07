@@ -353,11 +353,13 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
         txt_pad, img_pad = ~txt_mask, ~img_mask
 
         cost = cost_matrix_cosine(txt_emb.float(), img_emb.float())
+
         import pdb
         pdb.set_trace()
         # cost: batch:txt_len*img_token_len
         joint_pad = txt_pad.unsqueeze(-1) | img_pad.unsqueeze(-2)
         cost.masked_fill_(joint_pad, 0)
+        # B * M (txt_len) * N (img_len)
 
 
         txt_len = (txt_pad.size(1) - txt_pad.sum(dim=1, keepdim=False)).to(
@@ -366,8 +368,19 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
         img_len = (img_pad.size(1) - img_pad.sum(dim=1, keepdim=False)).to(
             dtype=cost.dtype
         )
+
+
+        txt_weight_soft = F.softmax(cost.sum(dim=2).masked_fill(txt_pad, float("-inf")), dim=1)
+        img_weight_soft = F.softmax(cost.sum(dim=1).masked_fill(img_pad, float("-inf")), dim=1)  # barch * N
+
+        txt_weight_even = (1 / txt_len.unsqueeze(1)).masked_fill(txt_pad, 0)
+        img_weight_even = (1 / img_len.unsqueeze(1)).masked_fill(img_pad, 0)
+
+        txt_weight_soft = temp * txt_weight_soft + (1 - temp) * txt_weight_even
+        img_weight_soft = temp * img_weight_soft + (1 - temp) * img_weight_even
+
         T = weighted_ipot(
-            cost.detach(), u, v, txt_len, txt_pad, img_len, img_pad, joint_pad, 0.5, 50, 1
+            cost.detach(), txt_weight_soft, img_weight_soft, txt_len, txt_pad, img_len, img_pad, joint_pad, 0.5, 50, 1
         )
         distance = trace(cost.matmul(T.detach()))
 
