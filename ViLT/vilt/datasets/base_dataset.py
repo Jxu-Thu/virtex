@@ -180,10 +180,10 @@ class BaseDataset(torch.utils.data.Dataset):
             ref_text = []
             id=0
             for (i, token) in enumerate(ref_tokens):
-                cand_indexes.append(id)
-                ref_text.append(token)
                 if not token.startswith("##"):
                     id=id+1
+                cand_indexes.append(id)
+                ref_text.append(token)
             if len(cand_indexes) < max_len:
                 cand_indexes += [cand_indexes[-1]]*(max_len-len(cand_indexes))
             word_boundary_index_array.append(cand_indexes)
