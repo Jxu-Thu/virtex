@@ -44,50 +44,6 @@ from .load_pretrained_ckpt import load_pretrained
 _logger = logging.getLogger(__name__)
 
 
-def download_clip(
-    url: str = "https://openaipublic.azureedge.net/clip/models/40d365715913c9da98579312b702a82c18be219cc2a73407c4526f58eba950af/ViT-B-32.pt",
-    root: str = os.path.expanduser("~/.cache/clip"),
-):
-    os.makedirs(root, exist_ok=True)
-    filename = os.path.basename(url)
-
-    expected_sha256 = url.split("/")[-2]
-    download_target = os.path.join(root, filename)
-
-    if os.path.exists(download_target) and not os.path.isfile(download_target):
-        raise RuntimeError(f"{download_target} exists and is not a regular file")
-
-    if os.path.isfile(download_target):
-        if (
-            hashlib.sha256(open(download_target, "rb").read()).hexdigest()
-            == expected_sha256
-        ):
-            return download_target
-        else:
-            warnings.warn(
-                f"{download_target} exists, but the SHA256 checksum does not match; re-downloading the file"
-            )
-
-    with urllib.request.urlopen(url) as source, open(download_target, "wb") as output:
-        with tqdm(total=int(source.info().get("Content-Length")), ncols=80) as loop:
-            while True:
-                buffer = source.read(8192)
-                if not buffer:
-                    break
-
-                output.write(buffer)
-                loop.update(len(buffer))
-
-    if (
-        hashlib.sha256(open(download_target, "rb").read()).hexdigest()
-        != expected_sha256
-    ):
-        raise RuntimeError(
-            f"Model has been downloaded but the SHA256 checksum does not not match"
-        )
-
-    return download_target
-
 
 class UnNormalize(object):
     def __init__(self, mean, std):
@@ -415,6 +371,64 @@ class PatchEmbed(nn.Module):
         x = self.proj(x)
         return x
 
+class ConvLayer(nn.Module):
+    def __init__(
+            self,
+            in_chans,
+            out_chans,
+            kernel_size=3,
+            strides=2,
+    ):
+        super().__init__()
+        self.conv = nn.Conv2d(in_chans, out_chans, kernel_size=kernel_size, stride=strides)
+        self.norm = nn.BatchNorm2d(out_chans)
+        self.act = nn.ReLU()
+
+    def forward(self, x):
+        return self.act(self.norm(self.conv(x)))
+
+
+class ConvPatchEmbed(nn.Module):
+    def __init__(
+        self,
+        img_size=224,
+        patch_size=16,
+        in_chans=3,
+        embed_dim=768,
+        no_patch_embed_bias=False,
+    ):
+        super().__init__()
+        img_size = to_2tuple(img_size)
+        patch_size = to_2tuple(patch_size)
+        num_patches = (img_size[1] // patch_size[1]) * (img_size[0] // patch_size[0])
+        self.img_size = img_size
+        self.patch_size = patch_size
+        self.num_patches = num_patches
+
+        self.proj = nn.Sequential(ConvLayer(in_chans, 24, 3, 2),
+                                  ConvLayer(24, 48, 3, 2),
+                                  ConvLayer(48, 96, 3, 2),
+                                  ConvLayer(96, 192, 3, 2),
+                                  ConvLayer(192, 384, 3, 2),
+                                  ConvLayer(384, embed_dim, 1, 1),
+                                   )
+        # self.proj = nn.Conv2d(
+        #     in_chans,
+        #     embed_dim,
+        #     kernel_size=patch_size,
+        #     stride=patch_size,
+        #     bias=False if no_patch_embed_bias else True,
+        # )
+
+
+    def forward(self, x):
+        B, C, H, W = x.shape
+        # FIXME look at relaxing size constraints
+        x = self.proj(x)
+        return x
+
+
+
 
 class VisionTransformer(nn.Module):
     """ Vision Transformer
@@ -709,36 +723,101 @@ class VisionTransformer(nn.Module):
         return x
 
 
-class DistilledVisionTransformer(VisionTransformer):
-    """ Vision Transformer with distillation token.
+class VisionCStemTransformer(VisionTransformer):
+    def __init__(self,
+        img_size=224,
+        patch_size=16,
+        in_chans=3,
+        num_classes=1000,
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        mlp_ratio=4.0,
+        qkv_bias=True,
+        qk_scale=None,
+        representation_size=None,
+        drop_rate=0.0,
+        attn_drop_rate=0.0,
+        drop_path_rate=0.0,
+        norm_layer=None,
+        add_norm_before_transformer=False,
+        no_patch_embed_bias=False,
+        config=None):
+        super().__init__(img_size=img_size,
+        patch_size=patch_size,
+        in_chans=in_chans,
+        num_classes=num_classes,
+        embed_dim=embed_dim,
+        depth=depth,
+        num_heads=num_heads,
+        mlp_ratio=mlp_ratio,
+        qkv_bias=qkv_bias,
+        qk_scale=qk_scale,
+        representation_size=representation_size,
+        drop_rate=drop_rate,
+        attn_drop_rate=attn_drop_rate,
+        drop_path_rate=drop_path_rate,
+        norm_layer=norm_layer,
+        add_norm_before_transformer=add_norm_before_transformer,
+        no_patch_embed_bias=no_patch_embed_bias,
+        config=config)
 
-    Paper: `Training data-efficient image transformers & distillation through attention` -
-        https://arxiv.org/abs/2012.12877
-
-    This impl of distilled ViT is taken from https://github.com/facebookresearch/deit
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.dist_token = nn.Parameter(torch.zeros(1, 1, self.embed_dim))
+        self.patch_embed = ConvPatchEmbed(
+            img_size=img_size,
+            patch_size=patch_size,
+            in_chans=in_chans,
+            embed_dim=embed_dim,
+        )
         num_patches = self.patch_embed.num_patches
-        self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 2, self.embed_dim))
 
-        trunc_normal_(self.dist_token, std=0.02)
+
+        self.patch_size = patch_size
+        self.patch_dim = img_size // patch_size
+        self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
+        self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, embed_dim))
+
+        dpr = [
+            x.item() for x in torch.linspace(0, drop_path_rate, depth)
+        ]  # stochastic depth decay rule
+        self.blocks = nn.ModuleList(
+            [
+                Block(
+                    dim=embed_dim,
+                    num_heads=num_heads,
+                    mlp_ratio=mlp_ratio,
+                    qkv_bias=qkv_bias,
+                    qk_scale=qk_scale,
+                    drop=drop_rate,
+                    attn_drop=attn_drop_rate,
+                    drop_path=dpr[i],
+                    norm_layer=norm_layer,
+                )
+                for i in range(depth)
+            ]
+        )
+        self.norm = norm_layer(embed_dim)
+
         trunc_normal_(self.pos_embed, std=0.02)
+        trunc_normal_(self.cls_token, std=0.02)
+        self.apply(self._init_weights)
 
     def visual_embed(self, _x, max_image_len=200, mask_it=False):
         _, _, ph, pw = self.patch_embed.proj.weight.shape
+        import pdb
+        pdb.set_trace()
 
         x = self.patch_embed(_x)
+        # x: 32*768*18*19
         x_mask = (_x.sum(dim=1) != 0).float()[:, None, :, :]
+        # x_mask: 32*1*576*608
         x_mask = F.interpolate(x_mask, size=(x.shape[2], x.shape[3])).long()
+        # 计算mask 32 * 1 * 18*19
         x_h = x_mask[:, 0].sum(dim=1)[:, 0]
         x_w = x_mask[:, 0].sum(dim=2)[:, 0]
 
         B, C, H, W = x.shape
         spatial_pos = (
-            self.pos_embed[:, 2:, :]
+            self.pos_embed[:, 1:, :]
             .transpose(1, 2)
             .view(1, C, self.patch_dim, self.patch_dim)
         )
@@ -757,6 +836,7 @@ class DistilledVisionTransformer(VisionTransformer):
 
         pos_embed = pos_embed.flatten(2).transpose(1, 2)
         x = x.flatten(2).transpose(1, 2)
+        # 32*342*768
         patch_index = (
             torch.stack(
                 torch.meshgrid(
@@ -767,6 +847,7 @@ class DistilledVisionTransformer(VisionTransformer):
             .expand(x_mask.shape[0], x_mask.shape[1], -1, -1, -1)
             .flatten(1, 3)
         )
+        # 32*(18*19)*2 : 代表patch的x,y坐标
         x_mask = x_mask.flatten(1)
 
         if mask_it:
@@ -787,6 +868,7 @@ class DistilledVisionTransformer(VisionTransformer):
             eff = x_h * x_w
             max_image_len = min(eff.max(), max_image_len)
 
+        # x_mask: 32 * 342
         valid_idx = x_mask.nonzero(as_tuple=False)
         non_valid_idx = (1 - x_mask).nonzero(as_tuple=False)
         unique_rows = valid_idx[:, 0].unique()
@@ -794,7 +876,7 @@ class DistilledVisionTransformer(VisionTransformer):
         non_valid_row_idx = [
             non_valid_idx[non_valid_idx[:, 0] == u] for u in unique_rows
         ]
-
+        # 拿到哪个batch. patch 的数据是空
         valid_nums = [v.size(0) for v in valid_row_idx]
         non_valid_nums = [v.size(0) for v in non_valid_row_idx]
         pad_nums = [max_image_len - v for v in valid_nums]
@@ -816,9 +898,14 @@ class DistilledVisionTransformer(VisionTransformer):
 
         select = torch.cat(select, dim=0)
         x = x[select[:, 0], select[:, 1]].view(B, -1, C)
+        # 32*200*768
         x_mask = x_mask[select[:, 0], select[:, 1]].view(B, -1)
+        # 32*200
         patch_index = patch_index[select[:, 0], select[:, 1]].view(B, -1, 2)
+        #32, 200,2
         pos_embed = pos_embed[select[:, 0], select[:, 1]].view(B, -1, C)
+        # 32*200*768
+
         if mask_it:
             label = label[select[:, 0], select[:, 1]].view(B, -1, 3)
 
@@ -828,10 +915,9 @@ class DistilledVisionTransformer(VisionTransformer):
             )
 
         cls_tokens = self.cls_token.expand(B, -1, -1)
-        dist_token = self.dist_token.expand(B, -1, -1)
-        x = torch.cat((cls_tokens, dist_token, x), dim=1)
+        x = torch.cat((cls_tokens, x), dim=1)
         pos_embed = torch.cat(
-            (self.pos_embed[:, :2, :].expand(B, -1, -1), pos_embed), dim=1
+            (self.pos_embed[:, 0, :][:, None, :].expand(B, -1, -1), pos_embed), dim=1
         )
         x = x + pos_embed
         x = self.pos_drop(x)
@@ -839,29 +925,14 @@ class DistilledVisionTransformer(VisionTransformer):
         if self.add_norm_before_transformer:
             x = self.pre_norm(x)
 
-        x_mask = torch.cat([torch.ones(x_mask.shape[0], 2).to(x_mask), x_mask], dim=1)
+        x_mask = torch.cat([torch.ones(x_mask.shape[0], 1).to(x_mask), x_mask], dim=1)
 
         if mask_it:
             return x, x_mask, (patch_index, (H, W)), label
         else:
             return x, x_mask, (patch_index, (H, W)), None
 
-    def forward_features(self, _x, max_image_len=144, mask_it=False):
-        x, x_mask, patch_index, label = self.visual_embed(
-            _x, max_image_len=max_image_len, mask_it=mask_it
-        )
 
-        for blk in self.blocks:
-            x, _ = blk(x, mask=x_mask)
-
-        x = self.norm(x)
-        return x, x_mask, label
-
-    def forward(self, x, max_image_len=-1):
-        x, _, _ = self.forward_features(x, max_image_len=max_image_len)
-        x = x[:, 0]
-        x = self.head(x)
-        return x
 
 
 def resize_pos_embed(posemb, posemb_new):
@@ -917,8 +988,44 @@ def _create_vision_transformer(variant, pretrained=False, distilled=False, **kwa
         _logger.warning("Removing representation layer for fine-tuning.")
         repr_size = None
 
-    model_cls = DistilledVisionTransformer if distilled else VisionTransformer
+    model_cls = VisionTransformer
     model = model_cls(
+        img_size=img_size,
+        num_classes=num_classes,
+        representation_size=repr_size,
+        **kwargs,
+    )
+    model.default_cfg = default_cfg
+    if pretrained:
+        print('-'*30)
+        print('Initialize from the Pre-trained CKPT')
+        print('-'*30)
+        load_pretrained(
+            model,
+            save_ckpt_path=huawei_root_path,
+            num_classes=num_classes,
+            in_chans=kwargs.get("in_chans", 3),
+            filter_fn=partial(checkpoint_filter_fn, model=model),
+            strict=False,
+        )
+    return model
+
+def _create_vision_conv_stem_transformer(variant, pretrained=False, distilled=False, **kwargs):
+    default_cfg = default_cfgs[variant]
+    default_num_classes = default_cfg["num_classes"]
+    default_img_size = default_cfg["input_size"][-1]
+
+    num_classes = kwargs.pop("num_classes", default_num_classes)
+    img_size = kwargs.pop("img_size", default_img_size)
+    repr_size = kwargs.pop("representation_size", None)
+    huawei_root_path = kwargs['config'].pop("huawei_root_path", None)
+    if repr_size is not None and num_classes != default_num_classes:
+        # Remove representation layer if fine-tuning. This may not always be the desired action,
+        # but I feel better than doing nothing by default for fine-tuning. Perhaps a better interface?
+        _logger.warning("Removing representation layer for fine-tuning.")
+        repr_size = None
+
+    model = VisionTransformer(
         img_size=img_size,
         num_classes=num_classes,
         representation_size=repr_size,
