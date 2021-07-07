@@ -68,7 +68,7 @@ def ipot(C, x_len, x_pad, y_len, y_pad, joint_pad, beta, iteration, k):
     return T
 
 @torch.no_grad()
-def weighted_ipot(C, u, v, x_len, x_pad, y_len, y_pad, joint_pad, beta, iteration, k):
+def weighted_ipot(C, txt_w, img_w, x_len, x_pad, y_len, y_pad, joint_pad, beta, iteration, k):
     """ [B, M, N], [B], [B, M], [B], [B, N], [B, M, N]"""
     import pdb
     pdb.set_trace()
@@ -83,6 +83,9 @@ def weighted_ipot(C, u, v, x_len, x_pad, y_len, y_pad, joint_pad, beta, iteratio
     T.masked_fill_(joint_pad, 0)
     A.masked_fill_(joint_pad, 0)
 
+    txt_w = txt_w.view(b, 1, m)
+    img_w = img_w.view(b, 1, n)
+
     # broadcastable lengths
     x_len = x_len.unsqueeze(1).unsqueeze(2)
     y_len = y_len.unsqueeze(1).unsqueeze(2)
@@ -95,8 +98,8 @@ def weighted_ipot(C, u, v, x_len, x_pad, y_len, y_pad, joint_pad, beta, iteratio
         Q = A * T  # bs * n * m
         sigma = sigma.view(b, m, 1)
         for _ in range(k):
-            delta = u / (Q.matmul(sigma).view(b, 1, n) + y_mask)
-            sigma = v / (delta.matmul(Q) + x_mask)
+            delta = img_w / (Q.matmul(sigma).view(b, 1, n) + y_mask)
+            sigma = txt_w / (delta.matmul(Q) + x_mask)
         T = delta.view(b, n, 1) * Q * sigma
     T.masked_fill_(joint_pad, 0)
     return T
