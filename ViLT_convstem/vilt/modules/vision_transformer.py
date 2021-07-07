@@ -932,7 +932,24 @@ class VisionCStemTransformer(VisionTransformer):
         else:
             return x, x_mask, (patch_index, (H, W)), None
 
+    def forward_features(self, _x, max_image_len=144, mask_it=False):
+        import pdb
+        pdb.set_trace()
+        x, x_mask, patch_index, label = self.visual_embed(
+            _x, max_image_len=max_image_len, mask_it=mask_it
+        )
 
+        for blk in self.blocks:
+            x, _ = blk(x, mask=x_mask)
+
+        x = self.norm(x)
+        return x, x_mask, label
+
+    def forward(self, x, max_image_len=-1):
+        x, _, _ = self.forward_features(x, max_image_len=max_image_len)
+        x = x[:, 0]
+        x = self.head(x)
+        return x
 
 
 def resize_pos_embed(posemb, posemb_new):
