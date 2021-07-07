@@ -378,11 +378,14 @@ class ConvLayer(nn.Module):
             out_chans,
             kernel_size=3,
             strides=2,
+            act=nn.ReLU
     ):
         super().__init__()
         self.conv = nn.Conv2d(in_chans, out_chans, kernel_size=kernel_size, stride=strides)
         self.norm = nn.BatchNorm2d(out_chans)
         self.act = nn.ReLU()
+        # else:
+        #     self.act = nn.Identity()
 
     def forward(self, x):
         return self.act(self.norm(self.conv(x)))
@@ -410,7 +413,7 @@ class ConvPatchEmbed(nn.Module):
                                   ConvLayer(48, 96, 3, 2),
                                   ConvLayer(96, 192, 3, 2),
                                   ConvLayer(192, 384, 3, 2),
-                                  ConvLayer(384, embed_dim, 1, 1),
+                                  nn.Conv2d(384, embed_dim, kernel_size=1, stride=1)
                                    )
         # self.proj = nn.Conv2d(
         #     in_chans,
@@ -762,6 +765,8 @@ class VisionCStemTransformer(VisionTransformer):
         no_patch_embed_bias=no_patch_embed_bias,
         config=config)
 
+        import pdb
+        pdb.set_trace()
         self.patch_embed = ConvPatchEmbed(
             img_size=img_size,
             patch_size=patch_size,
@@ -1042,7 +1047,7 @@ def _create_vision_conv_stem_transformer(variant, pretrained=False, distilled=Fa
         _logger.warning("Removing representation layer for fine-tuning.")
         repr_size = None
 
-    model = VisionTransformer(
+    model = VisionCStemTransformer(
         img_size=img_size,
         num_classes=num_classes,
         representation_size=repr_size,
@@ -1139,6 +1144,17 @@ def vit_middle_patch32_384(pretrained=False, **kwargs):
     """
     model_kwargs = dict(patch_size=32, embed_dim=512, depth=12, num_heads=8, **kwargs)
     model = _create_vision_transformer(
+        "vit_middle_patch32_384", pretrained=False,  **model_kwargs
+    )
+    return model
+
+@register_model
+def vit_middle_conv_patch32_384(pretrained=False, **kwargs):
+    """ ViT-Base model (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
+    ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
+    """
+    model_kwargs = dict(patch_size=32, embed_dim=512, depth=12, num_heads=8, **kwargs)
+    model = _create_vision_conv_stem_transformer(
         "vit_middle_patch32_384", pretrained=False,  **model_kwargs
     )
     return model
