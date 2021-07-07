@@ -383,13 +383,13 @@ class ConvLayer(nn.Module):
     ):
         super().__init__()
         self.conv = nn.Conv2d(in_chans, out_chans, kernel_size=kernel_size, stride=strides, padding=padding)
-        self.norm = nn.BatchNorm2d(out_chans)
+        self.norm1 = nn.BatchNorm2d(out_chans)
         self.act = nn.ReLU()
         # else:
         #     self.act = nn.Identity()
 
     def forward(self, x):
-        return self.act(self.norm(self.conv(x)))
+        return self.act(self.norm1(self.conv(x)))
 
 
 class ConvPatchEmbed(nn.Module):
@@ -985,6 +985,7 @@ class VisionCStemTransformer(nn.Module):
             )
 
         cls_tokens = self.cls_token.expand(B, -1, -1)
+        # add a cls token
         x = torch.cat((cls_tokens, x), dim=1)
         pos_embed = torch.cat(
             (self.pos_embed[:, 0, :][:, None, :].expand(B, -1, -1), pos_embed), dim=1

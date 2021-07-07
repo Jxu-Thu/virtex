@@ -118,8 +118,6 @@ class ViLTransformerSS(pl.LightningModule):
         image_embeds=None,
         image_masks=None,
     ):
-        import pdb
-        pdb.set_trace()
         if f"image_{image_token_type_idx - 1}" in batch:
             imgkey = f"image_{image_token_type_idx - 1}"
         else:
@@ -188,8 +186,6 @@ class ViLTransformerSS(pl.LightningModule):
         return ret
 
     def forward(self, batch):
-        import pdb
-        pdb.set_trace()
         ret = dict()
         if len(self.current_tasks) == 0:
             ret.update(self.infer(batch))

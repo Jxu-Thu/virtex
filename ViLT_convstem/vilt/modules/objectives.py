@@ -337,8 +337,6 @@ def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
 
     batch = {k: v for k, v in batch.items()}
     batch["image"] = itm_images
-    import pdb
-    pdb.set_trace()
     infer = pl_module.infer(batch, mask_text=False, mask_image=False)
 
     with torch.cuda.amp.autocast(enabled=False):
