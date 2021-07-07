@@ -33,7 +33,7 @@ sudo echo "Defaults        secure_path=\"$path:/usr/local/mpi/bin:/usr/local/nvi
 sudo chmod 0440 /etc/sudoers.d/${PHILLY_USER}
 
 
-cd /blob/v-jinx/virtex/ViLT
+cd /blob/v-jinx/virtex/ViLT_convstem
 sudo apt-get install -y git
 sudo pip --no-cache-dir install -r requirements.txt &>/dev/null
 sudo pip --no-cache-dir install -e . &>/dev/null
@@ -61,7 +61,7 @@ LOG_DIR=/blob/v-jinx/checkpoint_vilt/pre_train
 
 
 EXP_NAME=pretrain_indomain24GPU_h512_without_pretrain_conv_bottom
-RESUME_DIR=${LOG_DIR}/${EXP_NAME}/version_0/checkpoints/last.ckpt
+#RESUME_DIR=${LOG_DIR}/${EXP_NAME}/version_0/checkpoints/last.ckpt
 BATCH_SIZE=96
 TOTAL_BATCH_SIZE=3072
 
@@ -69,5 +69,10 @@ TOTAL_BATCH_SIZE=3072
 python run.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
 exp_name=$EXP_NAME num_gpus=$N_GPU_PER_WORKER \
 num_nodes=${N_WORKER} vit_middle_conv_patch32_384 whole_word_masking=True \
-resume_from=$RESUME_DIR \
 step100k batch_size=$TOTAL_BATCH_SIZE per_gpu_batchsize=$BATCH_SIZE
+
+#python run.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
+#exp_name=$EXP_NAME num_gpus=$N_GPU_PER_WORKER \
+#num_nodes=${N_WORKER} vit_middle_conv_patch32_384 whole_word_masking=True \
+#resume_from=$RESUME_DIR \
+#step100k batch_size=$TOTAL_BATCH_SIZE per_gpu_batchsize=$BATCH_SIZE
