@@ -167,6 +167,29 @@ class BaseDataset(torch.utils.data.Dataset):
                 index = random.randint(0, len(self.index_mapper) - 1)
         return ret
 
+    def get_word_boundary(self, examples, max_len=40):
+        word_boundary_index_array = []
+        ref_texts = []
+        for e in examples:
+            ref_tokens = []
+            for id in e["input_ids"]:
+                token = self.tokenizer._convert_id_to_token(id)
+                ref_tokens.append(token)
+
+            cand_indexes = []
+            ref_text = []
+            id=0
+            for (i, token) in enumerate(ref_tokens):
+                cand_indexes.append(id)
+                ref_text.append(token)
+                if not token.startswith("##"):
+                    id=id+1
+            if len(cand_indexes) < max_len:
+                cand_indexes += [cand_indexes[-1]]*(max_len-len(cand_indexes))
+            word_boundary_index_array.append(cand_indexes)
+            ref_texts.append(ref_text)
+        return np.array(word_boundary_index_array), ref_texts
+
     def collate(self, batch, mlm_collator):
         batch_size = len(batch)
         keys = set([key for b in batch for key in b.keys()])
@@ -225,6 +248,7 @@ class BaseDataset(torch.utils.data.Dataset):
             flatten_encodings = [e for encoding in encodings for e in encoding]
             import pdb
             pdb.set_trace()
+            word_boundary_index = self.get_word_boundary(flatten_encodings, self.max_text_len)
             flatten_mlms = mlm_collator(flatten_encodings)
             # ('inputs_id', 'labels)
             # inputs_id : batch size (32) * 40 tokens
