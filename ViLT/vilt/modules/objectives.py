@@ -315,6 +315,8 @@ def compute_itm_wpa(pl_module, batch):
     return ret
 
 def compute_itm_wpa_tmp_max_ot(pl_module, batch, temp):
+    import pdb
+    pdb.set_trace()
     pos_len = len(batch["text"]) // 2
     neg_len = len(batch["text"]) - pos_len
     itm_labels = torch.cat([torch.ones(pos_len), torch.zeros(neg_len)]).to(
