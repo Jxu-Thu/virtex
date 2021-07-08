@@ -608,6 +608,8 @@ class VisionTransformer(nn.Module):
         )
         # 32*(18*19)*2 : 代表patch的x,y坐标
         x_mask = x_mask.flatten(1)
+        import pdb
+        pdb.set_trace()
 
         if mask_it:
             x, label = self.mask_tokens(_x, x)
@@ -627,8 +629,6 @@ class VisionTransformer(nn.Module):
             eff = x_h * x_w
             max_image_len = min(eff.max(), max_image_len)
 
-        import pdb
-        pdb.set_trace()
         # x_mask: 32 * 342
         valid_idx = x_mask.nonzero(as_tuple=False)
         non_valid_idx = (1 - x_mask).nonzero(as_tuple=False)
