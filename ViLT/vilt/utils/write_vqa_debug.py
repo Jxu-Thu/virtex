@@ -50,8 +50,6 @@ def path2rest(path, split, annotations, label2ans):
 
 
 def make_arrow(root, dataset_root):
-    import pdb
-    pdb.set_trace()
     with open(f"{root}/v2_OpenEnded_mscoco_train2014_questions.json", "r") as fp:
         questions_train2014 = json.load(fp)["questions"]
     with open(f"{root}/v2_OpenEnded_mscoco_val2014_questions.json", "r") as fp:
