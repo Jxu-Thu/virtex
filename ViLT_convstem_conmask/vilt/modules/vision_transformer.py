@@ -928,7 +928,13 @@ class VisionCStemTransformer(nn.Module):
             .flatten(1, 3)
         )
         # 32*(18*19)*2 : 代表patch的x,y坐标
+        import pdb
+        pdb.set_trace()
         x_mask = x_mask.flatten(1)
+        # get the h mask matrix
+        # x_h
+
+        # torch.arange(max_len).expand(len(lens), max_len) < lens.unsqueeze(1)
         import pdb
         pdb.set_trace()
         if mask_it:
