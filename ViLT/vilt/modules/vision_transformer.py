@@ -608,8 +608,6 @@ class VisionTransformer(nn.Module):
         )
         # 32*(18*19)*2 : 代表patch的x,y坐标
         x_mask = x_mask.flatten(1)
-        import pdb
-        pdb.set_trace()
 
         if mask_it:
             x, label = self.mask_tokens(_x, x)
@@ -631,9 +629,11 @@ class VisionTransformer(nn.Module):
 
         # x_mask: 32 * 342
         valid_idx = x_mask.nonzero(as_tuple=False)
+        # valid_idx: 6312 * 2 (each 2 number represents batch_idx, len_idx)
         non_valid_idx = (1 - x_mask).nonzero(as_tuple=False)
         unique_rows = valid_idx[:, 0].unique()
         valid_row_idx = [valid_idx[valid_idx[:, 0] == u] for u in unique_rows]
+        # list: len(list)==batch_size, list[0]=valid_idx (0, idx) for the 0-th image
         non_valid_row_idx = [
             non_valid_idx[non_valid_idx[:, 0] == u] for u in unique_rows
         ]
@@ -644,6 +644,7 @@ class VisionTransformer(nn.Module):
 
         select = list()
         for i, (v, nv, p) in enumerate(zip(valid_nums, non_valid_nums, pad_nums)):
+            # i-th image in the batch
             if p <= 0:
                 valid_choice = torch.multinomial(torch.ones(v).float(), max_image_len)
                 select.append(valid_row_idx[i][valid_choice])
