@@ -719,7 +719,7 @@ class VisionTransformer(nn.Module):
         else:
             return x, x_mask, (patch_index, (H, W)), None
 
-    def forward_features(self, _x, max_image_len=144, mask_it=False):
+    def forward_features(self, _x, max_image_len=200, mask_it=False):
         x, x_mask, patch_index, label = self.visual_embed(
             _x, max_image_len=max_image_len, mask_it=mask_it
         )
@@ -883,9 +883,7 @@ class VisionCStemTransformer(nn.Module):
 
         return feats, labels
 
-    def visual_embed(self, _x, max_image_len=200, mask_it=False):
-        ph, pw = self.patch_size, self.patch_size
-
+    def visual_embed(self, _x, max_image_len=16, mask_it=False):
         x = self.patch_embed(_x)
         # x: 32*768*18*19
         x_mask = (_x.sum(dim=1) != 0).float()[:, None, :, :]
@@ -947,6 +945,8 @@ class VisionCStemTransformer(nn.Module):
         else:
             eff = x_h * x_w
             max_image_len = min(eff.max(), max_image_len)
+        # get the first index of col, get the first index of row: two tensor
+        #
 
         # x_mask: 32 * 342
         valid_idx = x_mask.nonzero(as_tuple=False)
@@ -1013,7 +1013,7 @@ class VisionCStemTransformer(nn.Module):
         else:
             return x, x_mask, (patch_index, (H, W)), None
 
-    def forward_features(self, _x, max_image_len=144, mask_it=False):
+    def forward_features(self, _x, max_image_len=16, mask_it=False):
         x, x_mask, patch_index, label = self.visual_embed(
             _x, max_image_len=max_image_len, mask_it=mask_it
         )
