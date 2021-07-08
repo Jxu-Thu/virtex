@@ -358,10 +358,9 @@ def make_arrow(root, dataset_root):
         print(
             len(paths), len(annot_paths), len(annot),
         )
-        path2rest(annot_paths[0], split, annotations, label2ans)
-        # bs = [
-        #     path2rest(path, split, annotations, label2ans) for path in tqdm(annot_paths)
-        # ]
+        bs = [
+            path2rest(path, split, annotations, label2ans) for path in tqdm(annot_paths)
+        ]
 
         dataframe = pd.DataFrame(
             bs,
