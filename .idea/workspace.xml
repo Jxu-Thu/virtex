@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c22b7db7-8b25-4579-8671-233cbd680c5f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViLT/vilt/modules/vision_transformer.py" beforeDir="false" afterPath="$PROJECT_DIR$/ViLT/vilt/modules/vision_transformer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,21 +100,7 @@
       <workItem from="1624858540202" duration="350000" />
       <workItem from="1624861705418" duration="4718000" />
       <workItem from="1625020286282" duration="11879000" />
-      <workItem from="1625283669059" duration="48231000" />
-    </task>
-    <task id="LOCAL-00297" summary="d">
-      <created>1625644347862</created>
-      <option name="number" value="00297" />
-      <option name="presentableId" value="LOCAL-00297" />
-      <option name="project" value="LOCAL" />
-      <updated>1625644347862</updated>
-    </task>
-    <task id="LOCAL-00298" summary="d">
-      <created>1625644405159</created>
-      <option name="number" value="00298" />
-      <option name="presentableId" value="LOCAL-00298" />
-      <option name="project" value="LOCAL" />
-      <updated>1625644405159</updated>
+      <workItem from="1625283669059" duration="53480000" />
     </task>
     <task id="LOCAL-00299" summary="d">
       <created>1625644573099</created>
@@ -446,7 +431,21 @@
       <option name="project" value="LOCAL" />
       <updated>1625730828040</updated>
     </task>
-    <option name="localTasksCounter" value="346" />
+    <task id="LOCAL-00346" summary="d">
+      <created>1625734488296</created>
+      <option name="number" value="00346" />
+      <option name="presentableId" value="LOCAL-00346" />
+      <option name="project" value="LOCAL" />
+      <updated>1625734488296</updated>
+    </task>
+    <task id="LOCAL-00347" summary="d">
+      <created>1625734529249</created>
+      <option name="number" value="00347" />
+      <option name="presentableId" value="LOCAL-00347" />
+      <option name="project" value="LOCAL" />
+      <updated>1625734529249</updated>
+    </task>
+    <option name="localTasksCounter" value="348" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
