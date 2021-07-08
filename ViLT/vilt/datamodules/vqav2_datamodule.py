@@ -16,6 +16,8 @@ class VQAv2DataModule(BaseDataModule):
         return "vqa"
 
     def setup(self, stage):
+        import pdb
+        pdb.set_trace()
         super().setup(stage)
 
         train_answers = self.train_dataset.table["answers"].to_pandas().tolist()

@@ -31,6 +31,9 @@ def path2rest(path, split, annotations, label2ans):
 
     _annot = annotations[split][iid]
     _annot = list(_annot.items())
+    # [(98213000, ['What color is the rope?', {'labels': [2, 6, 2896], 'scores': [0.9, 1.0, 0.3]}]),
+    # (98213001, ['What color is the word stop written in?', {'labels': [60, 4, 16, 6], 'scores': [0.6, 1.0, 0.3, 0.3]}]),
+    # (98213002, ['Can I walk across the bridge?', {'labels': [9], 'scores': [1.0]}])]
     qids, qas = [a[0] for a in _annot], [a[1] for a in _annot]
     questions = [qa[0] for qa in qas]
     answers = [qa[1] for qa in qas] if "test" not in split else list(list())

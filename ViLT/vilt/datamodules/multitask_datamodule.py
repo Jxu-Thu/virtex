@@ -14,7 +14,8 @@ class MTDataModule(LightningDataModule):
         assert len(datamodule_keys) > 0
 
         super().__init__()
-
+        import pdb
+        pdb.set_trace()
         self.dm_keys = datamodule_keys
         self.dm_dicts = {key: _datamodules[key](_config) for key in datamodule_keys}
         self.dms = [v for k, v in self.dm_dicts.items()]

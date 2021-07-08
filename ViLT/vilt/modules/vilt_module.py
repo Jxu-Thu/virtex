@@ -11,6 +11,8 @@ class ViLTransformerSS(pl.LightningModule):
     def __init__(self, config):
         super().__init__()
         self.save_hyperparameters()
+        import pdb
+        pdb.set_trace()
 
         bert_config = BertConfig(
             vocab_size=config["vocab_size"],
