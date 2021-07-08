@@ -191,8 +191,6 @@ class BaseDataset(torch.utils.data.Dataset):
         return np.array(word_boundary_index_array), ref_texts
 
     def collate(self, batch, mlm_collator):
-        import pdb
-        pdb.set_trace()
         batch_size = len(batch)
         keys = set([key for b in batch for key in b.keys()])
         # Reshape key: batch * data

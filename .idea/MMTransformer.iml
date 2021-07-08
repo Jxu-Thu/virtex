@@ -3,7 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/ViLT_convstem" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/ViLT" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.6 (pycharm_usage)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
