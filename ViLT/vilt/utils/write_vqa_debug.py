@@ -257,6 +257,7 @@ def make_arrow(root, dataset_root):
 
     annotations = dict()
 
+    #
     for split, questions in zip(
         ["train", "val", "test", "test-dev"],
         [
@@ -282,6 +283,8 @@ def make_arrow(root, dataset_root):
             all_major_answers.append(q["multiple_choice_answer"])
 
     all_major_answers = [normalize_word(word) for word in tqdm(all_major_answers)]
+    import pdb
+    pdb.set_trace()
     counter = {k: v for k, v in Counter(all_major_answers).items() if v >= 9}
     ans2label = {k: i for i, k in enumerate(counter.keys())}
     label2ans = list(counter.keys())

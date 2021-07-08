@@ -66,6 +66,7 @@ def make_arrow(root, dataset_root):
 
     annotations = dict()
 
+    # 一张图可能有多个question,这里聚合起来
     for split, questions in zip(
         ["train", "val", "test", "test-dev"],
         [
@@ -82,7 +83,7 @@ def make_arrow(root, dataset_root):
         annotations[split] = _annot
 
     all_major_answers = list()
-
+    # 把所有的答案拿到
     for split, annots in zip(
         ["train", "val"], [annotations_train2014, annotations_val2014],
     ):
