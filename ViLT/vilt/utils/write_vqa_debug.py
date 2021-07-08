@@ -286,6 +286,7 @@ def make_arrow(root, dataset_root):
     import pdb
     pdb.set_trace()
     counter = {k: v for k, v in Counter(all_major_answers).items() if v >= 9}
+    # label 编码 i 是 enumerate 序列
     ans2label = {k: i for i, k in enumerate(counter.keys())}
     label2ans = list(counter.keys())
 
@@ -312,7 +313,9 @@ def make_arrow(root, dataset_root):
             _annot[q["image_id"]][q["question_id"]].append(
                 {"labels": labels, "scores": scores,}
             )
-
+    import pdb
+    pdb.set_trace()
+    # _annot[q["image_id"]][q["question_id"]] = ['What is this photo taken looking through?', {'labels': [0], 'scores': [1.0]}]
     for split in ["train", "val"]:
         filtered_annot = dict()
         for ik, iv in annotations[split].items():
