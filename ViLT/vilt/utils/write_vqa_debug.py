@@ -330,8 +330,6 @@ def make_arrow(root, dataset_root):
                 filtered_annot[ik] = new_q
         annotations[split] = filtered_annot
 
-    import pdb
-    pdb.set_trace()
     for split in [
         "train",
         "val",
@@ -360,8 +358,6 @@ def make_arrow(root, dataset_root):
         print(
             len(paths), len(annot_paths), len(annot),
         )
-        import pdb
-        pdb.set_trace()
         path2rest(annot_paths[0], split, annotations, label2ans)
         # bs = [
         #     path2rest(path, split, annotations, label2ans) for path in tqdm(annot_paths)
