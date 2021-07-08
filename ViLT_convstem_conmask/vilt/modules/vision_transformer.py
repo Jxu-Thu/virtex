@@ -929,7 +929,8 @@ class VisionCStemTransformer(nn.Module):
         )
         # 32*(18*19)*2 : 代表patch的x,y坐标
         x_mask = x_mask.flatten(1)
-
+        import pdb
+        pdb.set_trace()
         if mask_it:
             x, label = self.mask_tokens(_x, x)
 
