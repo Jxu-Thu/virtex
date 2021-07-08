@@ -29,6 +29,7 @@ def config():
     val_transform_keys = ["pixelbert"]
     image_size = 384
     max_image_len = -1
+    max_path_len = 16
     patch_size = 32
     draw_false_image = 1
     image_only = False
@@ -110,6 +111,7 @@ def task_mlm_itm():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
+    max_path_len = 16
 
 @ex.named_config
 def task_mlm_itm_indomain():
@@ -119,6 +121,7 @@ def task_mlm_itm_indomain():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
+    max_path_len = 16
 
 @ex.named_config
 def task_mlm_itm_indomain_nopretrain():
@@ -128,6 +131,7 @@ def task_mlm_itm_indomain_nopretrain():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
+    max_path_len = 16
     pretrained_flag = False
 
 @ex.named_config
@@ -138,6 +142,7 @@ def task_mlm_itm_indomain_nopretrain_middle():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
+    max_path_len = 16
     pretrained_flag = False
     vit = 'vit_middle_patch32_384'
     hidden_size = 512
@@ -151,6 +156,7 @@ def task_mlm_itm_indomain_nopretrain_middle_no_itm():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
+    max_path_len = 16
     pretrained_flag = False
     vit = 'vit_middle_patch32_384'
     hidden_size = 512
@@ -166,6 +172,7 @@ def task_mlm_itm_randaug():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
+    max_path_len = 16
 
 
 @ex.named_config
@@ -177,6 +184,7 @@ def task_mlm_itm_mpp():
     max_epoch = 10
     max_image_len = 200
 
+    max_path_len = 16
 
 @ex.named_config
 def task_finetune_nlvr2():

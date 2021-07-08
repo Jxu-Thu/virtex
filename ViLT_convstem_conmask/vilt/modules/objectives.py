@@ -633,6 +633,7 @@ def compute_irtr_recall(pl_module):
     for _b in tqdm.tqdm(image_loader, desc="image prefetch loop"):
         (ie, im, _, _) = pl_module.transformer.visual_embed(
             _b["image"][0].to(pl_module.device),
+            max_patch_len=pl_module.hparams.config["max_patch_len"],
             max_image_len=pl_module.hparams.config["max_image_len"],
             mask_it=False,
         )

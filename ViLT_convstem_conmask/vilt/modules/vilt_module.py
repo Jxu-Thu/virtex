@@ -138,6 +138,7 @@ class ViLTransformerSS(pl.LightningModule):
                 image_labels,
             ) = self.transformer.visual_embed(
                 img,
+                max_patch_len=self.hparams.config["max_patch_len"],
                 max_image_len=self.hparams.config["max_image_len"],
                 mask_it=mask_image,
             )
