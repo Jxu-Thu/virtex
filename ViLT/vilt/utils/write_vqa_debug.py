@@ -283,8 +283,6 @@ def make_arrow(root, dataset_root):
             all_major_answers.append(q["multiple_choice_answer"])
 
     all_major_answers = [normalize_word(word) for word in tqdm(all_major_answers)]
-    import pdb
-    pdb.set_trace()
     counter = {k: v for k, v in Counter(all_major_answers).items() if v >= 9}
     # label 编码 i 是 enumerate 序列
     ans2label = {k: i for i, k in enumerate(counter.keys())}
@@ -313,20 +311,29 @@ def make_arrow(root, dataset_root):
             _annot[q["image_id"]][q["question_id"]].append(
                 {"labels": labels, "scores": scores,}
             )
-    import pdb
-    pdb.set_trace()
+
     # _annot[q["image_id"]][q["question_id"]] = ['What is this photo taken looking through?', {'labels': [0], 'scores': [1.0]}]
+    # 删除label=0的question
     for split in ["train", "val"]:
         filtered_annot = dict()
         for ik, iv in annotations[split].items():
+            # ik image_id
+            # iv : {458752000: ['What is this photo taken looking through?', {'labels': [0], 'scores': [1.0]}],
+            # 458752001: ['What position is this man playing?', {'labels': [1, 67],
+            # 'scores': [1.0, 0.3]}], 458752002: ['What color is the players shirt?',
+            # {'labels': [2], 'scores': [1.0]}], 458752003: ['Is this man a professional baseball player?',
+            # {'labels': [3, 9], 'scores': [1.0, 0.3]}]}
             new_q = dict()
             for qk, qv in iv.items():
+                # qv : ['What is this photo taken looking through?', {'labels': [0], 'scores': [1.0]}]
                 if len(qv[1]["labels"]) != 0:
                     new_q[qk] = qv
             if len(new_q) != 0:
                 filtered_annot[ik] = new_q
         annotations[split] = filtered_annot
 
+    import pdb
+    pdb.set_trace()
     for split in [
         "train",
         "val",
@@ -355,10 +362,12 @@ def make_arrow(root, dataset_root):
         print(
             len(paths), len(annot_paths), len(annot),
         )
-
-        bs = [
-            path2rest(path, split, annotations, label2ans) for path in tqdm(annot_paths)
-        ]
+        import pdb
+        pdb.set_trace()
+        path2rest(annot_paths[0], split, annotations, label2ans)
+        # bs = [
+        #     path2rest(path, split, annotations, label2ans) for path in tqdm(annot_paths)
+        # ]
 
         dataframe = pd.DataFrame(
             bs,

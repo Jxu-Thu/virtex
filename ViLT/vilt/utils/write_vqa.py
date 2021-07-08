@@ -120,11 +120,20 @@ def make_arrow(root, dataset_root):
                 {"labels": labels, "scores": scores,}
             )
 
+    # _annot[q["image_id"]][q["question_id"]] = ['What is this photo taken looking through?', {'labels': [0], 'scores': [1.0]}]
+    # 删除label=0的question
     for split in ["train", "val"]:
         filtered_annot = dict()
         for ik, iv in annotations[split].items():
+            # ik image_id
+            # iv : {458752000: ['What is this photo taken looking through?', {'labels': [0], 'scores': [1.0]}],
+            # 458752001: ['What position is this man playing?', {'labels': [1, 67],
+            # 'scores': [1.0, 0.3]}], 458752002: ['What color is the players shirt?',
+            # {'labels': [2], 'scores': [1.0]}], 458752003: ['Is this man a professional baseball player?',
+            # {'labels': [3, 9], 'scores': [1.0, 0.3]}]}
             new_q = dict()
             for qk, qv in iv.items():
+                # qv : ['What is this photo taken looking through?', {'labels': [0], 'scores': [1.0]}]
                 if len(qv[1]["labels"]) != 0:
                     new_q[qk] = qv
             if len(new_q) != 0:
