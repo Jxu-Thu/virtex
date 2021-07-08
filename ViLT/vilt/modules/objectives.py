@@ -440,6 +440,8 @@ def compute_imgcls(pl_module, batch):
 
 
 def compute_vqa(pl_module, batch):
+    import pdb
+    pdb.set_trace()
     infer = pl_module.infer(batch, mask_text=False, mask_image=False)
     vqa_logits = pl_module.vqa_classifier(infer["cls_feats"])
     vqa_targets = torch.zeros(

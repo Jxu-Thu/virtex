@@ -123,6 +123,8 @@ class ViLTransformerSS(pl.LightningModule):
         else:
             imgkey = "image"
 
+        import pdb
+        pdb.set_trace()
         do_mlm = "_mlm" if mask_text else ""
         text_ids = batch[f"text_ids{do_mlm}"]
         text_labels = batch[f"text_labels{do_mlm}"]

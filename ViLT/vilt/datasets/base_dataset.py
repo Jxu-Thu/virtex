@@ -236,8 +236,6 @@ class BaseDataset(torch.utils.data.Dataset):
 
         txt_keys = [k for k in list(dict_batch.keys()) if "text" in k]
 
-        import pdb
-        pdb.set_trace()
         if len(txt_keys) != 0:
             texts = [[d[0] for d in dict_batch[txt_key]] for txt_key in txt_keys]
             encodings = [[d[1] for d in dict_batch[txt_key]] for txt_key in txt_keys]
