@@ -22,8 +22,6 @@ class VQAv2Dataset(BaseDataset):
         )
 
     def __getitem__(self, index):
-        import pdb
-        pdb.set_trace()
         image_tensor = self.get_image(index)["image"]
         text = self.get_text(index)["text"]
 
