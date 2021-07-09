@@ -923,8 +923,7 @@ class VisionCStemTransformer(nn.Module):
             )[None, :, :, :]
                 .expand(x_mask.shape[0], -1, -1, -1)
         )
-        import pdb
-        pdb.set_trace()
+
         if (
             max_patch_len < 0
             or max_patch_len is None
@@ -984,6 +983,8 @@ class VisionCStemTransformer(nn.Module):
         sequence_raw_mask = x_mask.sum(dim=0) != 0
         sequence_raw_mask = sequence_raw_mask.expand(B, -1)
         sequence_raw_mask = sequence_raw_mask.detach()
+        import pdb
+        pdb.set_trace()
 
         x_mask = torch.masked_select(x_mask, sequence_raw_mask).reshape(B, -1)
         patch_index = torch.masked_select(patch_index, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, 2)
