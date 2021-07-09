@@ -892,8 +892,6 @@ class VisionCStemTransformer(nn.Module):
         # x_mask: 32*1*576*608
         x_mask = F.interpolate(x_mask, size=(x.shape[2], x.shape[3])).long()
         # 计算mask 32 * 1 * 18*19
-        import pdb
-        pdb.set_trace()
         x_h = x_mask[:, 0].sum(dim=1)[:, 0]
         x_w = x_mask[:, 0].sum(dim=2)[:, 0]
 
@@ -926,6 +924,9 @@ class VisionCStemTransformer(nn.Module):
                 .expand(x_mask.shape[0], -1, -1, -1)
         )
 
+        max_patch_len = -1
+        import pdb
+        pdb.set_trace()
         if (
             max_patch_len < 0
             or max_patch_len is None
@@ -946,6 +947,7 @@ class VisionCStemTransformer(nn.Module):
 
             arange_along_h, arange_along_w = torch.meshgrid(torch.arange(x_mask.shape[-2], device=x_mask.device),
                                                             torch.arange(x_mask.shape[-1], device=x_mask.device))
+            # get the h mask
             allow_h_select = torch.clamp(x_h + 1 - max_patch_len_h, 0)
             allow_h_select_low = torch.floor(torch.rand(x_h.size(), device=x_h.device) * allow_h_select).to(
                 arange_along_h.dtype)
@@ -967,8 +969,7 @@ class VisionCStemTransformer(nn.Module):
 
             image_mask = torch.logical_and(h_mask, w_mask)
 
-            import pdb
-            pdb.set_trace()
+
             x = x.permute(0, 2, 3, 1)  # batch, h, w, channel
             x = torch.masked_select(x, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h * max_patch_len_w, C)
             pos_embed = pos_embed.permute(0, 2, 3, 1)
@@ -994,8 +995,6 @@ class VisionCStemTransformer(nn.Module):
         if mask_it:
             x, label = self.mask_tokens(_x, x)
 
-        import pdb
-        pdb.set_trace()
         cls_tokens = self.cls_token.expand(B, -1, -1)
         # add a cls token
         x = torch.cat((cls_tokens, x), dim=1)
