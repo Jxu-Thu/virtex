@@ -982,7 +982,11 @@ class VisionCStemTransformer(nn.Module):
         # 32*(18*19)*2 : 代表patch的x,y坐标
 
         patch_index = patch_index.reshape(B, -1, 2)
-        sequence_raw_mask = x_mask.sum(dim=0) == 0
+        sequence_raw_mask = x_mask.sum(dim=0) != 0
+        sequence_raw_mask = sequence_raw_mask.expand(B, -1)
+
+        x_mask = torch.masked_select(x_mask, sequence_raw_mask).reshape(B, -1)
+        patch_index = torch.masked_select(patch_index, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, 2)
         # torch.masked_select
 
         if mask_it:
