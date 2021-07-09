@@ -970,13 +970,12 @@ class VisionCStemTransformer(nn.Module):
         pdb.set_trace()
         x = x.permute(0,2,3,1) # batch, h, w, channel
         x = torch.masked_select(x, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w, C)
+        pos_embed = pos_embed.permute(0,2,3,1)
         pos_embed = torch.masked_select(pos_embed, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w, C)
         x_mask = x_mask.flatten(1)
         x_mask = torch.masked_select(x_mask, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w)
         patch_index = torch.masked_select(patch_index, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w)
 
-
-        # x[0,1,0,:50] == torch.masked_select(x, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w, C)[0,0,0,:50]
 
 
         pos_embed = pos_embed.flatten(2).transpose(1, 2)
