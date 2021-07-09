@@ -112,7 +112,7 @@ def task_mlm_itm():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
-    max_patch_len = 16
+    max_patch_len = 15
 
 @ex.named_config
 def task_mlm_itm_indomain():
@@ -132,7 +132,7 @@ def task_mlm_itm_indomain_nopretrain():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
-    max_patch_len = 16
+    max_patch_len = 15
     pretrained_flag = False
 
 @ex.named_config
@@ -143,7 +143,7 @@ def task_mlm_itm_indomain_nopretrain_middle():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
-    max_patch_len = 16
+    max_patch_len = 15
     pretrained_flag = False
     vit = 'vit_middle_patch32_384'
     hidden_size = 512
@@ -158,7 +158,7 @@ def task_mlm_itm_indomain_nopretrain_middle_no_itm():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
-    max_patch_len = 16
+    max_patch_len = 15
     pretrained_flag = False
     vit = 'vit_middle_patch32_384'
     hidden_size = 512
@@ -174,7 +174,7 @@ def task_mlm_itm_randaug():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
-    max_patch_len = 16
+    max_patch_len = 15
 
 
 @ex.named_config
@@ -185,7 +185,7 @@ def task_mlm_itm_mpp():
     batch_size = 4096
     max_epoch = 10
     max_image_len = 200
-    max_patch_len = 16
+    max_patch_len = 15
 
 
 @ex.named_config
