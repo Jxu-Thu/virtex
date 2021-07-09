@@ -983,6 +983,7 @@ class VisionCStemTransformer(nn.Module):
         patch_index = patch_index.reshape(B, -1, 2)
         sequence_raw_mask = x_mask.sum(dim=0) != 0
         sequence_raw_mask = sequence_raw_mask.expand(B, -1)
+        sequence_raw_mask = sequence_raw_mask.detach()
 
         x_mask = torch.masked_select(x_mask, sequence_raw_mask).reshape(B, -1)
         patch_index = torch.masked_select(patch_index, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, 2)
