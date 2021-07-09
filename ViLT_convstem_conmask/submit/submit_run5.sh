@@ -62,8 +62,8 @@ LOG_DIR=/blob/v-jinx/checkpoint_vilt/pre_train
 
 EXP_NAME=pretrain_indomain24GPU_h512_without_pretrain_conv_bottom_conmask
 #RESUME_DIR=${LOG_DIR}/${EXP_NAME}/version_0/checkpoints/last.ckpt
-BATCH_SIZE=64
-TOTAL_BATCH_SIZE=3072
+BATCH_SIZE=43
+TOTAL_BATCH_SIZE=3096
 # accum three
 
 
