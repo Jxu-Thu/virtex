@@ -72,6 +72,7 @@ exp_name=$EXP_NAME num_gpus=$N_GPU_PER_WORKER \
 num_nodes=${N_WORKER} task_mlm_itm_indomain_nopretrain_middle whole_word_masking=True \
 vit=vit_middle_conv_patch32_384 \
 max_steps=100000 \
+max_patch_len=14 \
 step100k batch_size=$TOTAL_BATCH_SIZE per_gpu_batchsize=$BATCH_SIZE
 
 
