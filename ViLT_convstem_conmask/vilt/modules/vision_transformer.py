@@ -935,50 +935,47 @@ class VisionCStemTransformer(nn.Module):
             # if res is 384 x 640, 12 * 20 = 240
             max_patch_len_h = x_h.max()
             max_patch_len_w = x_w.max()
+            pos_embed = pos_embed.flatten(2).transpose(1, 2)
+            x = x.flatten(2).transpose(1, 2)
+            x_mask = x_mask.flatten(1)
         else:
             max_patch_len_h = min(x_h.max(), max_patch_len)
             max_patch_len_w = min(x_w.max(), max_patch_len)
 
+            arange_along_h, arange_along_w = torch.meshgrid(torch.arange(x_mask.shape[-2], device=x_mask.device),
+                                                            torch.arange(x_mask.shape[-1], device=x_mask.device))
+            allow_h_select = torch.clamp(x_h + 1 - max_patch_len_h, 0)
+            allow_h_select_low = torch.floor(torch.rand(x_h.size(), device=x_h.device) * allow_h_select).to(
+                arange_along_h.dtype)
+            allow_h_select_high = allow_h_select_low + max_patch_len_h
 
-        import pdb
-        pdb.set_trace()
-        # get the h mask matrix
-        arange_along_h, arange_along_w = torch.meshgrid(torch.arange(x_mask.shape[-2], device=x_mask.device),
-                                                        torch.arange(x_mask.shape[-1], device=x_mask.device))
-        allow_h_select = torch.clamp(x_h + 1 - max_patch_len_h, 0)
-        allow_h_select_low = torch.floor(torch.rand(x_h.size(), device=x_h.device) * allow_h_select).to(
-            arange_along_h.dtype)
-        allow_h_select_high = allow_h_select_low + max_patch_len_h
+            mask_down = arange_along_h.expand(B, H, W) >= allow_h_select_low.view(-1, 1, 1)
+            mask_up = arange_along_h.expand(B, H, W) < allow_h_select_high.view(-1, 1, 1)
+            h_mask = torch.logical_and(mask_down, mask_up)
 
-        mask_down = arange_along_h.expand(B, H, W) >= allow_h_select_low.view(-1, 1, 1)
-        mask_up = arange_along_h.expand(B, H, W) < allow_h_select_high.view(-1, 1, 1)
-        h_mask = torch.logical_and(mask_down, mask_up)
+            # get the w mask
+            allow_w_select = torch.clamp(x_w + 1 - max_patch_len_w, 0)
+            allow_w_select_low = torch.floor(torch.rand(x_w.size(), device=x_w.device) * allow_w_select).to(
+                arange_along_w.dtype)
+            allow_w_select_high = allow_w_select_low + max_patch_len_w
 
-        # get the w mask
-        allow_w_select = torch.clamp(x_w + 1 - max_patch_len_w, 0)
-        allow_w_select_low = torch.floor(torch.rand(x_w.size(), device=x_w.device) * allow_w_select).to(
-            arange_along_w.dtype)
-        allow_w_select_high = allow_w_select_low + max_patch_len_w
+            mask_down = arange_along_w.expand(B, H, W) >= allow_w_select_low.view(-1, 1, 1)
+            mask_up = arange_along_w.expand(B, H, W) < allow_w_select_high.view(-1, 1, 1)
+            w_mask = torch.logical_and(mask_down, mask_up)
 
-        mask_down = arange_along_w.expand(B, H, W) >= allow_w_select_low.view(-1, 1, 1)
-        mask_up = arange_along_w.expand(B, H, W) < allow_w_select_high.view(-1, 1, 1)
-        w_mask = torch.logical_and(mask_down, mask_up)
+            image_mask = torch.logical_and(h_mask, w_mask)
 
-        image_mask = torch.logical_and(h_mask, w_mask)
-
-        import pdb
-        pdb.set_trace()
-        x = x.permute(0,2,3,1) # batch, h, w, channel
-        x = torch.masked_select(x, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w, C)
-        pos_embed = pos_embed.permute(0,2,3,1)
-        pos_embed = torch.masked_select(pos_embed, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w, C)
-        x_mask = x_mask.squeeze(1)
-        x_mask = torch.masked_select(x_mask, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w)
-        patch_index = torch.masked_select(patch_index, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w)
+            import pdb
+            pdb.set_trace()
+            x = x.permute(0, 2, 3, 1)  # batch, h, w, channel
+            x = torch.masked_select(x, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h * max_patch_len_w, C)
+            pos_embed = pos_embed.permute(0, 2, 3, 1)
+            pos_embed = torch.masked_select(pos_embed, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h * max_patch_len_w, C)
+            x_mask = x_mask.squeeze(1)
+            x_mask = torch.masked_select(x_mask, image_mask).reshape(B, max_patch_len_h * max_patch_len_w)
+            patch_index = torch.masked_select(patch_index, image_mask.unsqueeze(3)).reshape(B, max_patch_len_h, max_patch_len_w, 2)
 
 
-        pos_embed = pos_embed.flatten(2).transpose(1, 2)
-        x = x.flatten(2).transpose(1, 2)
         # 32*342*768
         # 32*(18*19)*2 : 代表patch的x,y坐标
 
@@ -989,7 +986,6 @@ class VisionCStemTransformer(nn.Module):
 
         import pdb
         pdb.set_trace()
-        x_mask = x_mask.flatten(1)
         # x_mask: 32 * 342
         valid_idx = x_mask.nonzero(as_tuple=False)
         non_valid_idx = (1 - x_mask).nonzero(as_tuple=False)
