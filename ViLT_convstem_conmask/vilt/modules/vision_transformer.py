@@ -987,53 +987,15 @@ class VisionCStemTransformer(nn.Module):
 
         x_mask = torch.masked_select(x_mask, sequence_raw_mask).reshape(B, -1)
         patch_index = torch.masked_select(patch_index, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, 2)
+        pos_embed = torch.masked_select(pos_embed, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, C)
+        x = torch.masked_select(x, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, C)
         # torch.masked_select
 
         if mask_it:
             x, label = self.mask_tokens(_x, x)
 
-
         import pdb
         pdb.set_trace()
-        # x_mask: 32 * 342
-        valid_idx = x_mask.nonzero(as_tuple=False)
-        non_valid_idx = (1 - x_mask).nonzero(as_tuple=False)
-        unique_rows = valid_idx[:, 0].unique()
-        valid_row_idx = [valid_idx[valid_idx[:, 0] == u] for u in unique_rows]
-        non_valid_row_idx = [
-            non_valid_idx[non_valid_idx[:, 0] == u] for u in unique_rows
-        ]
-        # 拿到哪个batch. patch 的数据是空
-        valid_nums = [v.size(0) for v in valid_row_idx]
-        non_valid_nums = [v.size(0) for v in non_valid_row_idx]
-        pad_nums = non_valid_nums
-
-        select = list()
-        for i, (v, nv, p) in enumerate(zip(valid_nums, non_valid_nums, pad_nums)):
-            if p <= 0:
-                valid_choice = torch.multinomial(torch.ones(v).float(), max_image_len)
-                select.append(valid_row_idx[i][valid_choice])
-            else:
-                pad_choice = torch.multinomial(
-                    torch.ones(nv).float(), p, replacement=True
-                )
-                select.append(
-                    torch.cat(
-                        [valid_row_idx[i], non_valid_row_idx[i][pad_choice]], dim=0,
-                    )
-                )
-
-        select = torch.cat(select, dim=0)
-        x = x[select[:, 0], select[:, 1]].view(B, -1, C)
-        # 32*200*768
-        x_mask = x_mask[select[:, 0], select[:, 1]].view(B, -1)
-        # 32*200
-        patch_index = patch_index[select[:, 0], select[:, 1]].view(B, -1, 2)
-        #32, 200,2
-        pos_embed = pos_embed[select[:, 0], select[:, 1]].view(B, -1, C)
-        # 32*200*768
-
-
         cls_tokens = self.cls_token.expand(B, -1, -1)
         # add a cls token
         x = torch.cat((cls_tokens, x), dim=1)
