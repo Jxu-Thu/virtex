@@ -951,7 +951,6 @@ class VisionCStemTransformer(nn.Module):
 
         import pdb
         pdb.set_trace()
-        x_mask = x_mask.flatten(1)
         # get the h mask matrix
         arange_along_h, arange_along_w = torch.meshgrid(torch.arange(x_mask.shape[-2], device=x_mask.device),
                                                         torch.arange(x_mask.shape[-1], device=x_mask.device))
@@ -978,6 +977,7 @@ class VisionCStemTransformer(nn.Module):
 
         import pdb
         pdb.set_trace()
+        x_mask = x_mask.flatten(1)
         # x_mask: 32 * 342
         valid_idx = x_mask.nonzero(as_tuple=False)
         non_valid_idx = (1 - x_mask).nonzero(as_tuple=False)
