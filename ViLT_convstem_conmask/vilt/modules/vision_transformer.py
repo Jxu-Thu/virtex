@@ -892,6 +892,8 @@ class VisionCStemTransformer(nn.Module):
         # x_mask: 32*1*576*608
         x_mask = F.interpolate(x_mask, size=(x.shape[2], x.shape[3])).long()
         # 计算mask 32 * 1 * 18*19
+        import pdb
+        pdb.set_trace()
         x_h = x_mask[:, 0].sum(dim=1)[:, 0]
         x_w = x_mask[:, 0].sum(dim=2)[:, 0]
 
@@ -979,6 +981,9 @@ class VisionCStemTransformer(nn.Module):
         # 32*342*768
         # 32*(18*19)*2 : 代表patch的x,y坐标
 
+        patch_index = patch_index.reshape(B, -1, 2)
+        sequence_raw_mask = x_mask.sum(dim=0) == 0
+        # torch.masked_select
 
         if mask_it:
             x, label = self.mask_tokens(_x, x)
@@ -997,7 +1002,7 @@ class VisionCStemTransformer(nn.Module):
         # 拿到哪个batch. patch 的数据是空
         valid_nums = [v.size(0) for v in valid_row_idx]
         non_valid_nums = [v.size(0) for v in non_valid_row_idx]
-        pad_nums = [max_image_len - v for v in valid_nums]
+        pad_nums = non_valid_nums
 
         select = list()
         for i, (v, nv, p) in enumerate(zip(valid_nums, non_valid_nums, pad_nums)):
