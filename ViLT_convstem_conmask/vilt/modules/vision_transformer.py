@@ -928,32 +928,53 @@ class VisionCStemTransformer(nn.Module):
             .flatten(1, 3)
         )
         # 32*(18*19)*2 : 代表patch的x,y坐标
-        import pdb
-        pdb.set_trace()
-        x_mask = x_mask.flatten(1)
-        # get the h mask matrix
-        # x_h
 
-        # torch.arange(max_len).expand(len(lens), max_len) < lens.unsqueeze(1)
-        import pdb
-        pdb.set_trace()
+
         if mask_it:
             x, label = self.mask_tokens(_x, x)
 
         if (
-            max_image_len < 0
-            or max_image_len is None
-            or not isinstance(max_image_len, int)
+            max_patch_len < 0
+            or max_patch_len is None
+            or not isinstance(max_patch_len, int)
         ):
             # suppose aug is 800 x 1333, then, maximum effective res is 800 x 1333 (if one side gets bigger, the other will be constrained and be shrinked)
             # (800 // self.patch_size) * (1333 // self.patch_size) is the maximum number of patches that single image can get.
             # if self.patch_size = 32, 25 * 41 = 1025
             # if res is 384 x 640, 12 * 20 = 240
-            eff = x_h * x_w
-            max_image_len = eff.max()
+            max_patch_len_h = x_h.max()
+            max_patch_len_w = x_w.max()
         else:
-            eff = x_h * x_w
-            max_image_len = min(eff.max(), max_image_len)
+            max_patch_len_h = min(x_h.max(), max_patch_len)
+            max_patch_len_w = min(x_w.max(), max_patch_len)
+
+
+        import pdb
+        pdb.set_trace()
+        x_mask = x_mask.flatten(1)
+        # get the h mask matrix
+        arange_along_h, arange_along_w = torch.meshgrid(torch.arange(x_mask.shape[-2], device=x_mask.device),
+                                                        torch.arange(x_mask.shape[-1], device=x_mask.device))
+        allow_h_select = torch.clamp(x_h + 1 - max_patch_len_h, 0)
+        allow_h_select_low = torch.floor(torch.rand(x_h.size(), device=x_h.device) * allow_h_select).to(
+            arange_along_h.dtype)
+        allow_h_select_high = allow_h_select_low + max_patch_len_h
+
+        mask_down = arange_along_h.expand(B, H, W) >= allow_h_select_low.view(-1, 1, 1)
+        mask_up = arange_along_h.expand(B, H, W) < allow_h_select_high.view(-1, 1, 1)
+        h_mask = torch.logical_and(mask_down, mask_up)
+
+        # get the w mask
+        allow_w_select = torch.clamp(x_w + 1 - max_patch_len_w, 0)
+        allow_w_select_low = torch.floor(torch.rand(x_w.size(), device=x_w.device) * allow_w_select).to(
+            arange_along_w.dtype)
+        allow_w_select_high = allow_w_select_low + max_patch_len_w
+
+        mask_down = arange_along_w.expand(B, H, W) >= allow_w_select_low.view(-1, 1, 1)
+        mask_up = arange_along_w.expand(B, H, W) < allow_w_select_high.view(-1, 1, 1)
+        w_mask = torch.logical_and(mask_down, mask_up)
+
+        image_mask = torch.logical_and(h_mask, w_mask)
 
         import pdb
         pdb.set_trace()
@@ -995,13 +1016,6 @@ class VisionCStemTransformer(nn.Module):
         pos_embed = pos_embed[select[:, 0], select[:, 1]].view(B, -1, C)
         # 32*200*768
 
-        if mask_it:
-            label = label[select[:, 0], select[:, 1]].view(B, -1, 3)
-
-            label[x_mask == 0] = -100
-            label = torch.cat(
-                [torch.full((label.shape[0], 1, 3), -100).to(label), label,], dim=1,
-            )
 
         cls_tokens = self.cls_token.expand(B, -1, -1)
         # add a cls token
@@ -1017,10 +1031,7 @@ class VisionCStemTransformer(nn.Module):
 
         x_mask = torch.cat([torch.ones(x_mask.shape[0], 1).to(x_mask), x_mask], dim=1)
 
-        if mask_it:
-            return x, x_mask, (patch_index, (H, W)), label
-        else:
-            return x, x_mask, (patch_index, (H, W)), None
+        return x, x_mask, (patch_index, (H, W)), None
 
     def forward_features(self, _x, max_image_len=144, mask_it=False):
         x, x_mask, patch_index, label = self.visual_embed(
