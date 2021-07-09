@@ -924,9 +924,6 @@ class VisionCStemTransformer(nn.Module):
                 .expand(x_mask.shape[0], -1, -1, -1)
         )
 
-        max_patch_len = -1
-        import pdb
-        pdb.set_trace()
         if (
             max_patch_len < 0
             or max_patch_len is None
