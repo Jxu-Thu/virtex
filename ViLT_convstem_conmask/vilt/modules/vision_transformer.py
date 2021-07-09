@@ -914,25 +914,6 @@ class VisionCStemTransformer(nn.Module):
             dim=0,
         )
 
-        pos_embed = pos_embed.flatten(2).transpose(1, 2)
-        x = x.flatten(2).transpose(1, 2)
-        # 32*342*768
-        patch_index = (
-            torch.stack(
-                torch.meshgrid(
-                    torch.arange(x_mask.shape[-2]), torch.arange(x_mask.shape[-1])
-                ),
-                dim=-1,
-            )[None, None, :, :, :]
-            .expand(x_mask.shape[0], x_mask.shape[1], -1, -1, -1)
-            .flatten(1, 3)
-        )
-        # 32*(18*19)*2 : 代表patch的x,y坐标
-
-
-        if mask_it:
-            x, label = self.mask_tokens(_x, x)
-
         if (
             max_patch_len < 0
             or max_patch_len is None
@@ -974,6 +955,29 @@ class VisionCStemTransformer(nn.Module):
         w_mask = torch.logical_and(mask_down, mask_up)
 
         image_mask = torch.logical_and(h_mask, w_mask)
+
+        import pdb
+        pdb.set_trace()
+
+        pos_embed = pos_embed.flatten(2).transpose(1, 2)
+        x = x.flatten(2).transpose(1, 2)
+        # 32*342*768
+        patch_index = (
+            torch.stack(
+                torch.meshgrid(
+                    torch.arange(x_mask.shape[-2]), torch.arange(x_mask.shape[-1])
+                ),
+                dim=-1,
+            )[None, None, :, :, :]
+            .expand(x_mask.shape[0], x_mask.shape[1], -1, -1, -1)
+            .flatten(1, 3)
+        )
+        # 32*(18*19)*2 : 代表patch的x,y坐标
+
+
+        if mask_it:
+            x, label = self.mask_tokens(_x, x)
+
 
         import pdb
         pdb.set_trace()
