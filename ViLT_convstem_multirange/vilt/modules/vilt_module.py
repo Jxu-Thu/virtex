@@ -136,6 +136,8 @@ class ViLTransformerSS(pl.LightningModule):
                 image_masks,
                 patch_index,
                 image_labels,
+                square_raw_mask,
+                sequence_raw_mask
             ) = self.transformer.visual_embed(
                 img,
                 max_patch_len=self.hparams.config["max_patch_len"],
@@ -143,9 +145,11 @@ class ViLTransformerSS(pl.LightningModule):
                 mask_it=mask_image,
             )
         else:
-            patch_index, image_labels = (
+            patch_index, image_labels, square_raw_mask, sequence_raw_mask = (
                 None,
                 None,
+                None,
+                None
             )
 
         text_embeds, image_embeds = (
@@ -162,6 +166,17 @@ class ViLTransformerSS(pl.LightningModule):
         x = co_embeds
 
         for i, blk in enumerate(self.transformer.blocks):
+            if i == 5:
+                text_feats, image_feats = (
+                    x[:, : text_embeds.shape[1]],
+                    x[:, text_embeds.shape[1]:],
+                )
+                image_feats, image_masks, square_raw_mask, sequence_raw_mask = self.transformer.trans_image_shape(image_feats,
+                                                                                                                  image_masks,
+                                                                                                                  square_raw_mask,
+                                                                                                                  sequence_raw_mask)
+                x = torch.cat([text_feats, image_feats], dim=1)
+                co_masks = torch.cat([text_masks, image_masks], dim=1)
             x, _attn = blk(x, mask=co_masks)
 
         x = self.transformer.norm(x)

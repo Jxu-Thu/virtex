@@ -514,10 +514,13 @@ class InnerConvEmb(nn.Module):
         self.conv = nn.Conv2d(in_chans, out_channle, kernel_size=kernel_size, stride=stride, padding=padding)
         self.norm1 = nn.LayerNorm(out_channle)
 
-    def forward(self, image_seq, text_seq, image_raw_shape, image_raw_mask, image_mask):
+    def forward(self, x,  image_masks, square_raw_mask, sequence_raw_mask):
         import pdb
         pdb.set_trace()
-        return x
+        torch.zeros_like(sequence_raw_mask).expand(-1, -1, x.size()[-1])
+        import pdb
+        pdb.set_trace()
+        return x, image_masks, square_raw_mask, sequence_raw_mask
 
 
 class VisionTransformer(nn.Module):
@@ -1074,9 +1077,11 @@ class VisionCStemTransformer(nn.Module):
 
         # 32*342*768
         # 32*(18*19)*2 : 代表patch的x,y坐标
-
+        # image mask: raw_mask  (batch * img_h * img*w)
+        # x_mask: batch * (max_patch_len_h*max_patch_len_w)
         import pdb
         pdb.set_trace()
+        square_raw_mask = x_mask.copy()
         patch_index = patch_index.reshape(B, -1, 2)
         sequence_raw_mask = x_mask.sum(dim=0) != 0
         sequence_raw_mask = sequence_raw_mask.expand(B, -1)
@@ -1086,7 +1091,8 @@ class VisionCStemTransformer(nn.Module):
         patch_index = torch.masked_select(patch_index, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, 2)
         pos_embed = torch.masked_select(pos_embed, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, C)
         x = torch.masked_select(x, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, C)
-        # torch.masked_select
+        # raw_squa_mask batch*(max_patch_len_h*max_patch_len_w)
+        # x_mask: batch * seq_len
 
         if mask_it:
             x, label = self.mask_tokens(_x, x)
@@ -1105,10 +1111,10 @@ class VisionCStemTransformer(nn.Module):
 
         x_mask = torch.cat([torch.ones(x_mask.shape[0], 1).to(x_mask), x_mask], dim=1)
 
-        return x, x_mask, (patch_index, (H, W)), None
+        return x, x_mask, (patch_index, (H, W)), None, square_raw_mask, sequence_raw_mask
 
     def forward_features(self, _x, max_image_len=144, mask_it=False):
-        x, x_mask, patch_index, label = self.visual_embed(
+        x, x_mask, patch_index, label, square_raw_mask,  sequence_raw_mask = self.visual_embed(
             _x, max_image_len=max_image_len, mask_it=mask_it
         )
 
