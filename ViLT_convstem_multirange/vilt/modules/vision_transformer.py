@@ -515,8 +515,6 @@ class InnerConvEmb(nn.Module):
         self.norm1 = nn.LayerNorm(out_channle)
 
     def forward(self, x,  image_masks, square_raw_mask, sequence_raw_mask):
-        import pdb
-        pdb.set_trace()
         B, T = sequence_raw_mask.size()
         _, H, W = square_raw_mask.size()
         channel = x.size()[-1]
@@ -535,8 +533,6 @@ class InnerConvEmb(nn.Module):
         # obtain the spatial mask
         square_raw_mask = square_x.sum(dim=1) != 0
         square_x = square_x.flatten(2).transpose(1, 2)
-        import pdb
-        pdb.set_trace()
         # mask
         square_raw_mask = square_x.sum(dim=2) != 0
         sequence_raw_mask = square_raw_mask.sum(dim=0) !=0
@@ -550,9 +546,6 @@ class InnerConvEmb(nn.Module):
         x = torch.cat((cls_tokens, x), dim=1)
         x = self.norm1(x)
         x_mask = torch.cat([torch.ones(x_mask.shape[0], 1).to(x_mask), x_mask], dim=1)
-
-        import pdb
-        pdb.set_trace()
         return x, x_mask, square_raw_mask, sequence_raw_mask
 
 
