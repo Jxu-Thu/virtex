@@ -886,7 +886,7 @@ class VisionCStemTransformer(nn.Module):
             )
         num_patches = self.patch_embed.num_patches
 
-        self.trans_image_shape = InnerConvEmb(n_chans=embed_dim,
+        self.trans_image_shape = InnerConvEmb(in_chans=embed_dim,
             kernel_size=3,
             stride=2,
             padding=1,
