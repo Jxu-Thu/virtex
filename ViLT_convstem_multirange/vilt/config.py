@@ -95,7 +95,7 @@ def config():
 
     # ConvBottim
     convc=False
-    ot_stage = [9]
+    ot_stage = [8]
 
 
 # Named configs for "environment" which define gpus and nodes, and paths
