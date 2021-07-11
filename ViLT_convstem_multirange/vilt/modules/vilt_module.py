@@ -39,8 +39,16 @@ class ViLTransformerSS(pl.LightningModule):
                 pretrained=False, config=self.hparams.config
             )
 
+
         self.pooler = heads.Pooler(config["hidden_size"])
         self.pooler.apply(objectives.init_weights)
+
+        self.pooler_stages = nn.ModuleList()
+        for _ in range(len(config['ot_stage'])):
+            pooler = heads.Pooler(config["hidden_size"])
+            pooler.apply(objectives.init_weights)
+            self.pooler_stages.append(pooler)
+
 
         if config["loss_names"]["mlm"] > 0:
             self.mlm_score = heads.MLMHead(bert_config)
@@ -182,9 +190,11 @@ class ViLTransformerSS(pl.LightningModule):
                 )
 
                 if stage_output:
+                    cls_feats = self.pooler_stages[idx_modules](x)
                     ret = {
                         "text_feats": text_feats,
                         "image_feats": image_feats,
+                        "cls_feats": cls_feats,
                         "raw_cls_feats": x[:, 0],
                         "image_labels": image_labels,
                         "image_masks": image_masks,
