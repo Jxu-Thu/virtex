@@ -257,7 +257,7 @@ def compute_itm_wpa(pl_module, batch):
     batch = {k: v for k, v in batch.items()}
     batch["image"] = itm_images
 
-    infer = pl_module.infer(batch, mask_text=False, mask_image=False)
+    infer, stage_infer = pl_module.infer(batch, mask_text=False, mask_image=False, stage_output=True)
 
     with torch.cuda.amp.autocast(enabled=False):
         txt_emb, img_emb = infer["text_feats"], infer["image_feats"]

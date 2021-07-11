@@ -117,6 +117,7 @@ class ViLTransformerSS(pl.LightningModule):
         image_token_type_idx=1,
         image_embeds=None,
         image_masks=None,
+        stage_output=False
     ):
         if f"image_{image_token_type_idx - 1}" in batch:
             imgkey = f"image_{image_token_type_idx - 1}"
@@ -164,14 +165,34 @@ class ViLTransformerSS(pl.LightningModule):
         co_masks = torch.cat([text_masks, image_masks], dim=1)
 
         x = co_embeds
-
+        ret_list = []
         for i, blk in enumerate(self.transformer.blocks):
-            if i == 5:
+            if i in self.transformer.ot_stage:
+                import pdb
+                pdb.set_trace()
+                idx_modules = self.transformer.ot_stage.index(i)
+                x = self.transformer.trans_norms[idx_modules](x)
                 text_feats, image_feats = (
                     x[:, : text_embeds.shape[1]],
                     x[:, text_embeds.shape[1]:],
                 )
-                image_feats, image_masks, square_raw_mask, sequence_raw_mask = self.transformer.trans_image_shape(image_feats,
+
+                if stage_output:
+                    ret = {
+                        "text_feats": text_feats,
+                        "image_feats": image_feats,
+                        "raw_cls_feats": x[:, 0],
+                        "image_labels": image_labels,
+                        "image_masks": image_masks,
+                        "text_labels": text_labels,
+                        "text_ids": text_ids,
+                        "text_masks": text_masks,
+                        "patch_index": patch_index,
+                    }
+
+                    ret_list.append(ret)
+
+                image_feats, image_masks, square_raw_mask, sequence_raw_mask = self.transformer.trans_image_shape_modules[idx_modules](image_feats,
                                                                                                                   image_masks,
                                                                                                                   square_raw_mask,
                                                                                                                   sequence_raw_mask)
@@ -199,7 +220,10 @@ class ViLTransformerSS(pl.LightningModule):
             "patch_index": patch_index,
         }
 
-        return ret
+        if stage_output:
+            return ret, ret_list
+        else:
+            return ret
 
     def forward(self, batch):
         ret = dict()

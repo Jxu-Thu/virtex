@@ -525,8 +525,6 @@ class InnerConvEmb(nn.Module):
         square_x = torch.zeros(sequence_raw_mask.size(), device=x.device).unsqueeze(2).expand(-1, -1, channel).reshape(-1, channel)
         sequence_raw_mask_flat = sequence_raw_mask.flatten()
         square_x[sequence_raw_mask_flat] = img_features.reshape(-1, channel)
-        import pdb
-        pdb.set_trace()
         square_x = square_x.reshape(B, H, W, channel).permute(0, 3, 1, 2)
         square_x = self.conv(square_x)
 
@@ -927,6 +925,15 @@ class VisionCStemTransformer(nn.Module):
         self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, embed_dim))
         self.pos_drop = nn.Dropout(p=drop_rate)
 
+        self.ot_stage = config['ot_stage']
+        self.trans_image_shape_modules = nn.ModuleList([
+            InnerConvEmb(in_chans=embed_dim,
+            kernel_size=3,
+            stride=2,
+            padding=1,
+            out_channle=embed_dim) for _ in range(len(self.ot_stage))])
+        self.trans_norms = nn.ModuleList([norm_layer(embed_dim) for _ in range(len(self.ot_stage))])
+
         if add_norm_before_transformer:
             self.pre_norm = norm_layer(embed_dim)
 
@@ -949,7 +956,9 @@ class VisionCStemTransformer(nn.Module):
                 for i in range(depth)
             ]
         )
+
         self.norm = norm_layer(embed_dim)
+
 
         trunc_normal_(self.pos_embed, std=0.02)
         trunc_normal_(self.cls_token, std=0.02)
@@ -1105,8 +1114,6 @@ class VisionCStemTransformer(nn.Module):
         # 32*(18*19)*2 : 代表patch的x,y坐标
         # image mask: raw_mask  (batch * img_h * img*w)
         # x_mask: batch * (max_patch_len_h*max_patch_len_w)
-        import pdb
-        pdb.set_trace()
         square_raw_mask = x_mask.reshape(B, max_patch_len_h, max_patch_len_w).detach().clone()
         patch_index = patch_index.reshape(B, -1, 2)
         sequence_raw_mask = x_mask.sum(dim=0) != 0
