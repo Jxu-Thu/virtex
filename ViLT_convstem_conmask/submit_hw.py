@@ -49,7 +49,7 @@ print_and_excute_cmd('ls')
 print_and_excute_cmd('python setup.py install &>/dev/null')
 
 print(f'os.chdir {root}/virtex-master/ViLT_convstem_conmask')
-os.chdir(f'{root}/virtex-master/ViLT_convstem')
+os.chdir(f'{root}/virtex-master/ViLT_convstem_conmask')
 print_and_excute_cmd('pwd')
 print_and_excute_cmd('ls')
 os.system('pip install --ignore-installed PyYAML')
