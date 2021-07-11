@@ -75,6 +75,7 @@ def main(_config):
         val_check_interval=_config["val_check_interval"],
         limit_train_batches=1,
         limit_val_batches=1,
+        overfit_batches=10
     )
     if not _config["test_only"]:
         trainer.fit(model, datamodule=dm)
