@@ -520,7 +520,10 @@ class InnerConvEmb(nn.Module):
         B, T = sequence_raw_mask.size()
         _, H, W = square_raw_mask.size()
         channel = x.size()[-1]
-        cls_tokens, img_features = x[:, 0, :], x[:, 1:, :]
+
+        # split token and img features
+        cls_tokens, img_features = x[:, 0:1, :], x[:, 1:, :]
+        # re fill the img_features into the spatial positions
         square_x = torch.zeros(sequence_raw_mask.size(), device=x.device).unsqueeze(2).expand(-1, -1, channel).reshape(-1, channel)
         sequence_raw_mask_flat = sequence_raw_mask.flatten()
         square_x[sequence_raw_mask_flat] = img_features.reshape(-1, channel)
@@ -528,17 +531,18 @@ class InnerConvEmb(nn.Module):
         pdb.set_trace()
         square_x = square_x.reshape(B, H, W, channel).permute(0, 3, 1, 2)
         square_x = self.conv(square_x)
+
+        # obtain the spatial mask
         square_raw_mask = square_x.sum(dim=1) != 0
         square_x = square_x.flatten(2).transpose(1, 2)
         import pdb
         pdb.set_trace()
         # mask
-        square_raw_mask = square_x.sum(dim=1) != 0
-        x_mask = square_raw_mask.reshape(B, -1)
-        sequence_raw_mask = x_mask.sum(dim=0) !=0
+        square_raw_mask = square_x.sum(dim=2) != 0
+        sequence_raw_mask = square_raw_mask.sum(dim=0) !=0
         sequence_raw_mask = sequence_raw_mask.expand(B, -1).detach()
 
-        x_mask = torch.masked_select(x_mask, sequence_raw_mask).reshape(B, -1)
+        x_mask = torch.masked_select(square_raw_mask, sequence_raw_mask).reshape(B, -1)
         x = torch.masked_select(square_x, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, channel)
         # batch * T * channel
 
