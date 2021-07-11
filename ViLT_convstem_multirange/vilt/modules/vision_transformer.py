@@ -1372,7 +1372,7 @@ def vit_middle_conv_patch32_384_c(pretrained=False, **kwargs):
     """ ViT-Base model (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
     ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
     """
-    model_kwargs = dict(patch_size=32, embed_dim=512, depth=12, num_heads=8, **kwargs)
+    model_kwargs = dict(patch_size=32, embed_dim=512, depth=13, num_heads=8, **kwargs)
     model = _create_vision_conv_stem_transformer(
         "vit_middle_patch32_384", pretrained=False,  **model_kwargs
     )
