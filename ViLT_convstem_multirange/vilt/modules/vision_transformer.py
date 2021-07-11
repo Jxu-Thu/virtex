@@ -521,7 +521,6 @@ class InnerConvEmb(nn.Module):
         _, H, W = square_raw_mask.size()
         channel = x.size()[-1]
         cls_tokens, img_features = x[:, 0, :], x[:, 1:, :]
-        img_mask = image_masks[:, 1:]
         square_x = torch.zeros(sequence_raw_mask.size(), device=x.device).unsqueeze(2).expand(-1, -1, channel).reshape(-1, channel)
         sequence_raw_mask_flat = sequence_raw_mask.flatten()
         square_x[sequence_raw_mask_flat] = img_features.reshape(-1, channel)
