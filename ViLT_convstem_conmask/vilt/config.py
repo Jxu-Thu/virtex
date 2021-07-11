@@ -93,6 +93,9 @@ def config():
     # OT
     tempeture_max_OT=False
 
+    # ConvBottim
+    convc=False
+
 
 # Named configs for "environment" which define gpus and nodes, and paths
 @ex.named_config

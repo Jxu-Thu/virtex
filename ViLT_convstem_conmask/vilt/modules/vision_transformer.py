@@ -410,13 +410,14 @@ class ConvPatchEmbed(nn.Module):
         self.num_patches = num_patches
 
         if embed_dim == 768:
-            self.proj = nn.Sequential(ConvLayer(in_chans, 48, 3, 2, 1),
-                                      ConvLayer(48, 96, 3, 2, 1),
-                                      ConvLayer(96, 192, 3, 2, 1),
-                                      ConvLayer(192, 384, 3, 2, 1),
-                                      ConvLayer(384, 768, 3, 2, 1),
-                                      nn.Conv2d(768, embed_dim, kernel_size=1, stride=1)
+            self.proj = nn.Sequential(ConvLayer(in_chans, 32, 7, 2, 1),
+                                      ConvLayer(32, 64, 3, 2, 1),
+                                      ConvLayer(64, 128, 3, 2, 1),
+                                      ConvLayer(128, 256, 3, 2, 1),
+                                      ConvLayer(256, 512, 3, 2, 1),
+                                      nn.Conv2d(512, embed_dim, kernel_size=1, stride=1)
                                        )
+            # 少一层Transformer
         else:
             self.proj = nn.Sequential(ConvLayer(in_chans, 32, 3, 2, 1),
                                       ConvLayer(32, 64, 3, 2, 1),
@@ -425,6 +426,13 @@ class ConvPatchEmbed(nn.Module):
                                       ConvLayer(256, 512, 3, 2, 1),
                                       nn.Conv2d(512, embed_dim, kernel_size=1, stride=1)
                                       )
+            # self.proj = nn.Sequential(ConvLayer(in_chans, 14, 7, 2, 1),
+            #                           ConvLayer(14, 28, 3, 2, 1),
+            #                           ConvLayer(28, 56, 3, 2, 1),
+            #                           ConvLayer(56, 112, 3, 2, 1),
+            #                           ConvLayer(112, 224, 3, 2, 1),
+            #                           nn.Conv2d(448, embed_dim, kernel_size=1, stride=1)
+            #                           )
 
         # self.proj = nn.Conv2d(
         #     in_chans,
@@ -441,7 +449,55 @@ class ConvPatchEmbed(nn.Module):
         x = self.proj(x)
         return x
 
+class ConvPatchEmbedC(nn.Module):
+    def __init__(
+        self,
+        img_size=224,
+        patch_size=16,
+        in_chans=3,
+        embed_dim=768,
+        no_patch_embed_bias=False,
+    ):
+        super().__init__()
+        img_size = to_2tuple(img_size)
+        patch_size = to_2tuple(patch_size)
+        num_patches = (img_size[1] // patch_size[1]) * (img_size[0] // patch_size[0])
+        self.img_size = img_size
+        self.patch_size = patch_size
+        self.num_patches = num_patches
 
+        if embed_dim == 768:
+            self.proj = nn.Sequential(ConvLayer(in_chans, 32, 7, 2, 1),
+                                      ConvLayer(32, 64, 3, 2, 1),
+                                      ConvLayer(64, 128, 3, 2, 1),
+                                      ConvLayer(128, 256, 3, 2, 1),
+                                      ConvLayer(256, 512, 3, 2, 1),
+                                      nn.Conv2d(512, embed_dim, kernel_size=1, stride=1)
+                                       )
+            # 少一层Transformer
+        else:
+            self.proj = nn.Sequential(ConvLayer(in_chans, 14, 7, 2, 1),
+                                      ConvLayer(14, 28, 3, 2, 1),
+                                      ConvLayer(28, 56, 3, 2, 1),
+                                      ConvLayer(56, 112, 3, 2, 1),
+                                      ConvLayer(112, 224, 3, 2, 1),
+                                      nn.Conv2d(448, embed_dim, kernel_size=1, stride=1)
+                                      )
+
+        # self.proj = nn.Conv2d(
+        #     in_chans,
+        #     embed_dim,
+        #     kernel_size=patch_size,
+        #     stride=patch_size,
+        #     bias=False if no_patch_embed_bias else True,
+        # )
+
+
+    def forward(self, x):
+        B, C, H, W = x.shape
+        # FIXME look at relaxing size constraints
+        x = self.proj(x)
+        return x
 
 
 class VisionTransformer(nn.Module):
@@ -794,12 +850,20 @@ class VisionCStemTransformer(nn.Module):
         norm_layer = norm_layer or partial(nn.LayerNorm, eps=1e-6)
         self.add_norm_before_transformer = add_norm_before_transformer
 
-        self.patch_embed = ConvPatchEmbed(
-            img_size=img_size,
-            patch_size=patch_size,
-            in_chans=in_chans,
-            embed_dim=embed_dim,
-        )
+        if config['convc']:
+            self.patch_embed = ConvPatchEmbedC(
+                img_size=img_size,
+                patch_size=patch_size,
+                in_chans=in_chans,
+                embed_dim=embed_dim,
+            )
+        else:
+            self.patch_embed = ConvPatchEmbed(
+                img_size=img_size,
+                patch_size=patch_size,
+                in_chans=in_chans,
+                embed_dim=embed_dim,
+            )
         num_patches = self.patch_embed.num_patches
 
         self.patch_size = patch_size
@@ -1224,6 +1288,17 @@ def vit_middle_conv_patch32_384(pretrained=False, **kwargs):
     ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
     """
     model_kwargs = dict(patch_size=32, embed_dim=512, depth=12, num_heads=8, **kwargs)
+    model = _create_vision_conv_stem_transformer(
+        "vit_middle_patch32_384", pretrained=False,  **model_kwargs
+    )
+    return model
+
+@register_model
+def vit_middle_conv_patch32_384_c(pretrained=False, **kwargs):
+    """ ViT-Base model (ViT-B/32) from original paper (https://arxiv.org/abs/2010.11929).
+    ImageNet-1k weights fine-tuned from in21k @ 384x384, source https://github.com/google-research/vision_transformer.
+    """
+    model_kwargs = dict(patch_size=32, embed_dim=512, depth=11, num_heads=8, **kwargs)
     model = _create_vision_conv_stem_transformer(
         "vit_middle_patch32_384", pretrained=False,  **model_kwargs
     )
