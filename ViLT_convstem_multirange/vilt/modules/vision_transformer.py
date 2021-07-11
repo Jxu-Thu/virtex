@@ -517,10 +517,10 @@ class InnerConvEmb(nn.Module):
     def forward(self, x,  image_masks, square_raw_mask, sequence_raw_mask):
         import pdb
         pdb.set_trace()
-        B, T =sequence_raw_mask.size()
+        B, T = sequence_raw_mask.size()
         _, H, W = square_raw_mask.size()
         channel = x.size()[-1]
-        cls_token, img_features = x[:, 0, :], x[:, 1:, :]
+        cls_tokens, img_features = x[:, 0, :], x[:, 1:, :]
         img_mask = image_masks[:, 1:]
         square_x = torch.zeros(sequence_raw_mask.size(), device=x.device).unsqueeze(2).expand(-1, -1, channel).reshape(-1, channel)
         sequence_raw_mask_flat = sequence_raw_mask.flatten()
@@ -529,9 +529,28 @@ class InnerConvEmb(nn.Module):
         pdb.set_trace()
         square_x = square_x.reshape(B, H, W, channel).permute(0, 3, 1, 2)
         square_x = self.conv(square_x)
+        square_raw_mask = square_x.sum(dim=1) != 0
+        square_x = square_x.flatten(2).transpose(1, 2)
         import pdb
         pdb.set_trace()
-        return x, image_masks, square_raw_mask, sequence_raw_mask
+        # mask
+        square_raw_mask = square_x.sum(dim=1) != 0
+        x_mask = square_raw_mask.reshape(B, -1)
+        sequence_raw_mask = x_mask.sum(dim=0) !=0
+        sequence_raw_mask = sequence_raw_mask.expand(B, -1).detach()
+
+        image_masks = torch.masked_select(x_mask, sequence_raw_mask).reshape(B, -1)
+        x = torch.masked_select(square_x, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, channel)
+        # batch * T * channel
+
+        # add a cls token
+        x = torch.cat((cls_tokens, x), dim=1)
+        x = self.norm1(x)
+        x_mask = torch.cat([torch.ones(x_mask.shape[0], 1).to(x_mask), x_mask], dim=1)
+
+        import pdb
+        pdb.set_trace()
+        return x, x_mask, square_raw_mask, sequence_raw_mask
 
 
 class VisionTransformer(nn.Module):
@@ -1102,7 +1121,8 @@ class VisionCStemTransformer(nn.Module):
         patch_index = torch.masked_select(patch_index, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, 2)
         pos_embed = torch.masked_select(pos_embed, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, C)
         x = torch.masked_select(x, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, C)
-        # raw_squa_mask batch*(max_patch_len_h*max_patch_len_w)
+        # square_raw_mask batch*(max_patch_len_h*max_patch_len_w)
+        # square_raw_mask batch*(max_patch_len_h*max_patch_len_w)
         # x_mask: batch * seq_len
 
         if mask_it:
