@@ -259,47 +259,65 @@ def compute_itm_wpa(pl_module, batch):
 
     import pdb
     pdb.set_trace()
-    infer, stage_infer = pl_module.infer(batch, mask_text=False, mask_image=False, stage_output=True)
+    infer_final, stage_infer = pl_module.infer(batch, mask_text=False, mask_image=False, stage_output=True)
+    
+    def obtain_distance(infer, itm_module):
+        with torch.cuda.amp.autocast(enabled=False):
+            txt_emb, img_emb = infer["text_feats"], infer["image_feats"]
+            txt_mask, img_mask = infer["text_masks"].bool(), infer["image_masks"].bool()
+            # mask the sep token
+            for i, _len in enumerate(txt_mask.sum(dim=1)):
+                txt_mask[i, _len - 1] = False
+            # mask the start token
+            txt_mask[:, 0] = False
+            img_mask[:, 0] = False
+            if "deit" in pl_module.hparams.config["vit"]:
+                img_mask[:, 1] = False
+            txt_pad, img_pad = ~txt_mask, ~img_mask
 
-    with torch.cuda.amp.autocast(enabled=False):
-        txt_emb, img_emb = infer["text_feats"], infer["image_feats"]
-        txt_mask, img_mask = infer["text_masks"].bool(), infer["image_masks"].bool()
-        # mask the sep token
-        for i, _len in enumerate(txt_mask.sum(dim=1)):
-            txt_mask[i, _len - 1] = False
-        # mask the start token
-        txt_mask[:, 0] = False
-        img_mask[:, 0] = False
-        if "deit" in pl_module.hparams.config["vit"]:
-            img_mask[:, 1] = False
-        txt_pad, img_pad = ~txt_mask, ~img_mask
+            cost = cost_matrix_cosine(txt_emb.float(), img_emb.float())
+            # cost: batch:txt_len*img_token_len
+            joint_pad = txt_pad.unsqueeze(-1) | img_pad.unsqueeze(-2)
+            cost.masked_fill_(joint_pad, 0)
 
-        cost = cost_matrix_cosine(txt_emb.float(), img_emb.float())
-        # cost: batch:txt_len*img_token_len
-        joint_pad = txt_pad.unsqueeze(-1) | img_pad.unsqueeze(-2)
-        cost.masked_fill_(joint_pad, 0)
+            txt_len = (txt_pad.size(1) - txt_pad.sum(dim=1, keepdim=False)).to(
+                dtype=cost.dtype
+            )
+            img_len = (img_pad.size(1) - img_pad.sum(dim=1, keepdim=False)).to(
+                dtype=cost.dtype
+            )
+            T = ipot(
+                cost.detach(), txt_len, txt_pad, img_len, img_pad, joint_pad, 0.5, 50, 1
+            )
+            distance = trace(cost.matmul(T.detach()))
+        dist_pos = distance.masked_select(itm_labels == 1)
+        dist_neg = distance.masked_select(itm_labels == 0)
+        ot_loss = (dist_pos.sum() - dist_neg.sum()) / (dist_pos.size(0) + dist_neg.size(0))
+        itm_logits = itm_module(infer["cls_feats"])
+        itm_loss = F.cross_entropy(itm_logits, itm_labels.long())
 
-        txt_len = (txt_pad.size(1) - txt_pad.sum(dim=1, keepdim=False)).to(
-            dtype=cost.dtype
-        )
-        img_len = (img_pad.size(1) - img_pad.sum(dim=1, keepdim=False)).to(
-            dtype=cost.dtype
-        )
-        T = ipot(
-            cost.detach(), txt_len, txt_pad, img_len, img_pad, joint_pad, 0.5, 50, 1
-        )
-        distance = trace(cost.matmul(T.detach()))
+        return distance, dist_pos, dist_neg, ot_loss, itm_logits, itm_loss
 
-    dist_pos = distance.masked_select(itm_labels == 1)
-    dist_neg = distance.masked_select(itm_labels == 0)
-    ot_loss = (dist_pos.sum() - dist_neg.sum()) / (dist_pos.size(0) + dist_neg.size(0))
+    total_itm_loss = 0
+    total_ot_loss = 0
+    for stg in range(len(stage_infer)):
+        distance, dist_pos, dist_neg, ot_loss, itm_logits, itm_loss = obtain_distance(stage_infer[stg],
+                                                                                   pl_module.itm_scores_stages[stg])
 
-    itm_logits = pl_module.itm_score(infer["cls_feats"])
-    itm_loss = F.cross_entropy(itm_logits, itm_labels.long())
+
+        total_itm_loss += itm_loss
+        total_ot_loss += 0.1 * ot_loss
+
+    distance, dist_pos, dist_neg, ot_loss, itm_logits, itm_loss = obtain_distance(infer_final,
+                                                                                  pl_module.itm_score)
+
+    total_itm_loss += itm_loss
+    total_ot_loss += 0.1 * ot_loss
+
 
     ret = {
-        "itm_loss": itm_loss,
-        "itm_wpa_loss": 0.1 * ot_loss,
+        "itm_loss": total_itm_loss,
+        "itm_wpa_loss": total_ot_loss,
         "itm_logits": itm_logits,
         "itm_labels": itm_labels,
     }

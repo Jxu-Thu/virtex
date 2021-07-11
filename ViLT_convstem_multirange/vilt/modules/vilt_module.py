@@ -47,6 +47,12 @@ class ViLTransformerSS(pl.LightningModule):
             self.mlm_score.apply(objectives.init_weights)
 
         if config["loss_names"]["itm"] > 0:
+            self.itm_scores_stages = nn.ModuleList()
+            for _ in range(len(config['ot_stage'])):
+                itm_score = heads.ITMHead(config["hidden_size"])
+                itm_score.apply(objectives.init_weights)
+                self.itm_scores_stages.append(itm_score)
+
             self.itm_score = heads.ITMHead(config["hidden_size"])
             self.itm_score.apply(objectives.init_weights)
 
