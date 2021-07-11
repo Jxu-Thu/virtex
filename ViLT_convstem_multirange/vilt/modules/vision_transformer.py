@@ -527,8 +527,7 @@ class InnerConvEmb(nn.Module):
         square_x[sequence_raw_mask_flat] = img_features.reshape(-1, channel)
         import pdb
         pdb.set_trace()
-        square_x.transpose(1, 2)
-        square_x = square_x.reshape(B, H, W, channel)
+        square_x = square_x.reshape(B, H, W, channel).permute(0, 3, 1, 2)
         square_x = self.conv(square_x)
         import pdb
         pdb.set_trace()
