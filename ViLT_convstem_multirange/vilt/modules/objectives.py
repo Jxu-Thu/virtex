@@ -257,8 +257,6 @@ def compute_itm_wpa(pl_module, batch):
     batch = {k: v for k, v in batch.items()}
     batch["image"] = itm_images
 
-    import pdb
-    pdb.set_trace()
     infer_final, stage_infer = pl_module.infer(batch, mask_text=False, mask_image=False, stage_output=True)
 
     def obtain_distance(infer, itm_module):
