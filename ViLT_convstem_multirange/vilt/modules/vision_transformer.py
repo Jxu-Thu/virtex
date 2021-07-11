@@ -539,7 +539,7 @@ class InnerConvEmb(nn.Module):
         sequence_raw_mask = x_mask.sum(dim=0) !=0
         sequence_raw_mask = sequence_raw_mask.expand(B, -1).detach()
 
-        image_masks = torch.masked_select(x_mask, sequence_raw_mask).reshape(B, -1)
+        x_mask = torch.masked_select(x_mask, sequence_raw_mask).reshape(B, -1)
         x = torch.masked_select(square_x, sequence_raw_mask.unsqueeze(2)).reshape(B, -1, channel)
         # batch * T * channel
 
