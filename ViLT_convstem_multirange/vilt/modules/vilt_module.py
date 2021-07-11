@@ -105,7 +105,7 @@ class ViLTransformerSS(pl.LightningModule):
             for p in self.itm_score.parameters():
                 p.requires_grad = False
 
-        vilt_utils.set_metrics(self)
+        vilt_utils.set_metrics(self, len(config['ot_stage']))
         self.current_tasks = list()
 
         # ===================== load downstream (test_only) ======================

@@ -260,7 +260,7 @@ def compute_itm_wpa(pl_module, batch):
     import pdb
     pdb.set_trace()
     infer_final, stage_infer = pl_module.infer(batch, mask_text=False, mask_image=False, stage_output=True)
-    
+
     def obtain_distance(infer, itm_module):
         with torch.cuda.amp.autocast(enabled=False):
             txt_emb, img_emb = infer["text_feats"], infer["image_feats"]
@@ -303,6 +303,16 @@ def compute_itm_wpa(pl_module, batch):
     for stg in range(len(stage_infer)):
         distance, dist_pos, dist_neg, ot_loss, itm_logits, itm_loss = obtain_distance(stage_infer[stg],
                                                                                    pl_module.itm_scores_stages[stg])
+
+        phase = "train" if pl_module.training else "val"
+        loss = getattr(pl_module, f"{phase}_{stg}_itm_loss")(itm_loss)
+        wpa_loss = getattr(pl_module, f"{phase}_{stg}_itm_wpa_loss")(0.1 * ot_loss)
+        acc = getattr(pl_module, f"{phase}_{stg}_itm_accuracy")(
+            itm_logits, itm_labels
+        )
+        pl_module.log(f"itm/{phase}/loss_stage_{stg}", loss)
+        pl_module.log(f"itm/{phase}/wpa_loss_{stg}", wpa_loss)
+        pl_module.log(f"itm/{phase}/accuracy_{stg}", acc)
 
 
         total_itm_loss += itm_loss

@@ -11,7 +11,7 @@ from vilt.modules.objectives import compute_irtr_recall
 from vilt.gadgets.my_metrics import Accuracy, VQAScore, Scalar
 
 
-def set_metrics(pl_module):
+def set_metrics(pl_module, stages):
     for split in ["train", "val"]:
         for k, v in pl_module.hparams.config["loss_names"].items():
             if v < 1:
@@ -33,6 +33,10 @@ def set_metrics(pl_module):
             elif k == "mppd" or k == "mpfr":
                 setattr(pl_module, f"{split}_{k}_loss", Scalar())
             elif k == "itm":
+                for i in range(stages):
+                    setattr(pl_module, f"{split}_{i}_{k}_accuracy", Accuracy())
+                    setattr(pl_module, f"{split}_{i}_{k}_loss", Scalar())
+                    setattr(pl_module, f"{split}_{i}_{k}_wpa_loss", Scalar())
                 setattr(pl_module, f"{split}_{k}_accuracy", Accuracy())
                 setattr(pl_module, f"{split}_{k}_loss", Scalar())
                 setattr(pl_module, f"{split}_{k}_wpa_loss", Scalar())
