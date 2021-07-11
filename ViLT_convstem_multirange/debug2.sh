@@ -16,5 +16,6 @@ num_nodes=1 task_mlm_itm_indomain_nopretrain_middle whole_word_masking=True \
 vit=vit_middle_conv_patch32_384_c \
 convc=True \
 max_steps=100000 \
+fast_dev_run=True \
 max_patch_len=15 \
 step100k batch_size=$TOTAL_BATCH_SIZE per_gpu_batchsize=$BATCH_SIZE
