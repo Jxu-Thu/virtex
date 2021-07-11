@@ -511,13 +511,22 @@ class InnerConvEmb(nn.Module):
     ):
         super().__init__()
 
-        self.conv = nn.Conv2d(in_chans, out_channle, kernel_size=kernel_size, stride=stride, padding=padding)
+        self.conv = nn.Conv2d(in_chans, out_channle, kernel_size=kernel_size, stride=stride, padding=padding, bias=False)
         self.norm1 = nn.LayerNorm(out_channle)
 
     def forward(self, x,  image_masks, square_raw_mask, sequence_raw_mask):
         import pdb
         pdb.set_trace()
-        torch.zeros_like(sequence_raw_mask).expand(-1, -1, x.size()[-1])
+        B, T =sequence_raw_mask.size()
+        _, H, W = square_raw_mask.size()
+        channel = x.size()[-1]
+        cls_token, img_features = x[:, 0, :], x[:, 1:, :]
+        img_mask = image_masks[:, 1:]
+        square_x = torch.zeros(sequence_raw_mask.size(), device=x.device).unsqueeze(2).expand(-1, -1, channel).reshape(-1, channel)
+        sequence_raw_mask_flat = sequence_raw_mask.flatten()
+        square_x[sequence_raw_mask_flat] = img_features.reshape(-1, channel)
+        square_x = square_x.reshape(B, T, channel)
+        square_x = self.conv(square_x)
         import pdb
         pdb.set_trace()
         return x, image_masks, square_raw_mask, sequence_raw_mask
@@ -1081,7 +1090,7 @@ class VisionCStemTransformer(nn.Module):
         # x_mask: batch * (max_patch_len_h*max_patch_len_w)
         import pdb
         pdb.set_trace()
-        square_raw_mask = x_mask.detach().clone()
+        square_raw_mask = x_mask.reshape(B, max_patch_len_h, max_patch_len_w).detach().clone()
         patch_index = patch_index.reshape(B, -1, 2)
         sequence_raw_mask = x_mask.sum(dim=0) != 0
         sequence_raw_mask = sequence_raw_mask.expand(B, -1)
