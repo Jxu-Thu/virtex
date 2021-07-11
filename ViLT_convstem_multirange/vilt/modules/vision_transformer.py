@@ -525,6 +525,9 @@ class InnerConvEmb(nn.Module):
         square_x = torch.zeros(sequence_raw_mask.size(), device=x.device).unsqueeze(2).expand(-1, -1, channel).reshape(-1, channel)
         sequence_raw_mask_flat = sequence_raw_mask.flatten()
         square_x[sequence_raw_mask_flat] = img_features.reshape(-1, channel)
+        import pdb
+        pdb.set_trace()
+        square_x.transpose(1, 2)
         square_x = square_x.reshape(B, H, W, channel)
         square_x = self.conv(square_x)
         import pdb
