@@ -29,7 +29,7 @@ def config():
     val_transform_keys = ["pixelbert"]
     image_size = 384
     max_image_len = -1
-    max_patch_len = 15
+    max_patch_len = -1
     patch_size = 32
     draw_false_image = 1
     image_only = False
@@ -91,6 +91,9 @@ def config():
 
     # OT
     tempeture_max_OT=False
+
+    # ConvBottim
+    convc=False
 
 
 # Named configs for "environment" which define gpus and nodes, and paths
