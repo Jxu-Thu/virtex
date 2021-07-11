@@ -1081,7 +1081,7 @@ class VisionCStemTransformer(nn.Module):
         # x_mask: batch * (max_patch_len_h*max_patch_len_w)
         import pdb
         pdb.set_trace()
-        square_raw_mask = x_mask.copy()
+        square_raw_mask = x_mask.detach().clone()
         patch_index = patch_index.reshape(B, -1, 2)
         sequence_raw_mask = x_mask.sum(dim=0) != 0
         sequence_raw_mask = sequence_raw_mask.expand(B, -1)
