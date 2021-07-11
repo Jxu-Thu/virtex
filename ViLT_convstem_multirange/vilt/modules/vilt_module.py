@@ -168,8 +168,6 @@ class ViLTransformerSS(pl.LightningModule):
         ret_list = []
         for i, blk in enumerate(self.transformer.blocks):
             if i in self.transformer.ot_stage:
-                import pdb
-                pdb.set_trace()
                 idx_modules = self.transformer.ot_stage.index(i)
                 x = self.transformer.trans_norms[idx_modules](x)
                 text_feats, image_feats = (
