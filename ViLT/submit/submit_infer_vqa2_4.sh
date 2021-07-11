@@ -39,6 +39,6 @@ sudo pip --no-cache-dir install -r requirements.txt &>/dev/null
 sudo pip --no-cache-dir install -e . &>/dev/null
 
 python run.py with data_root=/blob/v-jinx/data/VilT_dataset \
-num_gpus=2 num_nodes=1 \
+num_gpus=4 num_nodes=1 \
 per_gpu_batchsize=32 task_finetune_vqa_randaug test_only=True \
 load_path="/blob/v-jinx/checkpoint_vilt/finetune_full_last/pretrain_indomain24GPU_vqa_ft/version_1/checkpoints/epoch=9-step=last.ckpt"
