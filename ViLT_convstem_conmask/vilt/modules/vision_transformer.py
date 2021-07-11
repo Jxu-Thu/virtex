@@ -476,11 +476,11 @@ class ConvPatchEmbedC(nn.Module):
                                        )
             # 少一层Transformer
         else:
-            self.proj = nn.Sequential(ConvLayer(in_chans, 14, 7, 2, 1),
-                                      ConvLayer(14, 28, 3, 2, 1),
+            self.proj = nn.Sequential(ConvLayer(in_chans, 28, 7, 2, 1),
                                       ConvLayer(28, 56, 3, 2, 1),
                                       ConvLayer(56, 112, 3, 2, 1),
                                       ConvLayer(112, 224, 3, 2, 1),
+                                      ConvLayer(224, 448, 3, 2, 1),
                                       nn.Conv2d(448, embed_dim, kernel_size=1, stride=1)
                                       )
 
