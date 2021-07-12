@@ -735,8 +735,6 @@ def arc_test_step(pl_module, batch, output):
 
 
 def vqa_test_wrapup(outs, model_name, save_prefix):
-    import pdb
-    pdb.set_trace()
     rank = torch.distributed.get_rank()
     qids, preds = list(), list()
     for out in outs:
@@ -751,6 +749,8 @@ def vqa_test_wrapup(outs, model_name, save_prefix):
 
     torch.distributed.barrier()
 
+    import pdb
+    pdb.set_trace()
     if rank == 0:
         jsons = list()
         paths = list(glob.glob("vqa_submit_*.json"))
