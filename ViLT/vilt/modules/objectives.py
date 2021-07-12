@@ -734,7 +734,7 @@ def arc_test_step(pl_module, batch, output):
     return output
 
 
-def vqa_test_wrapup(outs, model_name):
+def vqa_test_wrapup(outs, model_name, save_prefix):
     rank = torch.distributed.get_rank()
     qids, preds = list(), list()
     for out in outs:
@@ -744,7 +744,7 @@ def vqa_test_wrapup(outs, model_name):
     rets = list()
     for qid, pred in zip(qids, preds):
         rets.append({"question_id": qid, "answer": pred})
-    with open(f"vqa_submit_{rank}.json", "w") as fp:
+    with open(f"{save_prefix}/vqa_submit_{rank}.json", "w") as fp:
         json.dump(rets, fp, indent=4)
 
     torch.distributed.barrier()
@@ -755,12 +755,12 @@ def vqa_test_wrapup(outs, model_name):
         for path in paths:
             with open(path, "r") as fp:
                 jsons += json.load(fp)
-        os.makedirs("result", exist_ok=True)
-        with open(f"result/vqa_submit_{model_name}.json", "w") as fp:
+        os.makedirs(f"{save_prefix}/result", exist_ok=True)
+        with open(f"{save_prefix}/result/vqa_submit_{model_name}.json", "w") as fp:
             json.dump(jsons, fp, indent=4)
 
     torch.distributed.barrier()
-    os.remove(f"vqa_submit_{rank}.json")
+    os.remove(f"{save_prefix}/vqa_submit_{rank}.json")
 
 
 def arc_test_wrapup(outs, caplen, model_name):

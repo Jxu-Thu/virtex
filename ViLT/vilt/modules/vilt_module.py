@@ -254,9 +254,10 @@ class ViLTransformerSS(pl.LightningModule):
 
     def test_epoch_end(self, outs):
         model_name = self.hparams.config["load_path"].split("/")[-1][:-5]
+        save_prefix = self.hparams.config["load_path"].split("/")[:-1]
 
         if self.hparams.config["loss_names"]["vqa"] > 0:
-            objectives.vqa_test_wrapup(outs, model_name)
+            objectives.vqa_test_wrapup(outs, model_name, save_prefix)
         vilt_utils.epoch_wrapup(self)
 
     def configure_optimizers(self):
