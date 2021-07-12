@@ -254,7 +254,9 @@ class ViLTransformerSS(pl.LightningModule):
 
     def test_epoch_end(self, outs):
         model_name = self.hparams.config["load_path"].split("/")[-1][:-5]
-        save_prefix = self.hparams.config["load_path"].split("/")[:-1]
+        import pdb
+        pdb.set_trace()
+        save_prefix = '/'.join(self.hparams.config["load_path"].split("/")[:-1])
         print('save_prefix', save_prefix)
 
         if self.hparams.config["loss_names"]["vqa"] > 0:
