@@ -1,0 +1,63 @@
+data:
+  data_root: ../data/coco2017
+  huawei_flag: false
+  image_only: false
+  image_size: 224
+  max_text_len: 40
+  num_workers: 4
+  per_gpu_batchsize: 32
+  tokenizer: bert-base-uncased
+  train_transform_keys:
+  - Moco_transform
+  - Moco_transform
+  val_transform_keys:
+  - Moco_transform
+  - Moco_transform
+  whole_word_masking: true
+model:
+  alpha: 0.2
+  decay_power: cosine
+  hidden_dim: 2048
+  inter_dim: 1024
+  intra_dim: 128
+  lambda_:
+    I2TC_loss: 0.0001
+    IC_loss: 1.0
+    T2IC_loss: 0.0001
+    TC_loss: 1.0
+  loss_names:
+    I2TC: 1
+    IC: 1
+    T2IC: 1
+    TC: 1
+  lr_image: 0.03
+  lr_text: 4.0e-05
+  optim_type: sgd
+  queue_size: 32768
+  warmup_steps: 0
+  weight_decay: 0.0001
+trainer:
+  accelerator: ddp
+  callbacks:
+  - class_path: pytorch_lightning.callbacks.LearningRateMonitor
+    init_args:
+      logging_interval: step
+  - class_path: pytorch_lightning.callbacks.ModelCheckpoint
+    init_args:
+      save_last: true
+      verbose: true
+  default_root_dir: result/1626071537.9351838
+  fast_dev_run: false
+  gpus:
+  - 0
+  - 1
+  logger:
+    class_path: pytorch_lightning.loggers.TensorBoardLogger
+    init_args:
+      name: MMCresults
+      save_dir: result/
+  max_epochs: 1000
+  num_nodes: 1
+  overfit_batches: 10
+  precision: 16
+  val_check_interval: 1.0
