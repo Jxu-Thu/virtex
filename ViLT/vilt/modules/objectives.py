@@ -753,7 +753,7 @@ def vqa_test_wrapup(outs, model_name, save_prefix):
     pdb.set_trace()
     if rank == 0:
         jsons = list()
-        paths = list(glob.glob("vqa_submit_*.json"))
+        paths = list(glob.glob(f"{save_prefix}/vqa_submit_*.json"))
         for path in paths:
             with open(path, "r") as fp:
                 jsons += json.load(fp)
