@@ -749,8 +749,6 @@ def vqa_test_wrapup(outs, model_name, save_prefix):
 
     torch.distributed.barrier()
 
-    import pdb
-    pdb.set_trace()
     if rank == 0:
         jsons = list()
         paths = list(glob.glob(f"{save_prefix}/vqa_submit_*.json"))
