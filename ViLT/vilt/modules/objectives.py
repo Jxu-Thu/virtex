@@ -735,6 +735,8 @@ def arc_test_step(pl_module, batch, output):
 
 
 def vqa_test_wrapup(outs, model_name, save_prefix):
+    import pdb
+    pdb.set_trace()
     rank = torch.distributed.get_rank()
     qids, preds = list(), list()
     for out in outs:
