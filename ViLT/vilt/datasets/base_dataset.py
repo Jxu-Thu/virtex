@@ -251,6 +251,8 @@ class BaseDataset(torch.utils.data.Dataset):
             # labels : batch size * 40 tokens
 
             for i, txt_key in enumerate(txt_keys):
+                import pdb
+                pdb.set_trace()
                 word_boundary_index, _ = self.get_word_boundary(encodings[i], self.max_text_len)
                 word_boundary_index = torch.tensor(word_boundary_index)
                 texts, encodings = (
