@@ -77,6 +77,7 @@ max_patch_len=15 \
 step100k batch_size=$TOTAL_BATCH_SIZE per_gpu_batchsize=$BATCH_SIZE
 
 
+
 #python run.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
 #exp_name=$EXP_NAME num_gpus=$N_GPU_PER_WORKER \
 #num_nodes=${N_WORKER} vit_middle_conv_patch32_384 whole_word_masking=True \
