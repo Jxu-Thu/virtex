@@ -251,14 +251,14 @@ class BaseDataset(torch.utils.data.Dataset):
             # labels : batch size * 40 tokens
 
             for i, txt_key in enumerate(txt_keys):
-                import pdb
-                pdb.set_trace()
-                word_boundary_index, _ = self.get_word_boundary(encodings[i], self.max_text_len)
-                word_boundary_index = torch.tensor(word_boundary_index)
                 texts, encodings = (
                     [d[0] for d in dict_batch[txt_key]],
                     [d[1] for d in dict_batch[txt_key]],
                 )
+                import pdb
+                pdb.set_trace()
+                word_boundary_index, _ = self.get_word_boundary(encodings, self.max_text_len)
+                word_boundary_index = torch.tensor(word_boundary_index)
 
                 # no thin
                 mlm_ids, mlm_labels = (
