@@ -382,7 +382,8 @@ class ConvLayer(nn.Module):
             act=nn.ReLU
     ):
         super().__init__()
-        self.conv = nn.Conv2d(in_chans, out_chans, kernel_size=kernel_size, stride=strides, padding=padding)
+        self.conv = nn.Conv2d(in_chans, out_chans, kernel_size=kernel_size,
+                              stride=strides, padding=padding)
         self.norm1 = nn.BatchNorm2d(out_chans)
         self.act = nn.ReLU()
         # else:
