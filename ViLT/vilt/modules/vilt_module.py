@@ -233,6 +233,8 @@ class ViLTransformerSS(pl.LightningModule):
         return total_loss
 
     def training_epoch_end(self, outs):
+        import pdb
+        pdb.set_trace()
         vilt_utils.epoch_wrapup(self)
 
     def validation_step(self, batch, batch_idx):
