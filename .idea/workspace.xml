@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c22b7db7-8b25-4579-8671-233cbd680c5f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/vq-vae-2-pytorch/arraw_dataloader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ViLT/vilt/datasets/base_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ViLT/vilt/datasets/base_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViLT_convstem/vilt/datasets/base_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ViLT_convstem/vilt/datasets/base_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViLT_convstem_conmask/vilt/datasets/base_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ViLT_convstem_conmask/vilt/datasets/base_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ViLT_convstem_multirange/vilt/datasets/base_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/ViLT_convstem_multirange/vilt/datasets/base_dataset.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,35 +105,7 @@
       <workItem from="1624861705418" duration="4718000" />
       <workItem from="1625020286282" duration="11879000" />
       <workItem from="1625283669059" duration="59763000" />
-      <workItem from="1625754239161" duration="65965000" />
-    </task>
-    <task id="LOCAL-00403" summary="d">
-      <created>1625996382915</created>
-      <option name="number" value="00403" />
-      <option name="presentableId" value="LOCAL-00403" />
-      <option name="project" value="LOCAL" />
-      <updated>1625996382915</updated>
-    </task>
-    <task id="LOCAL-00404" summary="d">
-      <created>1625996475268</created>
-      <option name="number" value="00404" />
-      <option name="presentableId" value="LOCAL-00404" />
-      <option name="project" value="LOCAL" />
-      <updated>1625996475268</updated>
-    </task>
-    <task id="LOCAL-00405" summary="d">
-      <created>1625996621727</created>
-      <option name="number" value="00405" />
-      <option name="presentableId" value="LOCAL-00405" />
-      <option name="project" value="LOCAL" />
-      <updated>1625996621727</updated>
-    </task>
-    <task id="LOCAL-00406" summary="d">
-      <created>1625996768217</created>
-      <option name="number" value="00406" />
-      <option name="presentableId" value="LOCAL-00406" />
-      <option name="project" value="LOCAL" />
-      <updated>1625996768217</updated>
+      <workItem from="1625754239161" duration="71060000" />
     </task>
     <task id="LOCAL-00407" summary="d">
       <created>1625996832248</created>
@@ -451,7 +422,35 @@
       <option name="project" value="LOCAL" />
       <updated>1626266074807</updated>
     </task>
-    <option name="localTasksCounter" value="452" />
+    <task id="LOCAL-00452" summary="d">
+      <created>1626266282591</created>
+      <option name="number" value="00452" />
+      <option name="presentableId" value="LOCAL-00452" />
+      <option name="project" value="LOCAL" />
+      <updated>1626266282591</updated>
+    </task>
+    <task id="LOCAL-00453" summary="d">
+      <created>1626266302318</created>
+      <option name="number" value="00453" />
+      <option name="presentableId" value="LOCAL-00453" />
+      <option name="project" value="LOCAL" />
+      <updated>1626266302318</updated>
+    </task>
+    <task id="LOCAL-00454" summary="d">
+      <created>1626266367024</created>
+      <option name="number" value="00454" />
+      <option name="presentableId" value="LOCAL-00454" />
+      <option name="project" value="LOCAL" />
+      <updated>1626266367024</updated>
+    </task>
+    <task id="LOCAL-00455" summary="d">
+      <created>1626266454697</created>
+      <option name="number" value="00455" />
+      <option name="presentableId" value="LOCAL-00455" />
+      <option name="project" value="LOCAL" />
+      <updated>1626266454697</updated>
+    </task>
+    <option name="localTasksCounter" value="456" />
     <servers />
   </component>
   <component name="TimeTrackingManager">

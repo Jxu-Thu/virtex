@@ -27,6 +27,7 @@ class BaseDataset(torch.utils.data.Dataset):
         transform_keys : keys for generating augmented views of images
         text_column_name : pyarrow table column name that has list of strings as elements
         """
+
         assert len(transform_keys) >= 1
         super().__init__()
         self.transforms = keys_to_transforms(transform_keys, size=image_size)
@@ -38,7 +39,6 @@ class BaseDataset(torch.utils.data.Dataset):
         self.image_only = image_only
         self.data_dir = data_dir
 
-        # 就是把所有arror读进来concat
         if len(names) != 0:
             tables = [
                 pa.ipc.RecordBatchFileReader(
