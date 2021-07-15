@@ -42,11 +42,11 @@ class BaseDataset(torch.utils.data.Dataset):
         # vqav2 = ["vqav2_train", "vqav2_trainable_val", 'vqav2_rest_val']
         # names = cc3m + vg + coco + flicks30 + nlvr2 + sbu + vqav2
 
-        names = flicks30 + nlvr2
+        self.names = flicks30 + nlvr2
 
         data_lens = []
         tables = []
-        for name in names:
+        for name in self.names:
             pyarrow_table = pa.ipc.RecordBatchFileReader(
                 pa.memory_map(f"{data_dir}/{name}.arrow", "r")
             ).read_all()
@@ -56,7 +56,7 @@ class BaseDataset(torch.utils.data.Dataset):
         import pdb
         pdb.set_trace()
         self.data_lens = np.cumsum(data_lens)
-        print(f'read the dataset from {names}')
+        print(f'read the dataset from {self.names}')
 
 
     def __len__(self):
@@ -73,12 +73,14 @@ class BaseDataset(torch.utils.data.Dataset):
             data_index = index
         else:
             data_index = index - self.data_lens[dataset_index - 1]
-        return dataset_index, data_index
+        return dataset_index, data_index, self.names[dataset_index]
 
     def get_image(self, index, image_key="image"):
         import pdb
         pdb.set_trace()
-        dataset_index, data_index = self.find_index(index)
+        dataset_index, data_index, dataset_name = self.find_index(index)
+        if 'nlvr' in dataset_name:
+            image_key = np.random.choice(['image_0', 'image_1'])
         image = self.get_raw_image(dataset_index, data_index, image_key=image_key)
         image_tensor = self.transforms(image)
         return image_tensor
