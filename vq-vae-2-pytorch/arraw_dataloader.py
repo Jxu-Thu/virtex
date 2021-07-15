@@ -39,7 +39,7 @@ class BaseDataset(torch.utils.data.Dataset):
             pdb.set_trace()
             pyarrow_table = pa.ipc.RecordBatchFileReader(
                 pa.memory_map(f"{data_dir}/{name}.arrow", "r")
-            ).read_all()
+            ).read_all()['image']
             tables.append(pyarrow_table)
 
 
