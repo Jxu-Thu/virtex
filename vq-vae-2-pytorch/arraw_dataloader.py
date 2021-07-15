@@ -23,20 +23,20 @@ class BaseDataset(torch.utils.data.Dataset):
         self.data_dir = data_dir
 
 
-        cc3m = [f"conceptual_caption_train_{i}" for i in range(30)] + ["conceptual_caption_val_0"]
-        vg = ["vg"]
-        coco = ["coco_caption_karpathy_train", "coco_caption_karpathy_restval", "coco_caption_karpathy_test"]
+        # cc3m = [f"conceptual_caption_train_{i}" for i in range(30)] + ["conceptual_caption_val_0"]
+        # vg = ["vg"]
+        # coco = ["coco_caption_karpathy_train", "coco_caption_karpathy_restval", "coco_caption_karpathy_test"]
         flicks30 = ["f30k_caption_karpathy_train", "f30k_caption_karpathy_val"]
         nlvr2 = ["nlvr2_train", "nlvr2_dev"]
-        sbu = [f"sbu_{i}" for i in range(9)]
-        vqav2 = ["vqav2_train", "vqav2_trainable_val", 'vqav2_rest_val']
-        names = cc3m + vg + coco + flicks30 + nlvr2 + sbu + vqav2
+        # sbu = [f"sbu_{i}" for i in range(9)]
+        # vqav2 = ["vqav2_train", "vqav2_trainable_val", 'vqav2_rest_val']
+        # names = cc3m + vg + coco + flicks30 + nlvr2 + sbu + vqav2
+
+        names = flicks30 + nlvr2
 
 
         tables = []
         for name in names:
-            import pdb
-            pdb.set_trace()
             pyarrow_table = pa.ipc.RecordBatchFileReader(
                 pa.memory_map(f"{data_dir}/{name}.arrow", "r")
             ).read_all()
@@ -44,7 +44,8 @@ class BaseDataset(torch.utils.data.Dataset):
 
 
         print(f'read the dataset from {names}')
-
+        import pdb
+        pdb.set_trace()
         self.table = pa.concat_tables(tables, promote=True)
 
 
