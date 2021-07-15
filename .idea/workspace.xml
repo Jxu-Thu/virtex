@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c22b7db7-8b25-4579-8671-233cbd680c5f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/vq-vae-2-pytorch/arraw_dataloader.py" beforeDir="false" afterPath="$PROJECT_DIR$/vq-vae-2-pytorch/arraw_dataloader.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ViLT/submit/submit_finetune15.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vq-vae-2-pytorch/vqvae_sc.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,21 +106,8 @@
       <workItem from="1625020286282" duration="11879000" />
       <workItem from="1625283669059" duration="59763000" />
       <workItem from="1625754239161" duration="71251000" />
-      <workItem from="1626336134941" duration="2873000" />
-    </task>
-    <task id="LOCAL-00426" summary="d">
-      <created>1626062707130</created>
-      <option name="number" value="00426" />
-      <option name="presentableId" value="LOCAL-00426" />
-      <option name="project" value="LOCAL" />
-      <updated>1626062707131</updated>
-    </task>
-    <task id="LOCAL-00427" summary="d">
-      <created>1626062834784</created>
-      <option name="number" value="00427" />
-      <option name="presentableId" value="LOCAL-00427" />
-      <option name="project" value="LOCAL" />
-      <updated>1626062834784</updated>
+      <workItem from="1626336134941" duration="3815000" />
+      <workItem from="1626339977126" duration="5933000" />
     </task>
     <task id="LOCAL-00428" summary="d">
       <created>1626063008924</created>
@@ -449,7 +438,21 @@
       <option name="project" value="LOCAL" />
       <updated>1626338631369</updated>
     </task>
-    <option name="localTasksCounter" value="475" />
+    <task id="LOCAL-00475" summary="d">
+      <created>1626339017184</created>
+      <option name="number" value="00475" />
+      <option name="presentableId" value="LOCAL-00475" />
+      <option name="project" value="LOCAL" />
+      <updated>1626339017184</updated>
+    </task>
+    <task id="LOCAL-00476" summary="d">
+      <created>1626339099766</created>
+      <option name="number" value="00476" />
+      <option name="presentableId" value="LOCAL-00476" />
+      <option name="project" value="LOCAL" />
+      <updated>1626339099766</updated>
+    </task>
+    <option name="localTasksCounter" value="477" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
