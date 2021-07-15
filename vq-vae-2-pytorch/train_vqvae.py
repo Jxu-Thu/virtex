@@ -89,22 +89,22 @@ def main(args):
 
     args.distributed = dist.get_world_size() > 1
 
-    # transform = transforms.Compose(
-    #     [
-    #         transforms.Resize(args.size),
-    #         transforms.CenterCrop(args.size),
-    #         transforms.ToTensor(),
-    #         transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
-    #     ]
-    # )
-
     transform = transforms.Compose(
         [
-            transforms.Resize((args.size, args.size)),
+            transforms.Resize(args.size),
+            transforms.CenterCrop(args.size),
             transforms.ToTensor(),
             transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
         ]
     )
+
+    # transform = transforms.Compose(
+    #     [
+    #         transforms.Resize((args.size, args.size)),
+    #         transforms.ToTensor(),
+    #         transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
+    #     ]
+    # )
 
     import pdb
     pdb.set_trace()
