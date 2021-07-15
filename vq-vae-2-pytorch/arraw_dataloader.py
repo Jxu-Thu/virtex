@@ -44,16 +44,23 @@ class BaseDataset(torch.utils.data.Dataset):
 
         names = flicks30 + nlvr2
 
-
+        data_lens = []
         tables = []
         for name in names:
             pyarrow_table = pa.ipc.RecordBatchFileReader(
                 pa.memory_map(f"{data_dir}/{name}.arrow", "r")
             ).read_all()
             tables.append(pyarrow_table)
+            data_lens.append(len(pyarrow_table))
+        import pdb
+        pdb.set_trace()
+        np.cumsum(data_lens)
+
+
 
 
         print(f'read the dataset from {names}')
+
         import pdb
         pdb.set_trace()
         self.table = pa.concat_tables(tables, promote=True)
