@@ -137,7 +137,7 @@ def main(args):
         train(i, loader, model, optimizer, scheduler, device)
 
         if dist.is_primary():
-            torch.save(model.state_dict(), f"checkpoint/vqvae_{str(i + 1).zfill(3)}.pt")
+            torch.save(model.state_dict(), f"{args.path}/vqvae_{str(i + 1).zfill(3)}.pt")
 
 
 if __name__ == "__main__":
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     parser.add_argument("--epoch", type=int, default=560)
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--sched", type=str)
-    parser.add_argument("path", type=str)
+    parser.add_argument("path", type=str, default='/blob/v-jinx/checkpoint_vqvae_vlit')
 
     args = parser.parse_args()
 
