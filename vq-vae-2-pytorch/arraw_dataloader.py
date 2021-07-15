@@ -53,8 +53,6 @@ class BaseDataset(torch.utils.data.Dataset):
             tables.append(pyarrow_table)
             data_lens.append(len(pyarrow_table))
         self.tables = tables
-        import pdb
-        pdb.set_trace()
         self.data_lens = np.cumsum(data_lens)
         print(f'read the dataset from {self.names}')
 
@@ -76,11 +74,11 @@ class BaseDataset(torch.utils.data.Dataset):
         return dataset_index, data_index, self.names[dataset_index]
 
     def get_image(self, index, image_key="image"):
-        import pdb
-        pdb.set_trace()
         dataset_index, data_index, dataset_name = self.find_index(index)
         if 'nlvr' in dataset_name:
             image_key = np.random.choice(['image_0', 'image_1'])
+        else:
+            image_key = "image"
         image = self.get_raw_image(dataset_index, data_index, image_key=image_key)
         image_tensor = self.transforms(image)
         return image_tensor

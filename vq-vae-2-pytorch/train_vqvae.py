@@ -106,8 +106,6 @@ def main(args):
     #     ]
     # )
 
-    import pdb
-    pdb.set_trace()
     dataset = BaseDataset(data_dir=args.data_dir, image_size = args.size, transform=transform)
     sampler = dist.data_sampler(dataset, shuffle=True, distributed=args.distributed)
     loader = DataLoader(
@@ -125,8 +123,6 @@ def main(args):
 
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     scheduler = None
-    import pdb
-    pdb.set_trace()
     if args.sched == "cycle":
         scheduler = CycleScheduler(
             optimizer,
