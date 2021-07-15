@@ -50,7 +50,7 @@ class BaseDataset(torch.utils.data.Dataset):
 
 
     def __len__(self):
-        return len(self.index_mapper)
+        return len(self.table)
 
     def get_raw_image(self, index, image_key="image"):
         image_bytes = io.BytesIO(self.table[image_key][index].as_py())
@@ -63,6 +63,8 @@ class BaseDataset(torch.utils.data.Dataset):
         return image_tensor
 
     def __getitem__(self, idx):
+        import pdb
+        pdb.set_trace()
         image_tensor = self.get_image(idx)
         return image_tensor
 
