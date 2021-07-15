@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c22b7db7-8b25-4579-8671-233cbd680c5f" name="Default Changelist" comment="d">
-      <change beforePath="$PROJECT_DIR$/vq-vae-2-pytorch/vqvae.py" beforeDir="false" afterPath="$PROJECT_DIR$/vq-vae-2-pytorch/vqvae.py" afterDir="false" />
+    <list default="true" id="c22b7db7-8b25-4579-8671-233cbd680c5f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/vq-vae-2-pytorch/train_vqvae.py" beforeDir="false" afterPath="$PROJECT_DIR$/vq-vae-2-pytorch/train_vqvae.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,27 +104,7 @@
       <workItem from="1625020286282" duration="11879000" />
       <workItem from="1625283669059" duration="59763000" />
       <workItem from="1625754239161" duration="71251000" />
-    </task>
-    <task id="LOCAL-00408" summary="d">
-      <created>1625997986392</created>
-      <option name="number" value="00408" />
-      <option name="presentableId" value="LOCAL-00408" />
-      <option name="project" value="LOCAL" />
-      <updated>1625997986392</updated>
-    </task>
-    <task id="LOCAL-00409" summary="d">
-      <created>1625998251954</created>
-      <option name="number" value="00409" />
-      <option name="presentableId" value="LOCAL-00409" />
-      <option name="project" value="LOCAL" />
-      <updated>1625998251954</updated>
-    </task>
-    <task id="LOCAL-00410" summary="d">
-      <created>1625998618337</created>
-      <option name="number" value="00410" />
-      <option name="presentableId" value="LOCAL-00410" />
-      <option name="project" value="LOCAL" />
-      <updated>1625998618337</updated>
+      <workItem from="1626336134941" duration="299000" />
     </task>
     <task id="LOCAL-00411" summary="d">
       <created>1626006217544</created>
@@ -448,7 +428,28 @@
       <option name="project" value="LOCAL" />
       <updated>1626335880782</updated>
     </task>
-    <option name="localTasksCounter" value="457" />
+    <task id="LOCAL-00457" summary="d">
+      <created>1626336143193</created>
+      <option name="number" value="00457" />
+      <option name="presentableId" value="LOCAL-00457" />
+      <option name="project" value="LOCAL" />
+      <updated>1626336143193</updated>
+    </task>
+    <task id="LOCAL-00458" summary="d">
+      <created>1626336231826</created>
+      <option name="number" value="00458" />
+      <option name="presentableId" value="LOCAL-00458" />
+      <option name="project" value="LOCAL" />
+      <updated>1626336231826</updated>
+    </task>
+    <task id="LOCAL-00459" summary="d">
+      <created>1626336413319</created>
+      <option name="number" value="00459" />
+      <option name="presentableId" value="LOCAL-00459" />
+      <option name="project" value="LOCAL" />
+      <updated>1626336413319</updated>
+    </task>
+    <option name="localTasksCounter" value="460" />
     <servers />
   </component>
   <component name="TimeTrackingManager">

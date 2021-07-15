@@ -124,6 +124,8 @@ def main(args):
 
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
     scheduler = None
+    import pdb
+    pdb.set_trace()
     if args.sched == "cycle":
         scheduler = CycleScheduler(
             optimizer,
