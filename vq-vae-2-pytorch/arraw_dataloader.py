@@ -52,6 +52,7 @@ class BaseDataset(torch.utils.data.Dataset):
             ).read_all()
             tables.append(pyarrow_table)
             data_lens.append(len(pyarrow_table))
+        self.tables = tables
         import pdb
         pdb.set_trace()
         self.data_lens = np.cumsum(data_lens)
