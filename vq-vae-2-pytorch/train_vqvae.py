@@ -108,7 +108,7 @@ def main(args):
 
     import pdb
     pdb.set_trace()
-    dataset = BaseDataset(data_dir='/blob/v-jinx/data/ViLT_dataset', image_size = args.size, transform=transform)
+    dataset = BaseDataset(data_dir=args.data_dir, image_size = args.size, transform=transform)
     sampler = dist.data_sampler(dataset, shuffle=True, distributed=args.distributed)
     loader = DataLoader(
         dataset, batch_size=128 // args.n_gpu, sampler=sampler, num_workers=8
@@ -159,6 +159,7 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=3e-4)
     parser.add_argument("--sched", type=str)
     parser.add_argument("--path", type=str, default='/blob/v-jinx/checkpoint_vqvae_vlit')
+    parser.add_argument("--data_dir", type=str, default='/blob/v-jinx/data/VilT_dataset')
 
     args = parser.parse_args()
 
