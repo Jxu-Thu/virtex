@@ -62,8 +62,7 @@ class BaseDataset(torch.utils.data.Dataset):
         print(f'read the dataset from {names}')
 
         import pdb
-        pdb.set_trace()
-        self.table = pa.concat_tables(tables, promote=True)
+
 
 
     def __len__(self):
