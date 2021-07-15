@@ -1,12 +1,13 @@
 import torch
 import torch.nn as nn
-
+from transformers import BertConfig
+import json
 class MoCo(nn.Module):
     """
     Build a MoCo model with: a query encoder, a key encoder, and a queue
     https://arxiv.org/abs/1911.05722
     """
-    def __init__(self, base_encoder, intra_dim=128,inter_dim=1024, hidden_dim = 2048,K=32768, m=0.999, T=0.07,config = None):
+    def __init__(self, base_encoder, intra_dim=128,inter_dim=1024, hidden_dim = 2048,K=32768, m=0.999, T=0.07, is_pretrained = True, path = None):
         """
         dim: feature dimension (default: 128)
         K: queue size; number of negative keys (default: 65536)
@@ -21,9 +22,16 @@ class MoCo(nn.Module):
 
         # create the encoders
         # num_classes is the output fc dimension
-        if config is not None:
-            self.encoder_q = base_encoder(config)
-            self.encoder_k = base_encoder(config)
+        if path is not None:
+            if is_pretrained:
+                self.encoder_q = base_encoder.from_pretrained(path)
+                self.encoder_k = base_encoder.from_pretrained(path)
+            else:
+                with open(path+'config.json','r') as f:
+                    config = json.load(f)
+                bert_config = BertConfig(config)
+                self.encoder_q = base_encoder(bert_config)
+                self.encoder_k = base_encoder(bert_config)
             print(self.encoder_q.config.hidden_size)
             dim_mlp = self.encoder_q.config.hidden_size
         else:

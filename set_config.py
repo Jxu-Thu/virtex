@@ -19,11 +19,11 @@ def config():
     #trainer
     accelerator = "ddp"
     default_root_dir  = f"result/{str(time.time())}"
-    overfit_batches = 10
+    # overfit_batches = 10
     fast_dev_run = False
     val_check_interval = 1.0
-    log_dir = "result/"
-    exp_name = "MMCresults"
+    log_dir = "../results/"
+    exp_name = "MMCresult"
     logger = {"class_path":"pytorch_lightning.loggers.TensorBoardLogger",
               "init_args": {"save_dir": log_dir,"name": exp_name}
             }
@@ -73,7 +73,7 @@ def main(_config):
     config_["trainer"] = {}
     # print(_config["default_root_dir"])
     os.makedirs(_config["default_root_dir"])
-    config_["trainer"]["overfit_batches"] = _config["overfit_batches"]
+    # config_["trainer"]["overfit_batches"] = _config["overfit_batches"]
     config_["trainer"]["accelerator"] = _config["accelerator"]
     config_["trainer"]["default_root_dir"] = _config["default_root_dir"]
     config_["trainer"]["fast_dev_run"] = _config["fast_dev_run"]

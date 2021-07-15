@@ -6,7 +6,7 @@ from typing import Dict
 from modules import utils, objectives
 from modules.resnet50 import resnet50
 from modules.Moco import MoCo
-from transformers import BertModel, BertConfig
+from transformers import BertModel
 
 class Mixed_Moco(pl.LightningModule):
     def __init__(
@@ -23,7 +23,9 @@ class Mixed_Moco(pl.LightningModule):
         weight_decay: float = 1e-4,
         optim_type: str = "sgd",
         decay_power: str = "cosine",
-        warmup_steps: int = 0,       
+        warmup_steps: int = 0,    
+        is_pretrained: bool = True,
+        pretrained_or_config_path: str = "../pretrained_model/"
     ) -> None:
         """Multi-Modal Contrastive module
         Args:
@@ -40,17 +42,30 @@ class Mixed_Moco(pl.LightningModule):
             optim_type: optimizer category
             decay_power: the way of decaying
             warmup_steps: num of steps for warmup
+            is_pretrained: whether use pretrained BERT
+            pretrained_or_config_path: the path for pretraied model or config file of BERT
         """
         super().__init__()
         self.save_hyperparameters()
-        bert_config = BertConfig()
-        self.Text_Moco = MoCo(BertModel, intra_dim, inter_dim, hidden_dim,queue_size,config = bert_config)
+        self.Text_Moco = MoCo(BertModel,
+                             intra_dim,
+                             inter_dim, 
+                             hidden_dim,queue_size, 
+                             is_pretrained = is_pretrained, 
+                             path = pretrained_or_config_path
+        )
         self.Image_Moco = MoCo(resnet50, intra_dim, inter_dim, hidden_dim,queue_size)
         utils.set_metrics(self)
         self.current_tasks = list()
 
 
     def forward(self, batch):
+        # import pdb
+        # pdb.set_trace()
+        # print_image(batch["image"][0][0],"./hh_0.jpg")
+        # print_image(batch["image"][1][0],"./hh_1.jpg")
+        # import pdb
+        # pdb.set_trace()
         ret = dict()
         #image
         if "IC" in self.current_tasks:
@@ -82,6 +97,18 @@ class Mixed_Moco(pl.LightningModule):
     def configure_optimizers(self):
         return utils.set_schedule(self)
 
+def print_image(x, root):
+    #optional
+    import torch
+    import torchvision
+    x = x.cpu()
+    mean=[0.485, 0.456, 0.406]
+    std=[0.229, 0.224, 0.225]
+    t_mean = torch.FloatTensor(mean).view(3,1,1).expand(3, x.size(1), x.size(2))
+    t_std = torch.FloatTensor(std).view(3,1,1).expand(3, x.size(1), x.size(2))
+    img_GT = x * t_std +t_mean
+    img = torchvision.transforms.ToPILImage()(img_GT).convert('RGB')
+    img.save(root)
 
 if __name__ == '__main__':
     model = Mixed_Moco()
