@@ -54,33 +54,35 @@ class BaseDataset(torch.utils.data.Dataset):
             data_lens.append(len(pyarrow_table))
         import pdb
         pdb.set_trace()
-        np.cumsum(data_lens)
-
-
-
-
+        self.data_lens = np.cumsum(data_lens)
         print(f'read the dataset from {names}')
-
-        import pdb
-
 
 
     def __len__(self):
-        return len(self.table)
+        return self.data_lens[-1]
 
-    def get_raw_image(self, index, image_key="image"):
-        image_bytes = io.BytesIO(self.table[image_key][index].as_py())
+    def get_raw_image(self, dataset_index, data_index, image_key="image"):
+        image_bytes = io.BytesIO(self.tables[dataset_index][image_key][data_index].as_py())
         image_bytes.seek(0)
         return Image.open(image_bytes).convert("RGB")
 
+    def find_index(self, index):
+        dataset_index = np.digitize(index, self.data_lens)
+        if dataset_index == 0:
+            data_index = index
+        else:
+            data_index = index - self.data_lens[dataset_index - 1]
+        return dataset_index, data_index
+
     def get_image(self, index, image_key="image"):
-        image = self.get_raw_image(index, image_key=image_key)
+        import pdb
+        pdb.set_trace()
+        dataset_index, data_index = self.find_index(index)
+        image = self.get_raw_image(dataset_index, data_index, image_key=image_key)
         image_tensor = self.transforms(image)
         return image_tensor
 
     def __getitem__(self, idx):
-        import pdb
-        pdb.set_trace()
         image_tensor = self.get_image(idx)
         return image_tensor
 
