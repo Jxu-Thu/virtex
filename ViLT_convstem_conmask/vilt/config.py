@@ -296,6 +296,7 @@ def task_finetune_irtr_coco_randaug():
     learning_rate = 1e-4
 
 
+
 @ex.named_config
 def task_finetune_irtr_f30k():
     exp_name = "finetune_irtr_f30k"
@@ -324,9 +325,13 @@ def task_finetune_irtr_f30k_randaug():
     draw_false_text = 15
     learning_rate = 1e-4
 
-
 # Named configs for "etc" which are orthogonal to "env" and "task", need to be added at the end
-
+@ex.named_config
+def middle_size():
+    vit = 'vit_middle_conv_patch32_384'
+    hidden_size = 512
+    num_heads = 8
+    lr_mult = 10
 
 @ex.named_config
 def step25k():
