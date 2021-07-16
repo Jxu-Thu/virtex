@@ -6,7 +6,7 @@ SAVE_DIR=$LOG_DIR/$EXP_NAME
 
 mkdir -p $SAVE_DIR
 
-python run.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
+python run_pdb.py with data_root=$DATA_ROOT log_dir=$LOG_DIR \
 exp_name=$EXP_NAME num_gpus=1 num_nodes=1 \
 task_finetune_irtr_coco_randaug \
 middle_size \
