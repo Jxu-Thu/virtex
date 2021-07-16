@@ -318,6 +318,14 @@ def task_finetune_irtr_f30k_randaug():
 
 
 @ex.named_config
+def middle_size():
+    vit = 'vit_middle_patch32_384'
+    hidden_size = 512
+    num_heads = 8
+    lr_mult = 10
+
+
+@ex.named_config
 def step25k():
     max_epoch = 100
     max_steps = 25000

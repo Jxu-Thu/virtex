@@ -314,6 +314,12 @@ def task_finetune_irtr_f30k_randaug():
 
 # Named configs for "etc" which are orthogonal to "env" and "task", need to be added at the end
 
+@ex.named_config
+def middle_size():
+    vit = 'vit_middle_patch32_384'
+    hidden_size = 512
+    num_heads = 8
+    lr_mult = 10
 
 @ex.named_config
 def step25k():
