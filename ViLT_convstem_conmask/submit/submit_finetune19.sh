@@ -56,7 +56,7 @@ export NCCL_TREE_THRESHOLD=0
 export NCCL_ALGO=Ring
 export NCCL_DEBUG=INFO
 
-EXP_NAME=pretrain_indomain24GPU_pretrain_conv_bottom_conmask_vqa_ft
+EXP_NAME=pretrain_indomain24GPU_pretrain_conv_bottom_conmask_coco_irtr_ft
 DATA_ROOT=/blob/v-jinx/data/VilT_dataset
 LOG_DIR=/blob/v-jinx/checkpoint_vilt/finetune_val_best
 RESUME_DIR=/blob/v-jinx/checkpoint_vilt/pre_train/pretrain_indomain24GPU_h512_without_pretrain_conv_bottom_conmask/version_4/checkpoints/last.ckpt
