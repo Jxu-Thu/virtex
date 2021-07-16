@@ -4,8 +4,8 @@ data:
   image_only: false
   image_size: 224
   max_text_len: 40
-  num_workers: 4
-  per_gpu_batchsize: 32
+  num_workers: 8
+  per_gpu_batchsize: 64
   tokenizer: bert-base-uncased
   train_transform_keys:
   - Moco_transform
@@ -46,18 +46,24 @@ trainer:
     init_args:
       save_last: true
       verbose: true
-  default_root_dir: result/1626071537.9351838
+  default_root_dir: result/1626362863.1554291
   fast_dev_run: false
   gpus:
   - 0
   - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
   logger:
     class_path: pytorch_lightning.loggers.TensorBoardLogger
     init_args:
-      name: MMCresults
-      save_dir: result/
-  max_epochs: 1000
+      name: MMCresult
+      save_dir: ../results/
+  max_epochs: 200
   num_nodes: 1
-  overfit_batches: 10
   precision: 16
+  sync_batchnorm: true
   val_check_interval: 1.0

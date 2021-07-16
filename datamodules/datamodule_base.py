@@ -179,19 +179,21 @@ class BaseDataModule(LightningDataModule):
             num_workers=self.num_workers,
             pin_memory=True,
             collate_fn=self.collate,
+            drop_last= True
         )
         return loader
 
-    def val_dataloader(self):
-        loader = DataLoader(
-            self.val_dataset,
-            batch_size=self.eval_batch_size,
-            shuffle=False,
-            num_workers=self.num_workers,
-            pin_memory=True,
-            collate_fn=self.collate,
-        )
-        return loader
+    # def val_dataloader(self):
+    #     loader = DataLoader(
+    #         self.val_dataset,
+    #         batch_size=self.eval_batch_size,
+    #         shuffle=False,
+    #         num_workers=self.num_workers,
+    #         pin_memory=True,
+    #         collate_fn=self.collate,
+    #         drop_last= True
+    #     )
+    #     return loader
 
     def test_dataloader(self):
         loader = DataLoader(

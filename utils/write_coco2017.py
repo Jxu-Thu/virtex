@@ -17,6 +17,13 @@ def path2rest(path, iid2captions,iid2BTcaptions):
     bt_captions = iid2BTcaptions[name]
     return [binary, captions, bt_captions, name]
 
+# def path2rest(path, path2labels):
+#     name = path.split("/")[-1]
+#     with open(path, "rb") as fp:
+#         binary = fp.read()
+#     label = iid2labels[name]
+#     return [binary, label]
+
 
 def make_arrow(root, dataset_root):
     with open(f"{root}/annotations/captions_train2017_new_new.json", "r") as fp:
@@ -48,24 +55,39 @@ def make_arrow(root, dataset_root):
     )
 
     bs = [path2rest(path, iid2captions, iid2BTcaptions) for path in tqdm(caption_paths)]
+    # bs = [path2rest(path, iid2labels) for path in tqdm(paths)]
     # for i in bs:
     #     assert len(i[1])==len(i[2])
     # print('hh')
     # return
     for split in ["train"]:
         # batches = [b for b in bs if b[-1] == split]
-        batches = bs[:1000]
+        batches = bs[:10000]
+        # batches = bs
         dataframe = pd.DataFrame(
             batches, columns=["image", "caption", "BT_caption", "image_id"],
         )
+        # dataframe = pandas.DataFrame(
+        #     bs, columns=["image", "label"],
+        # )
 
         table = pa.Table.from_pandas(dataframe)
+
+        # table = pyarrow.Table.from_pandas(dataframe)
+
         os.makedirs(dataset_root, exist_ok=True)
+
         with pa.OSFile(
             f"{dataset_root}/coco2017_caption_{split}.arrow", "wb"
         ) as sink:
             with pa.RecordBatchFileWriter(sink, table.schema) as writer:
                 writer.write_table(table)
+
+        # with pyarrow.OSFile(
+        #     f"./MNist_train.arrow", "wb"
+        # ) as sink:
+        #     with pyarrow.RecordBatchFileWriter(sink, table.schema) as writer:
+        #         writer.write_table(table)
 
 if __name__ == '__main__':
     make_arrow('../../data/coco2017', '../../data/coco2017')

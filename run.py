@@ -29,7 +29,9 @@ class My_CLI(LightningCLI):
             pass
 
 def main():
+#     print('hh')
     cli = My_CLI(model_class= Mixed_Moco, datamodule_class = CocoCaptionKarpathyDataModule, is_test = False, seed_everything_default=1234)
 
 if __name__ == '__main__':
     main()
+    # print('hh')

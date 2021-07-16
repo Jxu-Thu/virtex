@@ -51,9 +51,10 @@ class BaseDataset(torch.utils.data.Dataset):
 
             print(f'read the dataset from {names}')
             self.table_names = list()
+            
+            # print(len(tables))
             # import pdb
             # pdb.set_trace()
-            print(len(tables))
             for i, name in enumerate(names):
                 self.table_names += [name] * len(tables[i])
 
@@ -78,13 +79,14 @@ class BaseDataset(torch.utils.data.Dataset):
                 self.all_texts = list()
         else:
             self.all_texts = list()
-        for i in range(len(self.all_texts[0])):
-            if len(self.all_texts[0][i])!=len(self.all_texts[1][i]):
-                print(i)
-                print(self.all_texts[0][i])
-                print(self.all_texts[1][i])
-                print(len(self.all_texts[0][i]))
-                print(len(self.all_texts[1][i]))
+        # pdb.set_trace()
+        # for i in range(len(self.all_texts[0])):
+        #     if len(self.all_texts[0][i])!=len(self.all_texts[1][i]):
+        #         print(i)
+        #         print(self.all_texts[0][i])
+        #         print(self.all_texts[1][i])
+        #         print(len(self.all_texts[0][i]))
+        #         print(len(self.all_texts[1][i]))
         #self.all_texts[0]每一个元素是一张图片的几个caption
         # import pdb
         # pdb.set_trace()
@@ -100,13 +102,13 @@ class BaseDataset(torch.utils.data.Dataset):
         else:
             for i in range(len(self.table)):
                 self.index_mapper[i] = (i, None)
-
+        # pdb.set_trace()
     @property
     def corpus(self):
         return [text for texts in self.all_texts for text in texts]
 
     def __len__(self):
-        return len(self.index_mapper)
+        return len(self.index_mapper)#50025 for 10000
 
     def get_raw_image(self, index, image_key="image"):
         index, caption_index = self.index_mapper[index]
@@ -165,7 +167,7 @@ class BaseDataset(torch.utils.data.Dataset):
     def collate(self, batch, mlm_collator):
         #batch[0]:{"image":[view1,view2],'img_index': 975, 'cap_index': 2,
         #           'raw_index': 4882, 'replica': True, 'text': [(content_1,encoding_1),(content_2,encoding_2)]}
-        print("collate")
+        # print("collate")
         # print(len(batch))
         # print(batch[0])
         

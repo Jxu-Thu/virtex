@@ -1,6 +1,7 @@
 import pytorch_lightning as pl
 import torch.nn.functional as F
 from typing import Dict
+# import typing
 # import sys 
 # sys.path.append("..")
 from modules import utils, objectives
@@ -87,12 +88,12 @@ class Mixed_Moco(pl.LightningModule):
     def training_epoch_end(self, outs):
         utils.epoch_wrapup(self)
 
-    def validation_step(self, batch, batch_idx):
-        utils.set_task(self)
-        output = self(batch)
+    # def validation_step(self, batch, batch_idx):
+    #     utils.set_task(self)
+    #     output = self(batch)
 
-    def validation_epoch_end(self, outs):
-        utils.epoch_wrapup(self)
+    # def validation_epoch_end(self, outs):
+    #     utils.epoch_wrapup(self)
 
     def configure_optimizers(self):
         return utils.set_schedule(self)

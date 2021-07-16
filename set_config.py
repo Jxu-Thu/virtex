@@ -18,6 +18,7 @@ def _loss_names(d={}):
 def config():
     #trainer
     accelerator = "ddp"
+    # accelerator = None
     default_root_dir  = f"result/{str(time.time())}"
     # overfit_batches = 10
     fast_dev_run = False
@@ -27,7 +28,7 @@ def config():
     logger = {"class_path":"pytorch_lightning.loggers.TensorBoardLogger",
               "init_args": {"save_dir": log_dir,"name": exp_name}
             }
-    num_gpus = [0,1]
+    num_gpus = [0,1,2,3,4,5,6,7]
     num_nodes = 1
     precision = 16
     callbacks = [{"class_path": "pytorch_lightning.callbacks.LearningRateMonitor", 
@@ -37,12 +38,13 @@ def config():
                   "init_args":{"verbose": True, "save_last": True}
                 }
     ]
-    max_epochs = 1000
+    sync_batchnorm = True
+    max_epochs = 200
 
     # datamodule
     data_root = "../data/coco2017"
-    num_workers = 4
-    per_gpu_batchsize = 32
+    num_workers = 8
+    per_gpu_batchsize = 64
     train_transform_keys = ["Moco_transform","Moco_transform"]
     val_transform_keys = ["Moco_transform","Moco_transform"]
     image_size = 224
@@ -74,6 +76,7 @@ def main(_config):
     # print(_config["default_root_dir"])
     os.makedirs(_config["default_root_dir"])
     # config_["trainer"]["overfit_batches"] = _config["overfit_batches"]
+    config_["trainer"]["sync_batchnorm"] = _config["sync_batchnorm"]
     config_["trainer"]["accelerator"] = _config["accelerator"]
     config_["trainer"]["default_root_dir"] = _config["default_root_dir"]
     config_["trainer"]["fast_dev_run"] = _config["fast_dev_run"]

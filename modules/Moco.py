@@ -32,7 +32,7 @@ class MoCo(nn.Module):
                 bert_config = BertConfig(config)
                 self.encoder_q = base_encoder(bert_config)
                 self.encoder_k = base_encoder(bert_config)
-            print(self.encoder_q.config.hidden_size)
+            # print(self.encoder_q.config.hidden_size)
             dim_mlp = self.encoder_q.config.hidden_size
         else:
             self.encoder_q = base_encoder()
@@ -206,6 +206,7 @@ class MoCo(nn.Module):
                     k = self.encoder_k(im_k)
                 k = self.mlp_k_inter(k)
                 k = nn.functional.normalize(k, dim=1)
+                k = self._batch_unshuffle_ddp(k, idx_unshuffle)
                 return k
 
 # utils
