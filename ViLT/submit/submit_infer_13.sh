@@ -40,6 +40,23 @@ sudo pip --no-cache-dir install -e . &>/dev/null
 
 
 
+mkdir -p $SAVE_DIR
+
+TASK=nlvr2
+run_model=task_finetune_nlvr2_randaug
+pre_trained_model="/blob/v-jinx/checkpoint_vilt/finetune_full_last/pretrain_nlvr_ft_full/version_0/checkpoints/last.ckpt"
+
+if [ "$TASK" == "nlvr2" ]; then
+	num_gpus=4
+	per_gpu_batchsize=32
+elif [ "$TASK" == "flick30k" ]; then
+	num_gpus=4
+	per_gpu_batchsize=4
+elif [ "$TASK" == "vqa2" ]; then
+	num_gpus=4
+	per_gpu_batchsize=32
+fi
+
 python run.py with data_root=/blob/v-jinx/data/VilT_dataset \
- num_gpus=4 num_nodes=1 per_gpu_batchsize=32 \
- task_finetune_nlvr2_randaug test_only=True load_path="/blob/v-jinx/checkpoint_vilt/finetune_full_last/pretrain_nlvr_ft_full/version_0/checkpoints/last.ckpt"
+ num_gpus=${num_gpus} num_nodes=1 per_gpu_batchsize=${per_gpu_batchsize} \
+ ${run_model} test_only=True load_path=${pre_trained_model}
