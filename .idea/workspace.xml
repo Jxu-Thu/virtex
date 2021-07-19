@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c22b7db7-8b25-4579-8671-233cbd680c5f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ViLT_convstem_conmask/submit/submit_infer20.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ViLT_convstem_conmask/submit/submit_infer21.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/records.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/records.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -110,14 +107,7 @@
       <workItem from="1625754239161" duration="71251000" />
       <workItem from="1626336134941" duration="3815000" />
       <workItem from="1626339977126" duration="11804000" />
-      <workItem from="1626486183503" duration="8112000" />
-    </task>
-    <task id="LOCAL-00446" summary="d">
-      <created>1626264681528</created>
-      <option name="number" value="00446" />
-      <option name="presentableId" value="LOCAL-00446" />
-      <option name="project" value="LOCAL" />
-      <updated>1626264681528</updated>
+      <workItem from="1626486183503" duration="8635000" />
     </task>
     <task id="LOCAL-00447" summary="d">
       <created>1626264707564</created>
@@ -455,7 +445,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626675327311</updated>
     </task>
-    <option name="localTasksCounter" value="495" />
+    <task id="LOCAL-00495" summary="d">
+      <created>1626684483988</created>
+      <option name="number" value="00495" />
+      <option name="presentableId" value="LOCAL-00495" />
+      <option name="project" value="LOCAL" />
+      <updated>1626684483988</updated>
+    </task>
+    <option name="localTasksCounter" value="496" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
