@@ -41,5 +41,5 @@ sudo pip --no-cache-dir install -e . &>/dev/null
 
 
 python run.py with data_root=/blob/v-jinx/data/VilT_dataset \
- num_gpus=1 num_nodes=1 per_gpu_batchsize=32 \
+ num_gpus=4 num_nodes=1 per_gpu_batchsize=32 \
  task_finetune_nlvr2_randaug test_only=True load_path="v-jinx/checkpoint_vilt/finetune_full_last/pretrain_nlvr_ft_full/version_0/checkpoints/last.ckpt"
