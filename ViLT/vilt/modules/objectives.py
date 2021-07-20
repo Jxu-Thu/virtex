@@ -478,6 +478,8 @@ def compute_vqa(pl_module, batch):
 
 
 def compute_nlvr2(pl_module, batch):
+    import pdb
+    pdb.set_trace()
     infer1 = pl_module.infer(
         batch, mask_text=False, mask_image=False, image_token_type_idx=1
     )
