@@ -191,6 +191,9 @@ def make_blob_arrow(root, dataset_root):
         annotations[split] = _annot
 
     for split in splits:
+        import pdb
+        pdb.set_trace()
+        process_blob(root, 'train-8401-0', annotations[split]['train-8401-0'])
         bs = [
             process_blob(root, iden, row) for iden, row in tqdm(annotations[split].items())
         ]
