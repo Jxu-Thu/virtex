@@ -44,7 +44,7 @@ mkdir -p $SAVE_DIR
 
 TASK=flick30k
 run_model=task_finetune_irtr_f30k_randaug
-pre_trained_model="/blob/v-jinx/checkpoint_vilt/finetune_val_best/pretrain_indomain24GPU_pretrain_conv_bottom_conmask_flick_ft/version_0/checkpoints/last.ckpt"
+pre_trained_model="/blob/v-jinx/checkpoint_vilt/finetune_val_best/pretrain_indomain24GPU_pretrain_conv_bottom_conmask_flick_ft/version_3/checkpoints/last.ckpt"
 
 if [ "$TASK" == "nlvr2" ]; then
 	num_gpus=4
