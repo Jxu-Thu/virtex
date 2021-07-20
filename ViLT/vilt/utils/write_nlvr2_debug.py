@@ -126,8 +126,6 @@ def make_arrow(root, dataset_root):
                 writer.write_table(table)
 
 def make_blob_arrow(root, dataset_root):
-    import pdb
-    pdb.set_trace()
     train_data = list(
         map(json.loads, open(f"{root}/nlvr2/data/train.json").readlines())
     )
