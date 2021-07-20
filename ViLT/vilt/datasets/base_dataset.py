@@ -39,6 +39,9 @@ class BaseDataset(torch.utils.data.Dataset):
         self.image_only = image_only
         self.data_dir = data_dir
 
+        import pdb
+        pdb.set_trace()
+
         if len(names) != 0:
             tables = [
                 pa.ipc.RecordBatchFileReader(
