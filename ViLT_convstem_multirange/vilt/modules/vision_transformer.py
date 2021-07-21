@@ -1057,8 +1057,6 @@ class VisionCStemTransformer(nn.Module):
             )[None, :, :, :]
                 .expand(x_mask.shape[0], -1, -1, -1)
         )
-        import pdb
-        pdb.set_trace()
         if (
             max_patch_len < 0
             or max_patch_len is None
@@ -1073,8 +1071,6 @@ class VisionCStemTransformer(nn.Module):
             if (max_patch_len_h == x_mask.size()[2]) and (max_patch_len_w == x_mask.size()[3]):
                 pass
             else:
-                import pdb
-                pdb.set_trace()
                 x = x[:, :, :max_patch_len_h, :max_patch_len_w]
                 x_mask = x_mask[:, :, :max_patch_len_h, :max_patch_len_w]
                 pos_embed = pos_embed[:, :, :max_patch_len_h, :max_patch_len_w]
