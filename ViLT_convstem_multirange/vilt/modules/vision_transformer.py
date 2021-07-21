@@ -1075,8 +1075,9 @@ class VisionCStemTransformer(nn.Module):
             else:
                 import pdb
                 pdb.set_trace()
-                a = 1
-            max_patch_len_h, max_patch_len_w = x_mask.size()[2], x_mask.size()[3]
+                x = x[:, :, :max_patch_len_h, :max_patch_len_w]
+                x_mask = x_mask[:, :, :max_patch_len_h, :max_patch_len_w]
+                pos_embed = pos_embed[:, :, :max_patch_len_h, :max_patch_len_w]
             # max_patch_len_w = x_w.max()
             pos_embed = pos_embed.flatten(2).transpose(1, 2)
             x = x.flatten(2).transpose(1, 2)
