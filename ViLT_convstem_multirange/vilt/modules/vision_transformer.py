@@ -1078,6 +1078,7 @@ class VisionCStemTransformer(nn.Module):
                 x = x[:, :, :max_patch_len_h, :max_patch_len_w]
                 x_mask = x_mask[:, :, :max_patch_len_h, :max_patch_len_w]
                 pos_embed = pos_embed[:, :, :max_patch_len_h, :max_patch_len_w]
+                patch_index = patch_index[:, :max_patch_len_h, :max_patch_len_w, :]
                 B, C, H, W = x.shape
             # max_patch_len_w = x_w.max()
             pos_embed = pos_embed.flatten(2).transpose(1, 2)
