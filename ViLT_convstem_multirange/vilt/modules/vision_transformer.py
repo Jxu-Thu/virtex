@@ -1122,7 +1122,7 @@ class VisionCStemTransformer(nn.Module):
 
 
         # 32*342*768
-        # 32*(18*19)*2 : 代表patch的x,y坐标
+        # 32*(18*19)*2
         # image mask: raw_mask  (batch * img_h * img*w)
         # x_mask: batch * (max_patch_len_h*max_patch_len_w)
         square_raw_mask = x_mask.reshape(B, max_patch_len_h, max_patch_len_w).detach().clone()
