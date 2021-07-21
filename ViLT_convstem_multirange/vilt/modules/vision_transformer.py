@@ -1068,6 +1068,14 @@ class VisionCStemTransformer(nn.Module):
             # (800 // self.patch_size) * (1333 // self.patch_size) is the maximum number of patches that single image can get.
             # if self.patch_size = 32, 25 * 41 = 1025
             # if res is 384 x 640, 12 * 20 = 240
+            max_patch_len_h = x_h.max()
+            max_patch_len_w = x_w.max()
+            if (max_patch_len_h == x_mask.size()[2]) and (max_patch_len_w == x_mask.size()[3]):
+                pass
+            else:
+                import pdb
+                pdb.set_trace()
+                a = 1
             max_patch_len_h, max_patch_len_w = x_mask.size()[2], x_mask.size()[3]
             # max_patch_len_w = x_w.max()
             pos_embed = pos_embed.flatten(2).transpose(1, 2)
