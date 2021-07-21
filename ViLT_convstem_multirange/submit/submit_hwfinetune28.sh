@@ -35,5 +35,5 @@ huawei_flag=True \
 huawei_root_path=/cache/VilT_dataset \
 middle_size \
 load_path=$RESUME_DIR \
-per_gpu_batchsize=8
+per_gpu_batchsize=4
 
