@@ -4,7 +4,7 @@ from transformers import (
     get_polynomial_decay_schedule_with_warmup,
     get_cosine_schedule_with_warmup,
 )
-
+from torch.optim.lr_scheduler import MultiStepLR
 def set_metrics(pl_module):
     for split in ["train", "val"]:
         for k, v in pl_module.hparams.loss_names.items():
@@ -39,6 +39,23 @@ def epoch_wrapup(pl_module):
             pl_module.log(f"{loss_name}/{phase}/acc5_epoch", value)
             getattr(pl_module, f"{phase}_{loss_name}_acc5").reset()
     pl_module.log(f"{phase}/the_metric", the_metric)
+
+def epoch_wrapup_eval_linear(pl_module):
+    phase = "train" if pl_module.training else "val"
+    value = getattr(pl_module, f"{phase}_loss").compute()
+    pl_module.log(f"{phase}/loss_epoch", value)
+    getattr(pl_module, f"{phase}_loss").reset()
+    value = getattr(pl_module, f"{phase}_acc").compute()
+    pl_module.log(f"{phase}/acc_epoch", value)
+    getattr(pl_module, f"{phase}_acc").reset()
+
+def set_schedule_eval_linear(pl_module):
+    lr = pl_module.hparams.lr
+    optimizer = torch.optim.SGD(filter(lambda p: p.requires_grad, pl_module.parameters()),lr=lr, momentum=0.9)
+    scheduler = MultiStepLR(optimizer, milestones=[30,40,50], gamma=0.2)
+    
+    return [optimizer], [scheduler]
+
 
 def set_schedule(pl_module):
     lr_image = pl_module.hparams.lr_image
@@ -103,14 +120,16 @@ def set_schedule(pl_module):
         optimizer = torch.optim.Adam(optimizer_grouped_parameters)
     elif optim_type == "sgd":
         optimizer = torch.optim.SGD(optimizer_grouped_parameters, momentum=0.9)
+    gpu_num = len(pl_module.trainer.gpus) if isinstance(pl_module.trainer.gpus,list) else pl_module.trainer.gpus
     if pl_module.trainer.max_steps is None:
         max_steps = (
             len(pl_module.trainer.datamodule.train_dataloader())
             * pl_module.trainer.max_epochs
-            // pl_module.trainer.accumulate_grad_batches
+            // (pl_module.trainer.accumulate_grad_batches*gpu_num)
         )
     else:
         max_steps = pl_module.trainer.max_steps
+    print(max_steps)
     warmup_steps = pl_module.hparams.warmup_steps
     if isinstance(pl_module.hparams.warmup_steps, float):
         warmup_steps = int(max_steps * warmup_steps)

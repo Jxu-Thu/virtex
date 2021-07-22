@@ -16,4 +16,4 @@ class CocoCaptionKarpathyDataModule(BaseDataModule):
 
     @property
     def dataset_name(self):
-        return "coco"
+        return "ImageNet"

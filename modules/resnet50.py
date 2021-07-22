@@ -229,8 +229,21 @@ class ResNet(nn.Module):
     def forward(self, x: Tensor) -> Tensor:
         return self._forward_impl(x)
 
-def resnet50(**kwargs: Any) -> ResNet:
+def resnet50(pretrained_path: Optional[bool] = None, remove_keys: Optional[str] = None,**kwargs: Any) -> ResNet:
     r"""ResNet-50 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
     """
-    return ResNet(Bottleneck, [3, 4, 6, 3], **kwargs)
+    model = ResNet(Bottleneck, [3, 4, 6, 3], **kwargs)
+    if pretrained_path is not None:
+        state = torch.load(pretrained_path)["state_dict"]
+        if remove_keys is not None:
+            state_keys = list(state.keys())
+            for i, key in enumerate(state_keys):
+                if remove_keys in key:
+                    newkey = key.replace("Image_Moco.encoder_q.", "")
+                    state[newkey] = state.pop(key)
+                else:
+                    state.pop(key)
+        model.load_state_dict(state)        
+    return model
+        

@@ -1,4 +1,4 @@
-from .base_dataset import BaseDataset
+from .base_dataset_raw import BaseDataset
 
 
 class Coco2017CaptionDataset(BaseDataset):
