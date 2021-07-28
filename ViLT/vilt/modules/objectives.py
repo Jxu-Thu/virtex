@@ -539,6 +539,8 @@ def compute_nlvr2(pl_module, batch):
 
 def compute_irtr(pl_module, batch):
     is_training_phase = pl_module.training
+    import pdb
+    pdb.set_trace()
 
     _bs, _c, _h, _w = batch["image"][0].shape
     false_len = pl_module.hparams.config["draw_false_text"]
