@@ -539,8 +539,6 @@ def compute_nlvr2(pl_module, batch):
 
 def compute_irtr(pl_module, batch):
     is_training_phase = pl_module.training
-    import pdb
-    pdb.set_trace()
 
     _bs, _c, _h, _w = batch["image"][0].shape
     false_len = pl_module.hparams.config["draw_false_text"]
@@ -617,6 +615,8 @@ def compute_irtr_recall(pl_module):
     )
 
     text_preload = list()
+    import pdb
+    pdb.set_trace()
     for _b in tqdm.tqdm(text_loader, desc="text prefetch loop"):
         text_preload.append(
             {
@@ -633,6 +633,9 @@ def compute_irtr_recall(pl_module):
     tiids = torch.tensor(tiids)
 
     image_preload = list()
+
+    import pdb
+    pdb.set_trace()
     for _b in tqdm.tqdm(image_loader, desc="image prefetch loop"):
         (ie, im, _, _) = pl_module.transformer.visual_embed(
             _b["image"][0].to(pl_module.device),
