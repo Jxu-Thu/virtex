@@ -615,8 +615,6 @@ def compute_irtr_recall(pl_module):
     )
 
     text_preload = list()
-    import pdb
-    pdb.set_trace()
     for _b in tqdm.tqdm(text_loader, desc="text prefetch loop"):
         text_preload.append(
             {
@@ -634,8 +632,6 @@ def compute_irtr_recall(pl_module):
 
     image_preload = list()
 
-    import pdb
-    pdb.set_trace()
     for _b in tqdm.tqdm(image_loader, desc="image prefetch loop"):
         (ie, im, _, _) = pl_module.transformer.visual_embed(
             _b["image"][0].to(pl_module.device),
@@ -682,6 +678,8 @@ def compute_irtr_recall(pl_module):
 
     iids = torch.tensor(gather_rank_iids)
     iids = iids.view(-1)
+    # image id
+    # tiid:
     scores = torch.tensor(gather_rank_scores)
     scores = scores.view(len(iids), -1)
 
